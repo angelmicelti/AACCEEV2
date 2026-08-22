@@ -2674,7 +2674,7 @@
             rol: 'admin',
             activo: true,
             createdAt: new Date().toISOString(),
-            forcePasswordChange: true // Forzar cambio de contraseña en primer login
+            forcePasswordChange: false // NO forzar cambio de contraseña (usa la de Firebase)
         };
 
         const DEPARTAMENTOS = [
