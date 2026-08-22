@@ -3,4 +3,6 @@ Este perfil tendrá acceso a todo, excepto a la pestaña de "Configuración"
 
 Edición en la pantalla "Cronograma", haciendo doble clic sobre una etiqueta, sale modal y se puede cambiar la información de la actividad.
 
+Haz que las actividades que no se hayan realizado aparezcan en el cuadrante con un color diferente (algo más apagado)
+
 Responsividad y multiplataforma.
