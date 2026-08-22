@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ace-villadiego-v9';
+const CACHE_NAME = 'ace-villadiego-v10';
 const urlsToCache = [
   '/',
   '/index.html',
