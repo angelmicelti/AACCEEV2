@@ -1,10 +1,7 @@
-Añade un tercer pefil de usuario, que se llamará "DACE".
-Este perfil tendrá acceso a todo, excepto a la pestaña de "Configuración"
 
-Añadir en la edición de actividades, delante de "Observaciones", un campo que se llame "Coste por alumno"
 
 Edición en la pantalla "Cronograma", haciendo doble clic sobre una etiqueta, sale modal y se puede cambiar la información de la actividad.
 
-Haz que las actividades que no se hayan realizado aparezcan en el cuadrante con un color diferente (algo más apagado)
+Haz que las actividades que no se hayan realizado, las que todavía estén nada más que propuestas, y las que hayan sido realizadas ya aparezcan en el cuadrante con tonos diferentes, para que se distingan visualmente los estados.
 
 Responsividad y multiplataforma.
