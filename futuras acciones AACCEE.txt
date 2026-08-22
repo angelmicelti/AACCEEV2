@@ -1,5 +1,2 @@
-En la pantalla "Actividades", añade un desplegable debajo de "Introduce nueva actividad" que se llame "Importación masiva de actividades".
-En dicho desplegable
-
-
-Enlace del GEM: https://gemini.google.com/gem/1qQUJ86mjfY6EhFk6l1ir8YAZ8Hxl2ei3?usp=sharing
+Añade un tercer pefil de usuario, que se llamará "DACE".
+Este perfil tendrá acceso a todo, excepto a la pestaña de "Configuración"
