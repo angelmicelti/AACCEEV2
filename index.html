@@ -1649,12 +1649,20 @@
                                 </svg>
                                 Gestión de Usuarios
                             </h2>
-                            <button onclick="abrirModalUsuario()" class="btn btn-primary btn-sm">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-                                </svg>
-                                Nuevo Usuario
-                            </button>
+                            <div class="flex gap-2 flex-wrap">
+                                <button onclick="abrirModalUsuario()" class="btn btn-primary btn-sm">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                    </svg>
+                                    Nuevo Usuario
+                                </button>
+                                <button onclick="forceSyncFromFirebase(this)" class="btn btn-secondary btn-sm" title="Recuperar usuarios creados en otras sesiones/dispositivos">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                                    </svg>
+                                    Sincronizar desde Nube
+                                </button>
+                            </div>
                         </div>
                         
                         <div id="usersList" class="space-y-3 max-h-96 overflow-y-auto"></div>
@@ -3197,6 +3205,51 @@
                 
                 // Recargar página para volver al login
                 location.reload();
+            }
+        }
+        
+        // Forzar sincronización de usuarios desde Firebase (para recuperar usuarios de otras sesiones)
+        async function forceSyncFromFirebase(btn) {
+            if (!confirm('¿Sincronizar usuarios desde la nube?\n\nEsto actualizará la lista de usuarios con los datos guardados en Firebase.')) {
+                return;
+            }
+            
+            try {
+                console.log('[FORCE SYNC] Iniciando sincronización forzada...');
+                
+                // Mostrar indicador de carga
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"/></svg> Sincronizando...';
+                }
+                
+                // Cargar directamente desde Firebase
+                const success = await loadUsersFromFirebase();
+                
+                if (success) {
+                    showToast(`✅ Sincronizados ${usersData.length} usuarios desde la nube`, 'success');
+                    renderUsersList();
+                    
+                    // Actualizar sesión si el usuario actual cambió
+                    if (currentUser) {
+                        const updatedUser = usersData.find(u => u.id === currentUser.id);
+                        if (updatedUser) {
+                            currentUser = updatedUser;
+                            updateSessionUI();
+                        }
+                    }
+                } else {
+                    showToast('⚠️ No se encontraron usuarios en la nube', 'warning');
+                }
+                
+            } catch (error) {
+                console.error('[FORCE SYNC] Error:', error);
+                showToast('❌ Error al sincronizar: ' + error.message, 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sincronizar desde Nube';
+                }
             }
         }
         
@@ -5256,37 +5309,57 @@
         // Guardar usuarios en Firebase
         async function saveUsersToFirebase() {
             try {
+                console.log('[FIREBASE SAVE] Guardando', usersData.length, 'usuarios en Firebase...');
+                console.log('[FIREBASE SAVE] Usuarios:', usersData.map(u => u.username));
+                
                 await usersDbRef.set({
                     users: usersData,
-                    lastUpdated: new Date().toISOString()
+                    lastUpdated: new Date().toISOString(),
+                    source: window.location.href // Para debug: saber desde dónde se guardó
                 });
-                console.log('Usuarios guardados en Firebase');
+                console.log('[FIREBASE SAVE] ✅ Usuarios guardados correctamente en Firebase');
             } catch (error) {
-                console.error('Error al guardar usuarios en Firebase:', error);
+                console.error('[FIREBASE SAVE] ❌ Error al guardar usuarios:', error);
+                console.error('[FIREBASE SAVE] Detalle:', error.message, error.code);
             }
         }
         
         // Cargar usuarios desde Firebase
         async function loadUsersFromFirebase() {
             try {
+                console.log('[FIREBASE USERS] Intentando cargar usuarios desde Firebase...');
                 const snapshot = await usersDbRef.once('value');
                 const data = snapshot.val();
                 
-                if (data && data.users) {
+                console.log('[FIREBASE USERS] Datos recibidos:', data ? 'EXISTEN' : 'VACÍOS/NULL');
+                
+                if (data && data.users && Array.isArray(data.users) && data.users.length > 0) {
+                    const usuariosAntes = usersData.length;
                     usersData = data.users;
+                    console.log(`[FIREBASE USERS] ✅ Usuarios cargados: ${usuariosAntes} → ${usersData.length}`);
+                    console.log('[FIREBASE USERS] Lista:', usersData.map(u => u.username));
                     
                     // Solo agregar admin si no existe Y no fue inicializado previamente en Firebase
                     if (!usersData.find(u => u.id === 'admin_default') && !adminInitializedFlag) {
-                        usersData.push({...DEFAULT_ADMIN});
+                        console.log('[FIREBASE USERS] Añadiendo admin por defecto...');
+                        const newAdmin = {...DEFAULT_ADMIN};
+                        newAdmin.password = await hashPassword(newAdmin.password);
+                        newAdmin.passwordHashed = true;
+                        usersData.push(newAdmin);
                         await markAdminAsInitialized();
                     }
                     
                     saveUsersToStorage();
-                    console.log('Usuarios cargados desde Firebase');
+                    console.log('[FIREBASE USERS] ✅ Sincronización completada desde Firebase');
+                    return true; // Éxito
+                } else {
+                    console.log('[FIREBASE USERS] ⚠️ No hay usuarios válidos en Firebase');
+                    return false; // Sin datos
                 }
             } catch (error) {
-                console.error('Error al cargar usuarios desde Firebase:', error);
+                console.error('[FIREBASE USERS] ❌ Error al cargar usuarios:', error);
                 showToast('No se pudieron sincronizar usuarios desde la nube', 'warning');
+                return false; // Error
             }
         }
 
