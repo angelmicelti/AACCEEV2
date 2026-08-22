@@ -1,7 +1,8 @@
 
 
-Edición en la pantalla "Cronograma", haciendo doble clic sobre una etiqueta, sale modal y se puede cambiar la información de la actividad.
 
 Haz que las actividades que no se hayan realizado, las que todavía estén nada más que propuestas, y las que hayan sido realizadas ya aparezcan en el cuadrante con tonos diferentes, para que se distingan visualmente los estados.
 
 Responsividad y multiplataforma.
+
+Establece, en el menú "Actividades", la opción de "Importar actividades desde el curso anterior", permitiendo la selección una a una de las mismas, o de todas las que se consideren oportunas por parte del usuario.
