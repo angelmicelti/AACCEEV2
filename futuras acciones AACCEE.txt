@@ -1,2 +1,6 @@
 Añade un tercer pefil de usuario, que se llamará "DACE".
 Este perfil tendrá acceso a todo, excepto a la pestaña de "Configuración"
+
+Edición en la pantalla "Cronograma", haciendo doble clic sobre una etiqueta, sale modal y se puede cambiar la información de la actividad.
+
+Responsividad y multiplataforma.
