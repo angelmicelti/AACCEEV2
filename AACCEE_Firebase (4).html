@@ -1,0 +1,3119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AACCEE - IES Virgen de Villadiego</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8f7f4;
+            --bg-dark: #1a1a1a;
+            --fg: #2d2d2d;
+            --fg-dark: #f0f0f0;
+            --muted: #6b7280;
+            --muted-dark: #9ca3af;
+            --accent: #0d7377;
+            --accent-hover: #0a5c5f;
+            --accent-light: #14a3a8;
+            --card: #ffffff;
+            --card-dark: #262626;
+            --border: #e5e5e5;
+            --border-dark: #404040;
+            --success: #059669;
+            --warning: #d97706;
+            --danger: #dc2626;
+        }
+
+        [data-theme="dark"] {
+            --bg: var(--bg-dark);
+            --fg: var(--fg-dark);
+            --muted: var(--muted-dark);
+            --card: var(--card-dark);
+            --border: var(--border-dark);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--fg);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .font-display {
+            font-family: 'Fraunces', serif;
+        }
+
+        /* Splash Screen */
+        #splash {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0d7377 0%, #0a5c5f 50%, #074749 100%);
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        #splash.visible {
+            opacity: 1;
+        }
+
+        #splash.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-content {
+            text-align: center;
+            color: white;
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Background Pattern */
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(13, 115, 119, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(13, 115, 119, 0.06) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(13, 115, 119, 0.03) 0%, transparent 70%);
+        }
+
+        /* Navigation */
+        .nav-tab {
+            position: relative;
+            padding: 0.75rem 1.25rem;
+            color: var(--muted);
+            font-weight: 500;
+            transition: all 0.2s;
+            border-radius: 0.5rem;
+        }
+
+        .nav-tab:hover {
+            color: var(--accent);
+            background: rgba(13, 115, 119, 0.08);
+        }
+
+        .nav-tab.active {
+            color: white;
+            background: var(--accent);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        /* Form Elements */
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--fg);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(13, 115, 119, 0.15);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            padding-right: 2.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--fg);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Accordion */
+        .accordion-header {
+            cursor: pointer;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, rgba(13, 115, 119, 0.08) 0%, rgba(13, 115, 119, 0.03) 100%);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s;
+        }
+
+        .accordion-header:hover {
+            background: linear-gradient(135deg, rgba(13, 115, 119, 0.12) 0%, rgba(13, 115, 119, 0.06) 100%);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+
+        .accordion-content.open {
+            max-height: 2000px;
+        }
+
+        .accordion-icon {
+            transition: transform 0.3s;
+        }
+
+        .accordion-header.open .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Cronograma */
+        .crono-cell {
+            min-height: 100px;
+            background: var(--card);
+            border: 2px dashed var(--border);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .crono-cell.drag-over {
+            border-color: var(--accent);
+            background: rgba(13, 115, 119, 0.08);
+        }
+
+        .activity-tag {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: grab;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .activity-tag:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(13, 115, 119, 0.3);
+        }
+
+        .activity-tag.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            color: white;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+        .toast.warning { background: var(--warning); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: var(--card);
+            border-radius: 1rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--muted);
+        }
+
+        /* Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Login Screen */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0d7377 0%, #0a5c5f 50%, #074749 100%);
+        }
+
+        .login-container {
+            background: var(--card);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            margin: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .login-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-title {
+            text-align: center;
+            font-family: 'Fraunces', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--fg);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .login-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .login-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--fg);
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            color: var(--fg);
+            transition: all 0.2s;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(13, 115, 119, 0.15);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(13, 115, 119, 0.3);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-error {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--danger);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            text-align: center;
+            display: none;
+        }
+
+        .login-error.visible {
+            display: block;
+        }
+
+        /* User Management Panel */
+        .user-management-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            transition: all 0.2s;
+        }
+
+        .user-card:hover {
+            border-color: var(--accent);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--fg);
+            font-size: 0.95rem;
+        }
+
+        .user-username {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .user-role-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .role-admin {
+            background: rgba(139, 92, 246, 0.15);
+            color: #7c3aed;
+        }
+
+        .role-user {
+            background: rgba(13, 115, 119, 0.15);
+            color: var(--accent);
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Session Info in Header */
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg);
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .session-user {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .session-role {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            background: rgba(13, 115, 119, 0.1);
+            color: var(--accent);
+        }
+
+        .logout-btn {
+            padding: 0.4rem 0.75rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 0.375rem;
+            color: var(--muted);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .logout-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            .crono-grid {
+                font-size: 0.75rem;
+            }
+            .activity-tag {
+                font-size: 0.7rem;
+                padding: 0.375rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-pattern">
+    <!-- Login Screen -->
+    <div id="loginScreen">
+        <div class="login-container">
+            <div class="login-logo">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                    <path d="M12 14v7"/>
+                </svg>
+            </div>
+            <h1 class="login-title">AACCEE Manager</h1>
+            <p class="login-subtitle">IES Virgen de Villadiego - Peñaflor (Sevilla)</p>
+            
+            <form id="loginForm" class="login-form" onsubmit="handleLogin(event)">
+                <div class="login-input-group">
+                    <label class="login-label" for="loginUsername">Usuario</label>
+                    <input type="text" id="loginUsername" class="login-input" placeholder="Introduce tu usuario" required autocomplete="username">
+                </div>
+                
+                <div class="login-input-group">
+                    <label class="login-label" for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" class="login-input" placeholder="Introduce tu contraseña" required autocomplete="current-password">
+                </div>
+                
+                <div id="loginError" class="login-error"></div>
+                
+                <button type="submit" id="loginBtn" class="login-btn">
+                    Iniciar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Splash Screen -->
+    <div id="splash" class="visible">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+                    <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                    <path d="M12 14v7"/>
+                </svg>
+            </div>
+            <h1 class="font-display text-3xl md:text-4xl font-bold mb-2">IES Virgen de Villadiego</h1>
+            <p class="text-lg opacity-80 mb-1">Peñaflor (Sevilla)</p>
+            <p class="text-xl font-semibold mt-4 opacity-90">Actividades Complementarias y Extraescolares</p>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="hidden">
+        <!-- Header -->
+        <header class="sticky top-0 z-50 backdrop-blur-md bg-opacity-90" style="background: var(--bg);">
+            <div class="max-w-7xl mx-auto px-4 py-4">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: var(--accent);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                <path d="M12 14v7"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="font-display text-lg md:text-xl font-bold" style="color: var(--accent);">AACCEE Manager</h1>
+                            <p class="text-xs" style="color: var(--muted);">IES Virgen de Villadiego</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="nav-tabs flex gap-2 overflow-x-auto pb-2 md:pb-0">
+                        <button class="nav-tab active" data-tab="config">Configuración</button>
+                        <button class="nav-tab" data-tab="actividades">Actividades</button>
+                        <button class="nav-tab" data-tab="cronograma">Cronograma</button>
+                        <button class="nav-tab" data-tab="informes">Informes</button>
+                    </nav>
+
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span id="headerCursoActivo" class="text-xs px-3 py-1 rounded-full hidden" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);"></span>
+                        
+                        <!-- Session Info (shown after login) -->
+                        <div id="sessionInfo" class="session-info hidden">
+                            <span class="session-user" id="sessionUserName">Usuario</span>
+                            <span class="session-role" id="sessionUserRole">Admin</span>
+                            <button onclick="handleLogout()" class="logout-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                    <polyline points="16 17 21 12 16 7"/>
+                                    <line x1="21" y1="12" x2="9" y2="12"/>
+                                </svg>
+                                Salir
+                            </button>
+                        </div>
+                        
+                        <button id="themeToggle" class="p-2 rounded-lg transition-colors hover:bg-opacity-10" style="background: rgba(13, 115, 119, 0.05);" aria-label="Cambiar tema">
+                            <svg id="sunIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                            </svg>
+                            <svg id="moonIcon" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 py-6">
+            <!-- Tab: Configuración -->
+            <section id="tab-config" class="tab-content fade-in">
+                <div class="grid gap-6 md:grid-cols-2">
+                    <!-- Cursos Escolares -->
+                    <div class="card p-6 md:col-span-2">
+                        <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color: var(--accent);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            Cursos Escolares
+                        </h2>
+                        
+                        <!-- Selector de curso activo -->
+                        <div class="mb-4 p-4 rounded-lg" style="background: var(--bg);">
+                            <label class="block text-sm font-medium mb-2">Curso Escolar Activo</label>
+                            <div class="flex gap-3 items-center">
+                                <select id="cursoEscolarSelect" class="form-input flex-1 form-select" onchange="seleccionarCursoEscolar(this.value)">
+                                    <option value="">Selecciona un curso escolar</option>
+                                </select>
+                                <button onclick="abrirModalNuevoCurso()" class="btn btn-primary flex-shrink-0">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                    </svg>
+                                    Nuevo Curso
+                                </button>
+                            </div>
+                            <p id="cursoActivoInfo" class="text-sm mt-2 hidden" style="color: var(--muted);"></p>
+                        </div>
+
+                        <!-- Lista de cursos -->
+                        <div id="cursosList" class="space-y-2 max-h-64 overflow-y-auto"></div>
+                    </div>
+
+                    <!-- Trimestres -->
+                    <div class="card p-6">
+                        <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color: var(--accent);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            Configuración de Trimestres
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Primer Trimestre</label>
+                                <div class="flex gap-2">
+                                    <input type="date" id="t1Start" class="form-input flex-1">
+                                    <input type="date" id="t1End" class="form-input flex-1">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Segundo Trimestre</label>
+                                <div class="flex gap-2">
+                                    <input type="date" id="t2Start" class="form-input flex-1">
+                                    <input type="date" id="t2End" class="form-input flex-1">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Tercer Trimestre</label>
+                                <div class="flex gap-2">
+                                    <input type="date" id="t3Start" class="form-input flex-1">
+                                    <input type="date" id="t3End" class="form-input flex-1">
+                                </div>
+                            </div>
+                            <button onclick="saveTrimestres()" class="btn btn-primary w-full">Guardar Trimestres</button>
+                        </div>
+                    </div>
+
+                    <!-- Profesorado -->
+                    <div class="card p-6">
+                        <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color: var(--accent);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            Profesorado Acompañante
+                        </h2>
+                        <div class="space-y-4">
+                            <div class="flex gap-2">
+                                <input type="text" id="newProfesor" class="form-input flex-1" placeholder="Nombre del profesor/a">
+                                <button onclick="addProfesor()" class="btn btn-primary">Añadir</button>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Importar desde Excel (Séneca)</label>
+                                <input type="file" id="excelImport" accept=".xlsx,.xls" class="form-input text-sm" onchange="importProfesoradoExcel(event)">
+                            </div>
+                            <div id="profesorList" class="max-h-48 overflow-y-auto space-y-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Import/Export -->
+                    <div class="card p-6">
+                        <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color: var(--accent);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Importar / Exportar Datos
+                        </h2>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="exportData()" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                Exportar JSON
+                            </button>
+                            <label class="btn btn-secondary cursor-pointer">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Importar JSON
+                                <input type="file" accept=".json" class="hidden" onchange="importData(event)">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Gestión de Usuarios (Solo Admin) -->
+                    <div id="userManagementPanel" class="card p-6 md:col-span-2 hidden">
+                        <div class="user-management-header">
+                            <h2 class="font-display text-xl font-bold flex items-center gap-2" style="color: var(--accent);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                Gestión de Usuarios
+                            </h2>
+                            <button onclick="abrirModalUsuario()" class="btn btn-primary btn-sm">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                Nuevo Usuario
+                            </button>
+                        </div>
+                        
+                        <div id="usersList" class="space-y-3 max-h-96 overflow-y-auto"></div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Tab: Actividades -->
+            <section id="tab-actividades" class="tab-content hidden">
+                <div class="space-y-4">
+                    <!-- Nueva Actividad -->
+                    <div class="card overflow-hidden">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: var(--accent);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
+                                </svg>
+                                Introduce nueva actividad
+                            </h2>
+                            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="p-6 space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Curso</label>
+                                        <select id="newCurso" class="form-input form-select" onchange="updateTrimestreOptions()">
+                                            <option value="">Selecciona curso</option>
+                                            <option value="1 ESO">1 ESO</option>
+                                            <option value="2 ESO">2 ESO</option>
+                                            <option value="3 ESO">3 ESO</option>
+                                            <option value="4 ESO">4 ESO</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Trimestre</label>
+                                        <select id="newTrimestre" class="form-input form-select">
+                                            <option value="">Selecciona trimestre</option>
+                                            <option value="Primer Trimestre">Primer Trimestre</option>
+                                            <option value="Segundo Trimestre">Segundo Trimestre</option>
+                                            <option value="Tercer Trimestre">Tercer Trimestre</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Nombre de la actividad</label>
+                                    <input type="text" id="newNombre" class="form-input" placeholder="Breve descripción">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Descripción de la actividad</label>
+                                    <textarea id="newDescripcion" class="form-input" rows="3" placeholder="Descripción detallada"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Departamentos implicados</label>
+                                    <select id="newDeptCount" class="form-input form-select" onchange="updateDeptFields()">
+                                        <option value="0">0 - Otro organizador</option>
+                                        <option value="1">1 departamento</option>
+                                        <option value="2">2 departamentos</option>
+                                        <option value="3">3 departamentos</option>
+                                        <option value="todos">Todos</option>
+                                    </select>
+                                </div>
+                                <div id="organizadorField" class="hidden">
+                                    <label class="block text-sm font-medium mb-1">Organizador</label>
+                                    <input type="text" id="newOrganizador" class="form-input" placeholder="Nombre del organizador">
+                                </div>
+                                <div id="deptFields" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Fecha de realización</label>
+                                    <input type="date" id="newFecha" class="form-input">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Profesorado acompañante</label>
+                                    <select id="newProfCount" class="form-input form-select mb-3" onchange="updateProfFields()">
+                                        <option value="1">1 profesor/a</option>
+                                        <option value="2">2 profesores/as</option>
+                                        <option value="3">3 profesores/as</option>
+                                        <option value="4">4 profesores/as</option>
+                                    </select>
+                                    <div id="profFields" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                                </div>
+                                <button onclick="saveActividad()" class="btn btn-primary w-full">Guardar Actividad</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editar Actividad -->
+                    <div class="card overflow-hidden">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: var(--accent);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                                Edita actividad existente
+                            </h2>
+                            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="p-6 space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Selecciona actividad a editar</label>
+                                    <select id="editSelect" class="form-input form-select" onchange="loadActividadForEdit()">
+                                        <option value="">Selecciona una actividad</option>
+                                    </select>
+                                </div>
+                                <div id="editForm" class="hidden space-y-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium mb-1">Curso</label>
+                                            <select id="editCurso" class="form-input form-select">
+                                                <option value="1 ESO">1 ESO</option>
+                                                <option value="2 ESO">2 ESO</option>
+                                                <option value="3 ESO">3 ESO</option>
+                                                <option value="4 ESO">4 ESO</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium mb-1">Trimestre</label>
+                                            <select id="editTrimestre" class="form-input form-select">
+                                                <option value="Primer Trimestre">Primer Trimestre</option>
+                                                <option value="Segundo Trimestre">Segundo Trimestre</option>
+                                                <option value="Tercer Trimestre">Tercer Trimestre</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Nombre de la actividad</label>
+                                        <input type="text" id="editNombre" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Descripción</label>
+                                        <textarea id="editDescripcion" class="form-input" rows="3"></textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Departamentos implicados</label>
+                                        <select id="editDeptCount" class="form-input form-select" onchange="updateEditDeptFields()">
+                                            <option value="0">0 - Otro organizador</option>
+                                            <option value="1">1 departamento</option>
+                                            <option value="2">2 departamentos</option>
+                                            <option value="3">3 departamentos</option>
+                                            <option value="todos">Todos</option>
+                                        </select>
+                                    </div>
+                                    <div id="editOrganizadorField" class="hidden">
+                                        <label class="block text-sm font-medium mb-1">Organizador</label>
+                                        <input type="text" id="editOrganizador" class="form-input">
+                                    </div>
+                                    <div id="editDeptFields" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Fecha de realización</label>
+                                        <input type="date" id="editFecha" class="form-input">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-1">Profesorado acompañante</label>
+                                        <select id="editProfCount" class="form-input form-select mb-3" onchange="updateEditProfFields()">
+                                            <option value="1">1 profesor/a</option>
+                                            <option value="2">2 profesores/as</option>
+                                            <option value="3">3 profesores/as</option>
+                                            <option value="4">4 profesores/as</option>
+                                        </select>
+                                        <div id="editProfFields" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <button onclick="updateActividad()" class="btn btn-primary flex-1">Actualizar</button>
+                                        <button onclick="deleteActividad()" class="btn btn-danger">Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Cronograma -->
+            <section id="tab-cronograma" class="tab-content hidden">
+                <div class="card p-6">
+                    <h2 class="font-display text-xl font-bold mb-6 flex items-center gap-2" style="color: var(--accent);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+                        </svg>
+                        Cronograma de Actividades
+                    </h2>
+                    <p class="text-sm mb-4" style="color: var(--muted);">Arrastra las etiquetas entre celdas para reorganizar las actividades</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse cronograma-table">
+                            <thead>
+                                <tr>
+                                    <th class="p-3 text-left font-semibold" style="background: rgba(13, 115, 119, 0.1);">Curso</th>
+                                    <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Primer Trimestre</th>
+                                    <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Segundo Trimestre</th>
+                                    <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Tercer Trimestre</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cronogramaBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tab: Informes -->
+            <section id="tab-informes" class="tab-content hidden">
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div class="card p-6">
+                        <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color: var(--accent);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+                            </svg>
+                            Informes de Actividades
+                        </h2>
+                        <div class="space-y-3">
+                            <button onclick="generateInformeCurso()" class="btn btn-secondary w-full justify-start">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                                </svg>
+                                Informe por Curso
+                            </button>
+                            <button onclick="generateInformeEvaluacion()" class="btn btn-secondary w-full justify-start">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                Informe por Evaluación
+                            </button>
+                            <button onclick="generateCuadranteGlobal()" class="btn btn-secondary w-full justify-start">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+                                </svg>
+                                Cuadrante Global
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card p-6">
+                        <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2" style="color: var(--accent);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            Informes de Participación
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Profesor/a</label>
+                                <select id="informeProfesor" class="form-input form-select">
+                                    <option value="">Selecciona profesor/a</option>
+                                </select>
+                                <button onclick="generateInformeProfesor()" class="btn btn-primary w-full mt-2">Generar Informe de Profesorado</button>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Departamento</label>
+                                <select id="informeDepartamento" class="form-input form-select">
+                                    <option value="">Selecciona departamento</option>
+                                </select>
+                                <button onclick="generateInformeDepartamento()" class="btn btn-primary w-full mt-2">Generar Informe de Departamento</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Modal: Curso Escolar -->
+    <div id="cursoModal" class="modal-overlay">
+        <div class="modal p-6" style="max-width: 500px;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-display text-xl font-bold" style="color: var(--accent);" id="cursoModalTitle">Nuevo Curso Escolar</h2>
+                <button onclick="cerrarModalCurso()" class="p-2 rounded-lg hover:bg-opacity-10" style="background: rgba(0,0,0,0.05);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="cursoForm" onsubmit="guardarCursoEscolar(event)" class="space-y-4">
+                <input type="hidden" id="cursoId">
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nombre del Curso</label>
+                    <input type="text" id="cursoNombre" class="form-input" placeholder="Ej: 2024-2025" required>
+                    <p class="text-xs mt-1" style="color: var(--muted);">Se sugiere formato: Año inicio-Año fin</p>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Año de Inicio</label>
+                    <input type="number" id="cursoAnoInicio" class="form-input" placeholder="Ej: 2024" min="2000" max="2100" required>
+                    <p class="text-xs mt-1" style="color: var(--muted);">El curso empezará el 1 de septiembre de este año</p>
+                </div>
+                
+                <div class="p-3 rounded-lg text-sm" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);">
+                    <strong>Período del curso:</strong><br>
+                    Del <span id="cursoFechaInicioPreview">1 de septiembre</span> al <span id="cursoFechaFinPreview">31 de agosto</span>
+                </div>
+                
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="cerrarModalCurso()" class="btn btn-secondary flex-1">Cancelar</button>
+                    <button type="submit" class="btn btn-primary flex-1">Guardar Curso</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Usuario -->
+    <div id="usuarioModal" class="modal-overlay">
+        <div class="modal p-6" style="max-width: 500px;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-display text-xl font-bold" style="color: var(--accent);" id="usuarioModalTitle">Nuevo Usuario</h2>
+                <button onclick="cerrarModalUsuario()" class="p-2 rounded-lg hover:bg-opacity-10" style="background: rgba(0,0,0,0.05);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="usuarioForm" onsubmit="guardarUsuario(event)" class="space-y-4">
+                <input type="hidden" id="usuarioId">
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nombre Completo</label>
+                    <input type="text" id="usuarioNombre" class="form-input" placeholder="Ej: María García López" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Usuario</label>
+                    <input type="text" id="usuarioUsername" class="form-input" placeholder="Ej: mgarcia" required pattern="[a-zA-Z0-9_]+" title="Solo letras, números y guión bajo">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Contraseña <span id="passwordOptionalText">(dejar vacío para mantener actual)</span></label>
+                    <input type="password" id="usuarioPassword" class="form-input" placeholder="Mínimo 4 caracteres" minlength="4">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-1">Rol</label>
+                    <select id="usuarioRol" class="form-input form-select" required>
+                        <option value="usuario">Usuario (solo cronograma)</option>
+                        <option value="admin">Administrador (acceso completo)</option>
+                    </select>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="usuarioActivo" checked class="w-4 h-4 rounded" style="accent-color: var(--accent);">
+                    <label for="usuarioActivo" class="text-sm font-medium">Usuario activo</label>
+                </div>
+                
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="cerrarModalUsuario()" class="btn btn-secondary flex-1">Cancelar</button>
+                    <button type="submit" class="btn btn-primary flex-1">Guardar Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA STORE ====================
+        let appData = {
+            config: {
+                trimestres: {
+                    t1: { start: '', end: '' },
+                    t2: { start: '', end: '' },
+                    t3: { start: '', end: '' }
+                },
+                profesorado: [],
+                cursosEscolares: [], // Array de cursos escolares
+                cursoEscolarActivo: null // ID del curso activo
+            },
+            actividades: []
+        };
+
+        // ==================== USER AUTHENTICATION SYSTEM ====================
+        let usersData = []; // Array de usuarios
+        let currentUser = null; // Usuario actualmente logueado
+        let editingUserId = null; // ID del usuario siendo editado
+        
+        // Usuario admin por defecto (se crea si no existe)
+        const DEFAULT_ADMIN = {
+            id: 'admin_default',
+            nombre: 'Administrador',
+            username: 'admin',
+            password: 'admin123', // Se recomienda cambiar tras primer login
+            rol: 'admin',
+            activo: true,
+            createdAt: new Date().toISOString()
+        };
+
+        const DEPARTAMENTOS = [
+            'Lengua Castellana', 'Geografía e Historia', 'Inglés', 'Francés',
+            'Matemáticas', 'Ciencias Naturales', 'Tecnología', 'Dibujo',
+            'Educación Física', 'Música'
+        ];
+
+        const CURSOS = ['1 ESO', '2 ESO', '3 ESO', '4 ESO'];
+        const TRIMESTRES = ['Primer Trimestre', 'Segundo Trimestre', 'Tercer Trimestre'];
+
+        let editingActividadId = null;
+        let syncInterval = null;
+        let draggedElement = null;
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            loadUsersFromStorage();
+            
+            const loginScreen = document.getElementById('loginScreen');
+            const splash = document.getElementById('splash');
+            const app = document.getElementById('app');
+            
+            // Verificar si hay sesión activa
+            const savedSession = localStorage.getItem('aaccee_session');
+            if (savedSession) {
+                try {
+                    const session = JSON.parse(savedSession);
+                    // Verificar que el usuario todavía existe y está activo
+                    const user = usersData.find(u => u.id === session.userId && u.activo);
+                    if (user) {
+                        currentUser = user;
+                        showApp(loginScreen, splash, app);
+                        return;
+                    }
+                } catch (e) {
+                    localStorage.removeItem('aaccee_session');
+                }
+            }
+            
+            // Mostrar pantalla de login
+            loginScreen.style.display = 'flex';
+            splash.classList.add('hidden');
+            app.classList.add('hidden');
+
+            initTabs();
+            initTheme();
+        });
+        
+        // Mostrar la aplicación después del login
+        function showApp(loginScreen, splash, app) {
+            loginScreen.style.display = 'none';
+            splash.classList.remove('hidden');
+            splash.classList.add('visible');
+            app.classList.add('hidden');
+            
+            updateSessionUI();
+            applyRoleRestrictions();
+            
+            splash.classList.add('visible');
+            
+            setTimeout(() => {
+                splash.classList.remove('visible');
+                splash.classList.add('hidden');
+                app.classList.remove('hidden');
+                
+                loadFromFirebase();
+            }, 1500);
+
+            splash.addEventListener('click', () => {
+                splash.classList.remove('visible');
+                splash.classList.add('hidden');
+                app.classList.remove('hidden');
+                
+                loadFromFirebase();
+            });
+
+            initTabs();
+            initTheme();
+            renderAll();
+        }
+
+        // ==================== STORAGE ====================
+        function saveToLocalStorage() {
+            localStorage.setItem('aceManagerData', JSON.stringify(appData));
+            // Sincronizar con Firebase
+            if (typeof saveToFirebase === 'function') {
+                saveToFirebase();
+            }
+        }
+
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('aceManagerData');
+            if (saved) {
+                appData = JSON.parse(saved);
+            }
+        }
+
+        // ==================== AUTHENTICATION SYSTEM ====================
+        
+        // Cargar usuarios desde localStorage
+        function loadUsersFromStorage() {
+            const saved = localStorage.getItem('aaccee_users');
+            if (saved) {
+                usersData = JSON.parse(saved);
+            }
+            
+            // Asegurar que existe el admin por defecto
+            if (!usersData.find(u => u.id === 'admin_default')) {
+                usersData.push({...DEFAULT_ADMIN});
+                saveUsersToStorage();
+            }
+        }
+        
+        // Guardar usuarios en localStorage y Firebase
+        function saveUsersToStorage() {
+            localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+            // Sincronizar con Firebase
+            if (typeof saveUsersToFirebase === 'function') {
+                saveUsersToFirebase();
+            }
+        }
+        
+        // Manejar login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // Deshabilitar botón mientras se procesa
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Verificando...';
+            errorDiv.classList.remove('visible');
+            
+            // Simular pequeña delay para mejor UX
+            setTimeout(() => {
+                // Buscar usuario
+                const user = usersData.find(u => 
+                    u.username.toLowerCase() === username.toLowerCase() && 
+                    u.password === password && 
+                    u.activo
+                );
+                
+                if (user) {
+                    // Login exitoso
+                    currentUser = user;
+                    
+                    // Guardar sesión
+                    localStorage.setItem('aaccee_session', JSON.stringify({
+                        userId: user.id,
+                        loginTime: new Date().toISOString()
+                    }));
+                    
+                    // Mostrar aplicación
+                    const loginScreen = document.getElementById('loginScreen');
+                    const splash = document.getElementById('splash');
+                    const app = document.getElementById('app');
+                    
+                    showApp(loginScreen, splash, app);
+                    
+                    showToast(`Bienvenido, ${user.nombre}!`, 'success');
+                } else {
+                    // Login fallido
+                    errorDiv.textContent = 'Usuario o contraseña incorrectos, o usuario inactivo';
+                    errorDiv.classList.add('visible');
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = 'Iniciar Sesión';
+                }
+            }, 500);
+        }
+        
+        // Manejar logout
+        function handleLogout() {
+            if (confirm('¿Seguro que quieres cerrar la sesión?')) {
+                currentUser = null;
+                localStorage.removeItem('aaccee_session');
+                
+                // Recargar página para volver al login
+                location.reload();
+            }
+        }
+        
+        // Actualizar UI de sesión
+        function updateSessionUI() {
+            if (!currentUser) return;
+            
+            const sessionInfo = document.getElementById('sessionInfo');
+            const sessionUserName = document.getElementById('sessionUserName');
+            const sessionUserRole = document.getElementById('sessionUserRole');
+            
+            sessionInfo.classList.remove('hidden');
+            sessionUserName.textContent = currentUser.nombre.split(' ')[0]; // Primer nombre
+            sessionUserRole.textContent = currentUser.rol === 'admin' ? 'Admin' : 'Usuario';
+            sessionUserRole.className = `session-role ${currentUser.rol === 'admin' ? 'role-admin' : 'role-user'}`;
+            
+            // Mostrar panel de gestión de usuarios si es admin
+            const userPanel = document.getElementById('userManagementPanel');
+            if (userPanel && currentUser.rol === 'admin') {
+                userPanel.classList.remove('hidden');
+                renderUsersList();
+            }
+        }
+        
+        // Aplicar restricciones por rol
+        function applyRoleRestrictions() {
+            if (!currentUser || currentUser.rol === 'admin') return;
+            
+            // Usuario normal: solo puede ver cronograma
+            const tabsToHide = ['config', 'actividades', 'informes'];
+            tabsToHide.forEach(tabId => {
+                const tabBtn = document.querySelector(`[data-tab="${tabId}"]`);
+                const tabContent = document.getElementById(`tab-${tabId}`);
+                
+                if (tabBtn) {
+                    tabBtn.style.display = 'none';
+                }
+                if (tabContent) {
+                    tabContent.style.display = 'none';
+                }
+            });
+            
+            // Forzar mostrar solo cronograma
+            const cronoTab = document.querySelector('[data-tab="cronograma"]');
+            if (cronoTab) {
+                cronoTab.click();
+            }
+        }
+
+        // ==================== USER MANAGEMENT CRUD ====================
+        
+        // Renderizar lista de usuarios
+        function renderUsersList() {
+            const list = document.getElementById('usersList');
+            if (!list) return;
+            
+            if (usersData.length === 0) {
+                list.innerHTML = '<p class="text-sm text-center py-4" style="color: var(--muted);">No hay usuarios registrados</p>';
+                return;
+            }
+            
+            list.innerHTML = usersData.map(user => {
+                const initials = user.nombre.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                const isDefaultAdmin = user.id === 'admin_default';
+                
+                return `
+                    <div class="user-card">
+                        <div class="user-info">
+                            <div class="user-avatar">${initials}</div>
+                            <div class="user-details">
+                                <div class="user-name">${user.nombre} ${isDefaultAdmin ? '(Sistema)' : ''}</div>
+                                <div class="user-username">@${user.username}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="user-role-badge ${user.rol === 'admin' ? 'role-admin' : 'role-user'}">
+                                ${user.rol === 'admin' ? 'Administrador' : 'Usuario'}
+                            </span>
+                            <span class="text-xs px-2 py-0.5 rounded-full" style="background: ${user.activo ? 'rgba(5, 150, 105, 0.15)' : 'rgba(220, 38, 38, 0.15)'}; color: ${user.activo ? '#059669' : '#dc2626'};">
+                                ${user.activo ? 'Activo' : 'Inactivo'}
+                            </span>
+                        </div>
+                        <div class="user-actions">
+                            <button onclick="editarUsuario('${user.id}')" class="btn btn-sm btn-secondary py-1 px-2" title="Editar">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                </svg>
+                            </button>
+                            ${!isDefaultAdmin ? `
+                            <button onclick="eliminarUsuario('${user.id}')" class="btn btn-sm btn-danger py-1 px-2" title="Eliminar">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                </svg>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Abrir modal para nuevo usuario
+        function abrirModalUsuario() {
+            editingUserId = null;
+            document.getElementById('usuarioModalTitle').textContent = 'Nuevo Usuario';
+            document.getElementById('usuarioForm').reset();
+            document.getElementById('usuarioId').value = '';
+            document.getElementById('passwordOptionalText').textContent = '';
+            document.getElementById('usuarioActivo').checked = true;
+            document.getElementById('usuarioModal').classList.add('active');
+        }
+        
+        // Abrir modal para editar usuario
+        function editarUsuario(userId) {
+            const user = usersData.find(u => u.id === userId);
+            if (!user) return;
+            
+            editingUserId = userId;
+            document.getElementById('usuarioModalTitle').textContent = 'Editar Usuario';
+            document.getElementById('usuarioId').value = user.id;
+            document.getElementById('usuarioNombre').value = user.nombre;
+            document.getElementById('usuarioUsername').value = user.username;
+            document.getElementById('usuarioPassword').value = '';
+            document.getElementById('usuarioRol').value = user.rol;
+            document.getElementById('usuarioActivo').checked = user.activo;
+            document.getElementById('passwordOptionalText').textContent = '(dejar vacío para mantener actual)';
+            document.getElementById('usuarioModal').classList.add('active');
+        }
+        
+        // Cerrar modal de usuario
+        function cerrarModalUsuario() {
+            document.getElementById('usuarioModal').classList.remove('active');
+            editingUserId = null;
+        }
+        
+        // Guardar usuario (crear o actualizar)
+        function guardarUsuario(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('usuarioNombre').value.trim();
+            const username = document.getElementById('usuarioUsername').value.trim().toLowerCase();
+            const password = document.getElementById('usuarioPassword').value;
+            const rol = document.getElementById('usuarioRol').value;
+            const activo = document.getElementById('usuarioActivo').checked;
+            
+            // Validaciones
+            if (!nombre || !username) {
+                showToast('Nombre y usuario son obligatorios', 'error');
+                return;
+            }
+            
+            // Verificar que el username no exista (excepto para el mismo usuario)
+            const existingUser = usersData.find(u => u.username.toLowerCase() === username && u.id !== editingUserId);
+            if (existingUser) {
+                showToast('Ya existe un usuario con ese nombre de usuario', 'error');
+                return;
+            }
+            
+            if (editingUserId) {
+                // Actualizar usuario existente
+                const userIndex = usersData.findIndex(u => u.id === editingUserId);
+                if (userIndex !== -1) {
+                    usersData[userIndex] = {
+                        ...usersData[userIndex],
+                        nombre,
+                        username,
+                        rol,
+                        activo,
+                        updatedAt: new Date().toISOString()
+                    };
+                    
+                    // Solo actualizar contraseña si se proporcionó una nueva
+                    if (password) {
+                        usersData[userIndex].password = password;
+                    }
+                    
+                    showToast('Usuario actualizado correctamente', 'success');
+                }
+            } else {
+                // Crear nuevo usuario
+                if (!password) {
+                    showToast('La contraseña es obligatoria para nuevos usuarios', 'error');
+                    return;
+                }
+                
+                const newUser = {
+                    id: 'user_' + Date.now(),
+                    nombre,
+                    username,
+                    password,
+                    rol,
+                    activo,
+                    createdAt: new Date().toISOString()
+                };
+                
+                usersData.push(newUser);
+                showToast('Usuario creado correctamente', 'success');
+            }
+            
+            saveUsersToStorage();
+            renderUsersList();
+            cerrarModalUsuario();
+            
+            // Si el admin editó su propio usuario, actualizar sesión
+            if (currentUser && editingUserId === currentUser.id) {
+                currentUser = usersData.find(u => u.id === editingUserId);
+                updateSessionUI();
+            }
+        }
+        
+        // Eliminar usuario
+        function eliminarUsuario(userId) {
+            const user = usersData.find(u => u.id === userId);
+            if (!user) return;
+            
+            // No permitir eliminar al admin por defecto
+            if (userId === 'admin_default') {
+                showToast('No se puede eliminar el administrador del sistema', 'error');
+                return;
+            }
+            
+            // No permitir eliminarse a sí mismo
+            if (currentUser && userId === currentUser.id) {
+                showToast('No puedes eliminar tu propio usuario', 'error');
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro de eliminar al usuario "${user.nombre}"?`)) {
+                usersData = usersData.filter(u => u.id !== userId);
+                saveUsersToStorage();
+                renderUsersList();
+                showToast('Usuario eliminado correctamente', 'success');
+            }
+        }
+
+        // ==================== THEME ====================
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('sunIcon').classList.add('hidden');
+                document.getElementById('moonIcon').classList.remove('hidden');
+            }
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+            document.getElementById('sunIcon').classList.toggle('hidden');
+            document.getElementById('moonIcon').classList.toggle('hidden');
+        });
+
+        // ==================== CURSOS ESCOLARES ====================
+        function renderCursosEscolares() {
+            const select = document.getElementById('cursoEscolarSelect');
+            const list = document.getElementById('cursosList');
+            const cursos = appData.config.cursosEscolares || [];
+            
+            // Actualizar select
+            select.innerHTML = '<option value="">Selecciona un curso escolar</option>';
+            cursos.forEach(curso => {
+                const selected = curso.id === appData.config.cursoEscolarActivo ? 'selected' : '';
+                const estado = obtenerEstadoCurso(curso);
+                select.innerHTML += `<option value="${curso.id}" ${selected}>${curso.nombre} (${estado.texto})</option>`;
+            });
+            
+            // Actualizar lista
+            if (cursos.length === 0) {
+                list.innerHTML = '<p class="text-sm text-center py-4" style="color: var(--muted);">No hay cursos escolares creados. ¡Crea tu primer curso!</p>';
+            } else {
+                list.innerHTML = cursos.map(curso => {
+                    const isActive = curso.id === appData.config.cursoEscolarActivo;
+                    const numActividades = appData.actividades.filter(a => a.cursoEscolarId === curso.id).length;
+                    const estado = obtenerEstadoCurso(curso);
+                    const esVencido = estado.estado === 'vencido';
+                    
+                    // Definir estilos según estado
+                    let borderStyle = '';
+                    let bgStyle = 'background: var(--bg);';
+                    let opacityStyle = '';
+                    
+                    if (isActive) {
+                        borderStyle = 'border-color: var(--accent);';
+                    } else if (esVencido) {
+                        opacityStyle = 'opacity: 0.7;';
+                        bgStyle = 'background: rgba(220, 38, 38, 0.05);'; // Fondo rojo suave
+                    }
+                    
+                    // Badge de estado
+                    const estadoBadge = `<span class="text-xs px-2 py-0.5 rounded-full" style="background: ${
+                        esVencido ? 'rgba(220, 38, 38, 0.15); color: #dc2626;' : 
+                        estado.estado === 'futuro' ? 'rgba(217, 119, 6, 0.15); color: #d97706;' :
+                        'rgba(5, 150, 105, 0.15); color: #059669;'
+                    }">${estado.icono} ${estado.texto}</span>`;
+                    
+                    return `
+                        <div class="p-3 rounded-lg flex items-center justify-between gap-3 ${isActive ? 'border-2' : ''}" 
+                             style="${bgStyle} ${borderStyle} ${opacityStyle}">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="font-medium">${curso.nombre}</span>
+                                    ${isActive ? '<span class="text-xs px-2 py-0.5 rounded-full" style="background: rgba(13, 115, 119, 0.15); color: var(--accent);">📌 Activo</span>' : ''}
+                                    ${estadoBadge}
+                                </div>
+                                <div class="text-xs mt-1" style="color: var(--muted);">
+                                    ${formatDate(curso.fechaInicio)} - ${formatDate(curso.fechaFin)}
+                                    <span class="mx-2">•</span>
+                                    ${numActividades} actividad${numActividades !== 1 ? 'es' : ''}
+                                    ${esVencido ? '<span class="mx-2">•</span><span style="color: #dc2626;">Protegido</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="flex gap-1 flex-shrink-0">
+                                ${!isActive ? `<button onclick="seleccionarCursoEscolar('${curso.id}')" class="btn btn-sm btn-primary py-1 px-2" title="Seleccionar">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </button>` : ''}
+                                <button onclick="editarCursoEscolar('${curso.id}')" class="btn btn-sm btn-secondary py-1 px-2" title="Editar">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                </button>
+                                ${!esVencido ? `
+                                <button onclick="eliminarCursoEscolar('${curso.id}')" class="btn btn-sm btn-danger py-1 px-2" title="Eliminar">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </button>
+                                ` : `
+                                <button disabled class="btn btn-sm py-1 px-2 cursor-not-allowed opacity-50" title="Curso vencido - No se puede eliminar" style="background: #e5e5e5; color: #9ca3af;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    </svg>
+                                </button>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Actualizar info del curso activo
+            actualizarInfoCursoActivo();
+        }
+        
+        function abrirModalNuevoCurso() {
+            document.getElementById('cursoModalTitle').textContent = 'Nuevo Curso Escolar';
+            document.getElementById('cursoId').value = '';
+            document.getElementById('cursoNombre').value = '';
+            document.getElementById('cursoAnoInicio').value = new Date().getFullYear();
+            actualizarPreviewFechas();
+            document.getElementById('cursoModal').classList.add('active');
+        }
+        
+        function editarCursoEscolar(id) {
+            const curso = appData.config.cursosEscolares.find(c => c.id === id);
+            if (!curso) return;
+            
+            document.getElementById('cursoModalTitle').textContent = 'Editar Curso Escolar';
+            document.getElementById('cursoId').value = curso.id;
+            document.getElementById('cursoNombre').value = curso.nombre;
+            document.getElementById('cursoAnoInicio').value = curso.anoInicio;
+            actualizarPreviewFechas();
+            document.getElementById('cursoModal').classList.add('active');
+        }
+        
+        function cerrarModalCurso() {
+            document.getElementById('cursoModal').classList.remove('active');
+            document.getElementById('cursoForm').reset();
+        }
+        
+        function guardarCursoEscolar(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('cursoId').value;
+            const nombre = document.getElementById('cursoNombre').value.trim();
+            const anoInicio = parseInt(document.getElementById('cursoAnoInicio').value);
+            const anoFin = anoInicio + 1;
+            
+            if (!nombre || !anoInicio) {
+                showToast('Nombre y año de inicio son obligatorios', 'warning');
+                return;
+            }
+            
+            const fechaInicio = `${anoInicio}-09-01`;
+            const fechaFin = `${anoFin}-08-31`;
+            
+            if (id) {
+                // Editar existente
+                const index = appData.config.cursosEscolares.findIndex(c => c.id === id);
+                if (index !== -1) {
+                    appData.config.cursosEscolares[index] = {
+                        ...appData.config.cursosEscolares[index],
+                        nombre,
+                        anoInicio,
+                        anoFin,
+                        fechaInicio,
+                        fechaFin
+                    };
+                    showToast('Curso escolar actualizado', 'success');
+                }
+            } else {
+                // Crear nuevo
+                const nuevoCurso = {
+                    id: 'curso_' + Date.now(),
+                    nombre,
+                    anoInicio,
+                    anoFin,
+                    fechaInicio,
+                    fechaFin,
+                    creadoEn: new Date().toISOString()
+                };
+                
+                // Verificar que no existe otro con el mismo periodo
+                const existe = appData.config.cursosEscolares.some(c => 
+                    c.fechaInicio === fechaInicio && c.fechaFin === fechaFin
+                );
+                
+                if (existe) {
+                    showToast('Ya existe un curso para este periodo', 'warning');
+                    return;
+                }
+                
+                appData.config.cursosEscolares.push(nuevoCurso);
+                showToast('Curso escolar creado', 'success');
+                
+                // Si es el primer curso, seleccionarlo automáticamente
+                if (appData.config.cursosEscolares.length === 1) {
+                    seleccionarCursoEscolar(nuevoCurso.id);
+                }
+            }
+            
+            saveToLocalStorage();
+            renderCursosEscolares();
+            cerrarModalCurso();
+        }
+        
+        // Helper: Verificar si un curso está vencido
+        function cursoEstaVencido(curso) {
+            const fechaFin = new Date(curso.fechaFin);
+            const hoy = new Date();
+            // El curso está vencido si su fecha de fin (31 agosto) ya pasó
+            return fechaFin < hoy.setHours(0, 0, 0, 0);
+        }
+        
+        // Helper: Obtener estado del curso
+        function obtenerEstadoCurso(curso) {
+            const hoy = new Date();
+            const fechaInicio = new Date(curso.fechaInicio);
+            const fechaFin = new Date(curso.fechaFin);
+            
+            if (fechaFin < hoy.setHours(0, 0, 0, 0)) {
+                return { estado: 'vencido', clase: 'vencido', texto: 'Vencido', icono: '🔒' };
+            } else if (fechaInicio > hoy) {
+                return { estado: 'futuro', clase: 'futuro', texto: 'Próximo', icono: '📅' };
+            } else {
+                return { estado: 'activo', clase: 'activo', texto: 'Activo', icono: '✅' };
+            }
+        }
+        
+        function eliminarCursoEscolar(id) {
+            const curso = appData.config.cursosEscolares.find(c => c.id === id);
+            if (!curso) return;
+            
+            // Verificar si el curso está vencido
+            if (cursoEstaVencido(curso)) {
+                showToast('❌ No se puede eliminar un curso vencido. Los datos históricos deben conservarse.', 'error');
+                return;
+            }
+            
+            const numActividades = appData.actividades.filter(a => a.cursoEscolarId === id).length;
+            
+            let mensaje = `¿Eliminar el curso "${curso.nombre}"?`;
+            if (numActividades > 0) {
+                mensaje += `\n\n⚠️ Este curso tiene ${numActividades} actividad${numActividades !== 1 ? 'es' : ''} asociada${numActividades !== 1 ? 's' : ''}. También se eliminarán.`;
+            }
+            
+            if (!confirm(mensaje)) return;
+            
+            // Eliminar actividades asociadas
+            appData.actividades = appData.actividades.filter(a => a.cursoEscolarId !== id);
+            
+            // Eliminar curso
+            appData.config.cursosEscolares = appData.config.cursosEscolares.filter(c => c.id !== id);
+            
+            // Si era el activo, limpiar selección
+            if (appData.config.cursoEscolarActivo === id) {
+                appData.config.cursoEscolarActivo = null;
+                // Seleccionar el siguiente si existe
+                if (appData.config.cursosEscolares.length > 0) {
+                    seleccionarCursoEscolar(appData.config.cursosEscolares[0].id);
+                }
+            }
+            
+            saveToLocalStorage();
+            renderCursosEscolares();
+            renderAll();
+            showToast('Curso escolar eliminado', 'success');
+        }
+        
+        function seleccionarCursoEscolar(id) {
+            if (!id) {
+                appData.config.cursoEscolarActivo = null;
+            } else {
+                appData.config.cursoEscolarActivo = id;
+            }
+            
+            // Actualizar select
+            document.getElementById('cursoEscolarSelect').value = id || '';
+            
+            saveToLocalStorage();
+            renderCursosEscolares();
+            renderAll(); // Re-render para filtrar actividades
+        }
+        
+        function actualizarInfoCursoActivo() {
+            const info = document.getElementById('cursoActivoInfo');
+            const headerInfo = document.getElementById('headerCursoActivo');
+            const cursoId = appData.config.cursoEscolarActivo;
+            
+            if (!cursoId) {
+                info.classList.add('hidden');
+                headerInfo.classList.add('hidden');
+                return;
+            }
+            
+            const curso = appData.config.cursosEscolares.find(c => c.id === cursoId);
+            if (!curso) {
+                info.classList.add('hidden');
+                headerInfo.classList.add('hidden');
+                return;
+            }
+            
+            const numActividades = appData.actividades.filter(a => a.cursoEscolarId === cursoId).length;
+            info.innerHTML = `<strong>${curso.nombre}</strong>: ${formatDate(curso.fechaInicio)} - ${formatDate(curso.fechaFin)} | ${numActividades} actividad${numActividades !== 1 ? 'es' : ''}`;
+            info.classList.remove('hidden');
+            
+            // Actualizar header
+            headerInfo.textContent = `📚 ${curso.nombre}`;
+            headerInfo.classList.remove('hidden');
+        }
+        
+        function actualizarPreviewFechas() {
+            const anoInicio = document.getElementById('cursoAnoInicio').value;
+            if (anoInicio) {
+                const anoFin = parseInt(anoInicio) + 1;
+                document.getElementById('cursoFechaInicioPreview').textContent = `1 de septiembre de ${anoInicio}`;
+                document.getElementById('cursoFechaFinPreview').textContent = `31 de agosto de ${anoFin}`;
+            } else {
+                document.getElementById('cursoFechaInicioPreview').textContent = '1 de septiembre';
+                document.getElementById('cursoFechaFinPreview').textContent = '31 de agosto';
+            }
+        }
+        
+        // Event listener para preview de fechas
+        document.getElementById('cursoAnoInicio')?.addEventListener('input', actualizarPreviewFechas);
+        
+        // Cerrar modal con click fuera o Escape
+        document.getElementById('cursoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'cursoModal') {
+                cerrarModalCurso();
+            }
+        });
+
+        // ==================== NAVIGATION ====================
+        function initTabs() {
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    const targetId = `tab-${tab.dataset.tab}`;
+                    const targetContent = document.getElementById(targetId);
+                    targetContent.classList.remove('hidden');
+                    targetContent.classList.add('fade-in');
+                    
+                    if (tab.dataset.tab === 'cronograma') {
+                        renderCronograma();
+                    }
+                });
+            });
+        }
+
+        // ==================== RENDER FUNCTIONS ====================
+        // Helper: Obtener actividades del curso escolar activo
+        function getActividadesCursoActivo() {
+            if (!appData.config.cursoEscolarActivo) {
+                return appData.actividades; // Si no hay curso activo, mostrar todas (para compatibilidad)
+            }
+            return appData.actividades.filter(a => a.cursoEscolarId === appData.config.cursoEscolarActivo);
+        }
+        
+        function renderAll() {
+            renderCursosEscolares();
+            renderTrimestres();
+            renderProfesorado();
+            renderEditSelect();
+            renderInformeSelects();
+            updateTrimestreOptions();
+            updateDeptFields();
+            updateProfFields();
+        }
+
+        function renderTrimestres() {
+            document.getElementById('t1Start').value = appData.config.trimestres.t1.start || '';
+            document.getElementById('t1End').value = appData.config.trimestres.t1.end || '';
+            document.getElementById('t2Start').value = appData.config.trimestres.t2.start || '';
+            document.getElementById('t2End').value = appData.config.trimestres.t2.end || '';
+            document.getElementById('t3Start').value = appData.config.trimestres.t3.start || '';
+            document.getElementById('t3End').value = appData.config.trimestres.t3.end || '';
+        }
+
+        function renderProfesorado() {
+            const container = document.getElementById('profesorList');
+            if (appData.config.profesorado.length === 0) {
+                container.innerHTML = '<p class="text-sm" style="color: var(--muted);">No hay profesorado registrado</p>';
+                return;
+            }
+            
+            container.innerHTML = appData.config.profesorado.map((prof, idx) => `
+                <div class="flex items-center justify-between p-2 rounded-lg" style="background: var(--bg);">
+                    <span class="text-sm">${prof}</span>
+                    <div class="flex gap-1">
+                        <button onclick="editProfesor(${idx})" class="p-1 rounded hover:bg-opacity-20" style="background: rgba(13, 115, 119, 0.1);">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                        </button>
+                        <button onclick="deleteProfesor(${idx})" class="p-1 rounded hover:bg-opacity-20" style="background: rgba(220, 38, 38, 0.1); color: var(--danger);">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderEditSelect() {
+            const select = document.getElementById('editSelect');
+            const actividades = getActividadesCursoActivo();
+            select.innerHTML = '<option value="">Selecciona una actividad</option>' +
+                actividades.map(act => 
+                    `<option value="${act.id}">${act.curso} - ${act.trimestre} - ${act.nombre}</option>`
+                ).join('');
+        }
+
+        function renderInformeSelects() {
+            const profSelect = document.getElementById('informeProfesor');
+            profSelect.innerHTML = '<option value="">Selecciona profesor/a</option>' +
+                appData.config.profesorado.map(prof => 
+                    `<option value="${prof}">${prof}</option>`
+                ).join('');
+            
+            const deptSelect = document.getElementById('informeDepartamento');
+            deptSelect.innerHTML = '<option value="">Selecciona departamento</option>' +
+                DEPARTAMENTOS.map(dept => 
+                    `<option value="${dept}">${dept}</option>`
+                ).join('');
+        }
+
+        function renderCronograma() {
+            const tbody = document.getElementById('cronogramaBody');
+            tbody.innerHTML = '';
+            
+            const actividadesCurso = getActividadesCursoActivo();
+            
+            CURSOS.forEach(curso => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td class="p-3 font-semibold" style="background: rgba(13, 115, 119, 0.05);">${curso}</td>`;
+                
+                TRIMESTRES.forEach(trimestre => {
+                    const cell = document.createElement('td');
+                    cell.className = 'p-2';
+                    
+                    const cellContent = document.createElement('div');
+                    cellContent.className = 'crono-cell';
+                    cellContent.dataset.curso = curso;
+                    cellContent.dataset.trimestre = trimestre;
+                    
+                    const actividadesInCell = actividadesCurso.filter(
+                        act => act.curso === curso && act.trimestre === trimestre
+                    );
+                    
+                    actividadesInCell.forEach(act => {
+                        const tag = createActivityTag(act);
+                        cellContent.appendChild(tag);
+                    });
+                    
+                    cellContent.addEventListener('dragover', handleDragOver);
+                    cellContent.addEventListener('dragleave', handleDragLeave);
+                    cellContent.addEventListener('drop', handleDrop);
+                    
+                    cell.appendChild(cellContent);
+                    row.appendChild(cell);
+                });
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function createActivityTag(actividad) {
+            const tag = document.createElement('div');
+            tag.className = 'activity-tag mb-2';
+            tag.draggable = true;
+            tag.dataset.id = actividad.id;
+            tag.innerHTML = `
+                <div class="font-semibold">${actividad.nombre}</div>
+                ${actividad.fecha ? `<div class="text-xs opacity-80 mt-1">${formatDate(actividad.fecha)}</div>` : ''}
+            `;
+            
+            tag.addEventListener('dragstart', handleDragStart);
+            tag.addEventListener('dragend', handleDragEnd);
+            
+            return tag;
+        }
+
+        // ==================== DRAG & DROP ====================
+        function handleDragStart(e) {
+            draggedElement = e.target;
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+            document.querySelectorAll('.crono-cell').forEach(cell => {
+                cell.classList.remove('drag-over');
+            });
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const targetCell = e.currentTarget;
+            targetCell.classList.remove('drag-over');
+            
+            if (!draggedElement) return;
+            
+            const draggedId = draggedElement.dataset.id;
+            const targetCurso = targetCell.dataset.curso;
+            const targetTrimestre = targetCell.dataset.trimestre;
+            
+            const sourceCell = draggedElement.parentElement;
+            const sourceCurso = sourceCell.dataset.curso;
+            const sourceTrimestre = sourceCell.dataset.trimestre;
+            
+            const draggedActividad = appData.actividades.find(a => a.id === draggedId);
+            
+            const targetActividad = appData.actividades.find(
+                a => a.curso === targetCurso && a.trimestre === targetTrimestre && a.id !== draggedId
+            );
+            
+            if (targetActividad) {
+                targetActividad.curso = sourceCurso;
+                targetActividad.trimestre = sourceTrimestre;
+            }
+            
+            draggedActividad.curso = targetCurso;
+            draggedActividad.trimestre = targetTrimestre;
+            
+            saveToLocalStorage();
+            renderCronograma();
+            showToast('Actividad movida correctamente', 'success');
+        }
+
+        // ==================== TRIMESTRES ====================
+        function saveTrimestres() {
+            appData.config.trimestres = {
+                t1: {
+                    start: document.getElementById('t1Start').value,
+                    end: document.getElementById('t1End').value
+                },
+                t2: {
+                    start: document.getElementById('t2Start').value,
+                    end: document.getElementById('t2End').value
+                },
+                t3: {
+                    start: document.getElementById('t3Start').value,
+                    end: document.getElementById('t3End').value
+                }
+            };
+            saveToLocalStorage();
+            showToast('Trimestres guardados', 'success');
+        }
+
+        // ==================== PROFESORADO ====================
+        function addProfesor() {
+            const input = document.getElementById('newProfesor');
+            const nombre = input.value.trim();
+            if (!nombre) return;
+            
+            if (appData.config.profesorado.includes(nombre)) {
+                showToast('Este profesor ya existe', 'warning');
+                return;
+            }
+            
+            appData.config.profesorado.push(nombre);
+            input.value = '';
+            saveToLocalStorage();
+            renderProfesorado();
+            renderInformeSelects();
+            showToast('Profesor añadido', 'success');
+        }
+
+        function editProfesor(idx) {
+            const currentName = appData.config.profesorado[idx];
+            const newName = prompt('Editar nombre del profesor:', currentName);
+            if (newName && newName.trim() && newName !== currentName) {
+                appData.config.profesorado[idx] = newName.trim();
+                saveToLocalStorage();
+                renderProfesorado();
+                renderInformeSelects();
+                showToast('Profesor actualizado', 'success');
+            }
+        }
+
+        function deleteProfesor(idx) {
+            if (confirm('Eliminar este profesor?')) {
+                appData.config.profesorado.splice(idx, 1);
+                saveToLocalStorage();
+                renderProfesorado();
+                renderInformeSelects();
+                showToast('Profesor eliminado', 'success');
+            }
+        }
+
+        function importProfesoradoExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    
+                    let imported = 0;
+                    json.forEach(row => {
+                        if (row[0] && typeof row[0] === 'string') {
+                            const nombre = row[0].trim();
+                            if (nombre && !appData.config.profesorado.includes(nombre)) {
+                                appData.config.profesorado.push(nombre);
+                                imported++;
+                            }
+                        }
+                    });
+                    
+                    saveToLocalStorage();
+                    renderProfesorado();
+                    renderInformeSelects();
+                    showToast(`${imported} profesores importados`, 'success');
+                } catch (error) {
+                    showToast('Error al leer el archivo Excel', 'error');
+                    console.error(error);
+                }
+            };
+            reader.readAsArrayBuffer(file);
+            event.target.value = '';
+        }
+
+        // ==================== ACCORDION ====================
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            header.classList.toggle('open');
+            content.classList.toggle('open');
+        }
+
+        // ==================== ACTIVIDADES FORM ====================
+        function updateTrimestreOptions() {
+            const curso = document.getElementById('newCurso').value;
+            const trimestreSelect = document.getElementById('newTrimestre');
+            const actividadesCurso = getActividadesCursoActivo();
+            
+            trimestreSelect.innerHTML = '<option value="">Selecciona trimestre</option>';
+            
+            TRIMESTRES.forEach(t => {
+                const exists = actividadesCurso.some(a => a.curso === curso && a.trimestre === t);
+                if (!exists) {
+                    trimestreSelect.innerHTML += `<option value="${t}">${t}</option>`;
+                }
+            });
+        }
+
+        function updateDeptFields() {
+            const count = document.getElementById('newDeptCount').value;
+            const container = document.getElementById('deptFields');
+            const organizadorField = document.getElementById('organizadorField');
+            
+            container.innerHTML = '';
+            organizadorField.classList.add('hidden');
+            
+            if (count === '0') {
+                organizadorField.classList.remove('hidden');
+            } else if (count === 'todos') {
+                return;
+            } else {
+                const num = parseInt(count);
+                for (let i = 0; i < num; i++) {
+                    const usedDepts = Array.from(container.querySelectorAll('select')).map(s => s.value);
+                    const availableDepts = DEPARTAMENTOS.filter(d => !usedDepts.includes(d));
+                    
+                    container.innerHTML += `
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Departamento ${i + 1}</label>
+                            <select class="form-input form-select dept-select" onchange="updateDeptFields()">
+                                <option value="">Selecciona</option>
+                                ${availableDepts.map(d => `<option value="${d}">${d}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function updateProfFields() {
+            const count = parseInt(document.getElementById('newProfCount').value);
+            const container = document.getElementById('profFields');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const usedProfs = Array.from(container.querySelectorAll('select')).map(s => s.value);
+                const availableProfs = appData.config.profesorado.filter(p => !usedProfs.includes(p));
+                
+                container.innerHTML += `
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Profesor/a ${i + 1}</label>
+                        <select class="form-input form-select prof-select" onchange="updateProfFields()">
+                            <option value="">Selecciona</option>
+                            ${availableProfs.map(p => `<option value="${p}">${p}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            }
+        }
+
+        function saveActividad() {
+            // Verificar que hay un curso escolar activo
+            if (!appData.config.cursoEscolarActivo) {
+                showToast('Selecciona un curso escolar primero', 'warning');
+                return;
+            }
+            
+            const curso = document.getElementById('newCurso').value;
+            const trimestre = document.getElementById('newTrimestre').value;
+            const nombre = document.getElementById('newNombre').value.trim();
+            const descripcion = document.getElementById('newDescripcion').value.trim();
+            const deptCount = document.getElementById('newDeptCount').value;
+            const fecha = document.getElementById('newFecha').value;
+            
+            if (!curso || !trimestre || !nombre) {
+                showToast('Curso, trimestre y nombre son obligatorios', 'warning');
+                return;
+            }
+            
+            // Verificar duplicados solo dentro del mismo curso escolar
+            const exists = appData.actividades.some(a => 
+                a.curso === curso && 
+                a.trimestre === trimestre && 
+                a.cursoEscolarId === appData.config.cursoEscolarActivo
+            );
+            if (exists) {
+                showToast('Ya existe una actividad para este curso y trimestre', 'warning');
+                return;
+            }
+            
+            let departamentos = [];
+            let organizador = '';
+            
+            if (deptCount === '0') {
+                organizador = document.getElementById('newOrganizador').value.trim();
+                if (!organizador) {
+                    showToast('Indica el organizador', 'warning');
+                    return;
+                }
+            } else if (deptCount === 'todos') {
+                departamentos = [...DEPARTAMENTOS];
+            } else {
+                const selects = document.querySelectorAll('#deptFields .dept-select');
+                selects.forEach(s => {
+                    if (s.value) departamentos.push(s.value);
+                });
+            }
+            
+            const profesorado = [];
+            const profSelects = document.querySelectorAll('#profFields .prof-select');
+            profSelects.forEach(s => {
+                if (s.value) profesorado.push(s.value);
+            });
+            
+            const actividad = {
+                id: Date.now().toString(),
+                cursoEscolarId: appData.config.cursoEscolarActivo,
+                curso,
+                trimestre,
+                nombre,
+                descripcion,
+                departamentos,
+                organizador,
+                fecha,
+                profesorado
+            };
+            
+            appData.actividades.push(actividad);
+            saveToLocalStorage();
+            
+            clearNewForm();
+            renderEditSelect();
+            updateTrimestreOptions();
+            showToast('Actividad guardada', 'success');
+        }
+
+        function clearNewForm() {
+            document.getElementById('newCurso').value = '';
+            document.getElementById('newTrimestre').innerHTML = '<option value="">Selecciona trimestre</option>';
+            document.getElementById('newNombre').value = '';
+            document.getElementById('newDescripcion').value = '';
+            document.getElementById('newDeptCount').value = '0';
+            document.getElementById('newFecha').value = '';
+            document.getElementById('newOrganizador').value = '';
+            document.getElementById('deptFields').innerHTML = '';
+            document.getElementById('organizadorField').classList.add('hidden');
+            updateProfFields();
+        }
+
+        // ==================== EDIT ACTIVIDAD ====================
+        function loadActividadForEdit() {
+            const id = document.getElementById('editSelect').value;
+            if (!id) {
+                document.getElementById('editForm').classList.add('hidden');
+                return;
+            }
+            
+            const act = appData.actividades.find(a => a.id === id);
+            if (!act) return;
+            
+            editingActividadId = id;
+            document.getElementById('editForm').classList.remove('hidden');
+            
+            document.getElementById('editCurso').value = act.curso;
+            document.getElementById('editTrimestre').value = act.trimestre;
+            document.getElementById('editNombre').value = act.nombre;
+            document.getElementById('editDescripcion').value = act.descripcion || '';
+            document.getElementById('editFecha').value = act.fecha || '';
+            
+            if (act.organizador) {
+                document.getElementById('editDeptCount').value = '0';
+                document.getElementById('editOrganizador').value = act.organizador;
+                document.getElementById('editOrganizadorField').classList.remove('hidden');
+                document.getElementById('editDeptFields').innerHTML = '';
+            } else if (act.departamentos.length === DEPARTAMENTOS.length) {
+                document.getElementById('editDeptCount').value = 'todos';
+                document.getElementById('editOrganizadorField').classList.add('hidden');
+                document.getElementById('editDeptFields').innerHTML = '';
+            } else {
+                document.getElementById('editDeptCount').value = act.departamentos.length.toString();
+                document.getElementById('editOrganizadorField').classList.add('hidden');
+                updateEditDeptFields(act.departamentos);
+            }
+            
+            document.getElementById('editProfCount').value = act.profesorado.length || 1;
+            updateEditProfFields(act.profesorado);
+        }
+
+        function updateEditDeptFields(selectedDepts = []) {
+            const count = document.getElementById('editDeptCount').value;
+            const container = document.getElementById('editDeptFields');
+            const organizadorField = document.getElementById('editOrganizadorField');
+            
+            container.innerHTML = '';
+            organizadorField.classList.add('hidden');
+            
+            if (count === '0') {
+                organizadorField.classList.remove('hidden');
+            } else if (count === 'todos') {
+                return;
+            } else {
+                const num = parseInt(count);
+                for (let i = 0; i < num; i++) {
+                    const usedDepts = Array.from(container.querySelectorAll('select')).map(s => s.value);
+                    const availableDepts = DEPARTAMENTOS.filter(d => !usedDepts.includes(d) || d === (selectedDepts[i] || ''));
+                    
+                    container.innerHTML += `
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Departamento ${i + 1}</label>
+                            <select class="form-input form-select edit-dept-select">
+                                <option value="">Selecciona</option>
+                                ${availableDepts.map(d => `<option value="${d}" ${d === (selectedDepts[i] || '') ? 'selected' : ''}>${d}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function updateEditProfFields(selectedProfs = []) {
+            const count = parseInt(document.getElementById('editProfCount').value);
+            const container = document.getElementById('editProfFields');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const usedProfs = Array.from(container.querySelectorAll('select')).map(s => s.value);
+                const availableProfs = appData.config.profesorado.filter(p => !usedProfs.includes(p) || p === (selectedProfs[i] || ''));
+                
+                container.innerHTML += `
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Profesor/a ${i + 1}</label>
+                        <select class="form-input form-select edit-prof-select">
+                            <option value="">Selecciona</option>
+                            ${availableProfs.map(p => `<option value="${p}" ${p === (selectedProfs[i] || '') ? 'selected' : ''}>${p}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            }
+        }
+
+        function updateActividad() {
+            if (!editingActividadId) return;
+            
+            const act = appData.actividades.find(a => a.id === editingActividadId);
+            if (!act) return;
+            
+            act.curso = document.getElementById('editCurso').value;
+            act.trimestre = document.getElementById('editTrimestre').value;
+            act.nombre = document.getElementById('editNombre').value.trim();
+            act.descripcion = document.getElementById('editDescripcion').value.trim();
+            act.fecha = document.getElementById('editFecha').value;
+            
+            const deptCount = document.getElementById('editDeptCount').value;
+            if (deptCount === '0') {
+                act.organizador = document.getElementById('editOrganizador').value.trim();
+                act.departamentos = [];
+            } else if (deptCount === 'todos') {
+                act.departamentos = [...DEPARTAMENTOS];
+                act.organizador = '';
+            } else {
+                act.departamentos = Array.from(document.querySelectorAll('#editDeptFields .edit-dept-select'))
+                    .map(s => s.value).filter(v => v);
+                act.organizador = '';
+            }
+            
+            act.profesorado = Array.from(document.querySelectorAll('#editProfFields .edit-prof-select'))
+                .map(s => s.value).filter(v => v);
+            
+            saveToLocalStorage();
+            renderEditSelect();
+            showToast('Actividad actualizada', 'success');
+        }
+
+        function deleteActividad() {
+            if (!editingActividadId) return;
+            if (!confirm('Eliminar esta actividad?')) return;
+            
+            appData.actividades = appData.actividades.filter(a => a.id !== editingActividadId);
+            saveToLocalStorage();
+            
+            document.getElementById('editSelect').value = '';
+            document.getElementById('editForm').classList.add('hidden');
+            editingActividadId = null;
+            
+            renderEditSelect();
+            updateTrimestreOptions();
+            showToast('Actividad eliminada', 'success');
+        }
+
+        // ==================== IMPORT/EXPORT ====================
+        function exportData() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ACE_Villadiego_${formatDateTimeFile()}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            showToast('Datos exportados', 'success');
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    appData = imported;
+                    saveToLocalStorage();
+                    renderAll();
+                    showToast('Datos importados correctamente', 'success');
+                } catch (error) {
+                    showToast('Error al importar: archivo inválido', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ==================== FIREBASE INTEGRATION ====================
+        // Firebase configuration - Datos aislados bajo el path 'aaccee_villadiego'
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZrgrH46VBv56E9i8MUzwtxyoQf8t7He0",
+            authDomain: "iesvdv-96a18.firebaseapp.com",
+            databaseURL: "https://iesvdv-96a18-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "iesvdv-96a18",
+            storageBucket: "iesvdv-96a18.firebasestorage.app",
+            messagingSenderId: "526669274609",
+            appId: "1:526669274609:web:d0c8f6624f01b460467850",
+            measurementId: "G-CPHW2W2VFH"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Path unico para aislar los datos de esta aplicacion
+        const FIREBASE_PATH = 'aaccee_villadiego';
+        
+        // Referencia a la base de datos
+        const dbRef = database.ref(FIREBASE_PATH);
+        
+        // Guardar datos en Firebase
+        async function saveToFirebase() {
+            try {
+                await dbRef.set({
+                    config: appData.config,
+                    actividades: appData.actividades,
+                    lastUpdated: new Date().toISOString()
+                });
+                console.log('Datos guardados en Firebase');
+            } catch (error) {
+                console.error('Error al guardar en Firebase:', error);
+                showToast('Error al guardar en la nube', 'error');
+            }
+        }
+        
+        // Cargar datos desde Firebase
+        async function loadFromFirebase() {
+            try {
+                const snapshot = await dbRef.once('value');
+                const data = snapshot.val();
+                
+                if (data) {
+                    if (data.config) {
+                        appData.config = { ...appData.config, ...data.config };
+                    }
+                    if (data.actividades) {
+                        appData.actividades = data.actividades;
+                    }
+                    saveToLocalStorage();
+                    renderAll();
+                    console.log('Datos cargados desde Firebase');
+                }
+                
+                // También cargar usuarios
+                await loadUsersFromFirebase();
+                
+                // Actualizar UI de usuarios si es admin
+                if (currentUser && currentUser.rol === 'admin') {
+                    renderUsersList();
+                }
+            } catch (error) {
+                console.error('Error al cargar desde Firebase:', error);
+                showToast('Error al cargar desde la nube', 'error');
+            }
+        }
+        
+        // Escuchar cambios en tiempo real
+        function listenToFirebaseChanges() {
+            dbRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.lastUpdated) {
+                    console.log('Datos sincronizados:', data.lastUpdated);
+                }
+            }, (error) => {
+                console.error('Error escuchando cambios:', error);
+            });
+        }
+        
+        // ==================== FIREBASE USER SYNC ====================
+        
+        // Referencia a usuarios en Firebase
+        const usersDbRef = database.ref(FIREBASE_PATH + '/users');
+        
+        // Guardar usuarios en Firebase
+        async function saveUsersToFirebase() {
+            try {
+                await usersDbRef.set({
+                    users: usersData,
+                    lastUpdated: new Date().toISOString()
+                });
+                console.log('Usuarios guardados en Firebase');
+            } catch (error) {
+                console.error('Error al guardar usuarios en Firebase:', error);
+            }
+        }
+        
+        // Cargar usuarios desde Firebase
+        async function loadUsersFromFirebase() {
+            try {
+                const snapshot = await usersDbRef.once('value');
+                const data = snapshot.val();
+                
+                if (data && data.users) {
+                    usersData = data.users;
+                    
+                    // Asegurar que existe el admin por defecto
+                    if (!usersData.find(u => u.id === 'admin_default')) {
+                        usersData.push({...DEFAULT_ADMIN});
+                    }
+                    
+                    saveUsersToStorage();
+                    console.log('Usuarios cargados desde Firebase');
+                }
+            } catch (error) {
+                console.error('Error al cargar usuarios desde Firebase:', error);
+            }
+        }
+
+        // ==================== PDF REPORTS ====================
+        function generateInformeCurso() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            addPDFHeader(doc, 'Informe de Actividades por Curso');
+            
+            let yPos = 45;
+            const actividadesCurso = getActividadesCursoActivo();
+            
+            CURSOS.forEach(curso => {
+                const actividades = actividadesCurso.filter(a => a.curso === curso);
+                if (actividades.length === 0) return;
+                
+                doc.setFontSize(14);
+                doc.setFont(undefined, 'bold');
+                doc.text(curso, 14, yPos);
+                yPos += 8;
+                
+                const tableData = actividades.map(act => [
+                    act.trimestre,
+                    act.nombre,
+                    act.departamentos.join(', ') || act.organizador || '-',
+                    act.fecha ? formatDate(act.fecha) : '-'
+                ]);
+                
+                doc.autoTable({
+                    startY: yPos,
+                    head: [['Trimestre', 'Actividad', 'Departamentos', 'Fecha']],
+                    body: tableData,
+                    theme: 'striped',
+                    headStyles: { fillColor: [13, 115, 119] },
+                    margin: { left: 14 }
+                });
+                
+                yPos = doc.lastAutoTable.finalY + 15;
+            });
+            
+            doc.save(`Informe_Cursos_${formatDateTimeFile()}.pdf`);
+            showToast('Informe generado', 'success');
+        }
+
+        function generateInformeEvaluacion() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            addPDFHeader(doc, 'Informe de Actividades por Evaluación');
+            
+            let yPos = 45;
+            const actividadesCurso = getActividadesCursoActivo();
+            
+            TRIMESTRES.forEach(trim => {
+                const actividades = actividadesCurso.filter(a => a.trimestre === trim);
+                if (actividades.length === 0) return;
+                
+                doc.setFontSize(14);
+                doc.setFont(undefined, 'bold');
+                doc.text(trim, 14, yPos);
+                yPos += 8;
+                
+                const tableData = actividades.map(act => [
+                    act.curso,
+                    act.nombre,
+                    act.departamentos.join(', ') || act.organizador || '-',
+                    act.fecha ? formatDate(act.fecha) : '-'
+                ]);
+                
+                doc.autoTable({
+                    startY: yPos,
+                    head: [['Curso', 'Actividad', 'Departamentos', 'Fecha']],
+                    body: tableData,
+                    theme: 'striped',
+                    headStyles: { fillColor: [13, 115, 119] },
+                    margin: { left: 14 }
+                });
+                
+                yPos = doc.lastAutoTable.finalY + 15;
+            });
+            
+            doc.save(`Informe_Evaluaciones_${formatDateTimeFile()}.pdf`);
+            showToast('Informe generado', 'success');
+        }
+
+        function generateCuadranteGlobal() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('landscape');
+            
+            addPDFHeader(doc, 'Cuadrante Global de Actividades', true);
+            
+            const cellWidth = 60;
+            const cellHeight = 40;
+            const startX = 25;
+            const startY = 45;
+            const colWidth = 90;
+            
+            doc.setFillColor(13, 115, 119);
+            doc.rect(startX, startY, 30, 10, 'F');
+            doc.rect(startX + 30, startY, colWidth, 10, 'F');
+            doc.rect(startX + 30 + colWidth, startY, colWidth, 10, 'F');
+            doc.rect(startX + 30 + colWidth * 2, startY, colWidth, 10, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(9);
+            doc.setFont(undefined, 'bold');
+            doc.text('Curso', startX + 15, startY + 7);
+            doc.text('1er Trimestre', startX + 30 + colWidth/2, startY + 7, { align: 'center' });
+            doc.text('2o Trimestre', startX + 30 + colWidth * 1.5, startY + 7, { align: 'center' });
+            doc.text('3er Trimestre', startX + 30 + colWidth * 2.5, startY + 7, { align: 'center' });
+            
+            let rowY = startY + 10;
+            
+            CURSOS.forEach((curso, idx) => {
+                doc.setFillColor(240, 247, 244);
+                doc.rect(startX, rowY, 30, cellHeight, 'F');
+                doc.rect(startX + 30, rowY, colWidth, cellHeight);
+                doc.rect(startX + 30 + colWidth, rowY, colWidth, cellHeight);
+                doc.rect(startX + 30 + colWidth * 2, rowY, colWidth, cellHeight);
+                
+                doc.setTextColor(45, 45, 45);
+                doc.setFontSize(8);
+                doc.setFont(undefined, 'bold');
+                doc.text(curso, startX + 15, rowY + cellHeight/2, { align: 'center' });
+                
+                TRIMESTRES.forEach((trim, tIdx) => {
+                    const acts = appData.actividades.filter(a => a.curso === curso && a.trimestre === trim);
+                    const cellX = startX + 30 + colWidth * tIdx;
+                    
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(7);
+                    
+                    let textY = rowY + 8;
+                    acts.forEach(act => {
+                        const depts = act.departamentos.length > 0 
+                            ? act.departamentos.slice(0, 2).join(', ') + (act.departamentos.length > 2 ? '...' : '')
+                            : (act.organizador || '-');
+                        const fecha = act.fecha ? `(${formatDate(act.fecha)})` : '';
+                        
+                        doc.text(act.nombre, cellX + 3, textY);
+                        doc.setFontSize(6);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(`${depts} ${fecha}`, cellX + 3, textY + 4);
+                        doc.setTextColor(45, 45, 45);
+                        doc.setFontSize(7);
+                        textY += 12;
+                    });
+                });
+                
+                rowY += cellHeight;
+            });
+            
+            doc.save(`Cuadrante_Global_${formatDateTimeFile()}.pdf`);
+            showToast('Informe generado', 'success');
+        }
+
+        function generateInformeProfesor() {
+            const profesor = document.getElementById('informeProfesor').value;
+            if (!profesor) {
+                showToast('Selecciona un profesor', 'warning');
+                return;
+            }
+            
+            const actividadesCurso = getActividadesCursoActivo();
+            const actividades = actividadesCurso.filter(a => a.profesorado.includes(profesor));
+            
+            if (actividades.length === 0) {
+                showToast('Este profesor no tiene actividades registradas', 'warning');
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            addPDFHeader(doc, `Informe de Profesorado: ${profesor}`);
+            
+            const tableData = actividades.map(act => [
+                act.curso,
+                act.trimestre,
+                act.nombre,
+                act.fecha ? formatDate(act.fecha) : '-'
+            ]);
+            
+            doc.autoTable({
+                startY: 45,
+                head: [['Curso', 'Trimestre', 'Actividad', 'Fecha']],
+                body: tableData,
+                theme: 'striped',
+                headStyles: { fillColor: [13, 115, 119] }
+            });
+            
+            doc.save(`Informe_Profesor_${profesor.replace(/\s+/g, '_')}_${formatDateTimeFile()}.pdf`);
+            showToast('Informe generado', 'success');
+        }
+
+        function generateInformeDepartamento() {
+            const departamento = document.getElementById('informeDepartamento').value;
+            if (!departamento) {
+                showToast('Selecciona un departamento', 'warning');
+                return;
+            }
+            
+            const actividadesCurso = getActividadesCursoActivo();
+            const actividades = actividadesCurso.filter(a => 
+                a.departamentos.includes(departamento)
+            );
+            
+            if (actividades.length === 0) {
+                showToast('Este departamento no tiene actividades registradas', 'warning');
+                return;
+            }
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            addPDFHeader(doc, `Informe de Departamento: ${departamento}`);
+            
+            const tableData = actividades.map(act => [
+                act.curso,
+                act.trimestre,
+                act.nombre,
+                act.fecha ? formatDate(act.fecha) : '-'
+            ]);
+            
+            doc.autoTable({
+                startY: 45,
+                head: [['Curso', 'Trimestre', 'Actividad', 'Fecha']],
+                body: tableData,
+                theme: 'striped',
+                headStyles: { fillColor: [13, 115, 119] }
+            });
+            
+            doc.save(`Informe_Departamento_${departamento.replace(/\s+/g, '_')}_${formatDateTimeFile()}.pdf`);
+            showToast('Informe generado', 'success');
+        }
+
+        function addPDFHeader(doc, title, landscape = false) {
+            doc.setFillColor(13, 115, 119);
+            doc.rect(0, 0, landscape ? 297 : 210, 35, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('IES Virgen de Villadiego', landscape ? 148.5 : 105, 12, { align: 'center' });
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text('Peñaflor (Sevilla)', landscape ? 148.5 : 105, 18, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text(title, landscape ? 148.5 : 105, 28, { align: 'center' });
+            
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(8);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Generado: ${formatDateTime()}`, landscape ? 283 : 196, 290, { align: 'right' });
+        }
+
+        // ==================== UTILITIES ====================
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const [year, month, day] = dateStr.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        function formatDateTime() {
+            const now = new Date();
+            return now.toLocaleString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatDateTimeFile() {
+            const now = new Date();
+            return `${now.getFullYear()}${(now.getMonth()+1).toString().padStart(2,'0')}${now.getDate().toString().padStart(2,'0')}_${now.getHours().toString().padStart(2,'0')}${now.getMinutes().toString().padStart(2,'0')}`;
+        }
+
+        function formatTime() {
+            const now = new Date();
+            return now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Iniciar escucha de cambios en Firebase
+        listenToFirebaseChanges();
+    </script>
+</body>
+</html>
