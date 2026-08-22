@@ -1649,20 +1649,12 @@
                                 </svg>
                                 Gestión de Usuarios
                             </h2>
-                            <div class="flex gap-2 flex-wrap">
-                                <button onclick="abrirModalUsuario()" class="btn btn-primary btn-sm">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-                                    </svg>
-                                    Nuevo Usuario
-                                </button>
-                                <button onclick="forceSyncFromFirebase(this)" class="btn btn-secondary btn-sm" title="Recuperar usuarios creados en otras sesiones/dispositivos">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-                                    </svg>
-                                    Sincronizar desde Nube
-                                </button>
-                            </div>
+                            <button onclick="abrirModalUsuario()" class="btn btn-primary btn-sm">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                Nuevo Usuario
+                            </button>
                         </div>
                         
                         <div id="usersList" class="space-y-3 max-h-96 overflow-y-auto"></div>
@@ -2919,97 +2911,93 @@
 
         // ==================== AUTHENTICATION SYSTEM ====================
         
-        // Cargar usuarios desde localStorage
+        // Cargar usuarios desde localStorage y/o Firebase
+        // PRIORIDAD: Firebase > localStorage > admin por defecto
         async function loadUsersFromStorage() {
             console.log('[AUTH] Iniciando carga de usuarios...');
+            console.log('[AUTH] Estrategia: Firebase tiene PRIORIDAD sobre localStorage');
             
             try {
-                // 1. Cargar desde localStorage primero (fuente rápida)
+                // 1. Cargar desde localStorage como respaldo (NO como fuente principal)
                 const saved = localStorage.getItem('aaccee_users');
+                let localUsers = [];
                 if (saved) {
                     try {
-                        usersData = JSON.parse(saved);
-                        console.log('[AUTH] Usuarios cargados desde localStorage:', usersData.length);
+                        localUsers = JSON.parse(saved);
+                        console.log('[AUTH] Usuarios en localStorage (respaldo):', localUsers.length);
                     } catch (parseError) {
                         console.error('[AUTH] Error parseando usuarios locales:', parseError);
-                        usersData = [];
+                        localUsers = [];
                     }
-                } else {
-                    console.log('[AUTH] No hay usuarios en localStorage (primera vez en este dispositivo)');
-                    usersData = [];
                 }
                 
-                // 2. Verificar si tenemos el usuario admin básico
-                let hasAdmin = usersData.some(u => u.id === 'admin_default');
-                
-                // 3. Intentar sincronizar con Firebase (NO bloqueante - si falla, usamos locals)
+                // 2. ★ PRIORIDAD ABSOLUTA: Intentar cargar desde Firebase PRIMERO
+                let firebaseHasData = false;
                 try {
-                    const isAdminInitialized = await checkAdminInitialized();
-                    console.log('[AUTH] Firebase disponible, adminInitialized:', isAdminInitialized);
+                    console.log('[AUTH] 🔍 Verificando Firebase como fuente PRINCIPAL...');
+                    firebaseHasData = await loadUsersFromFirebase();
                     
-                    // Si no tenemos admin localmente y Firebase dice que no fue inicializado, crearlo
-                    if (!hasAdmin && !isAdminInitialized) {
-                        console.log('[AUTH] Creando usuario admin por defecto...');
-                        const newAdmin = {...DEFAULT_ADMIN};
-                        newAdmin.password = await hashPassword(newAdmin.password);
-                        newAdmin.passwordHashed = true;
-                        usersData.push(newAdmin);
-                        hasAdmin = true;
-                        localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+                    if (firebaseHasData) {
+                        console.log('[AUTH] ✅ Usuarios cargados desde Firebase (fuente principal)');
                         
-                        // Marcar en Firebase (no crítico si falla)
-                        try { await markAdminAsInitialized(); } catch(e) { console.warn('[AUTH] No se pudo marcar admin en Firebase'); }
+                        // Hashear contraseñas si es necesario
+                        await hashPasswordsIfNeeded();
+                        
+                        console.log('[AUTH] Carga completada desde Firebase. Total:', usersData.length);
+                        return usersData;
                     }
                     
-                    // Cargar usuarios actualizados desde Firebase (opcional)
-                    try {
-                        await loadUsersFromFirebase();
-                        // Re-verificar si tenemos admin después de cargar desde Firebase
-                        hasAdmin = usersData.some(u => u.id === 'admin_default');
-                    } catch (firebaseLoadError) {
-                        console.warn('[AUTH] No se pudieron cargar usuarios desde Firebase:', firebaseLoadError.message);
-                        // Continuar con los datos locales - NO es crítico
-                    }
+                    console.log('[AUTH] ⚠️ Firebase no tiene datos, verificando alternativas...');
                     
                 } catch (firebaseError) {
-                    console.warn('[AUTH] Firebase no disponible o error:', firebaseError.message);
-                    console.log('[AUTH] Continuando modo offline/local...');
+                    console.warn('[AUTH] Firebase no disponible:', firebaseError.message);
+                    console.log('[AUTH] Usando datos locales como alternativa...');
                 }
                 
-                // 4. GARANTIZAR: Si aún no tenemos admin, crearlo SIEMPRE (modo emergencia)
+                // 3. Si Firebase no tiene datos, usar localStorage
+                if (localUsers.length > 0) {
+                    usersData = localUsers;
+                    console.log('[AUTH] Usando usuarios del localStorage:', usersData.length);
+                } else {
+                    usersData = [];
+                    console.log('[AUTH] No hay usuarios en localStorage ni Firebase');
+                }
+                
+                // 4. VERIFICAR CRÍTICA: ¿Tenemos admin?
+                let hasAdmin = usersData.some(u => u.id === 'admin_default');
+                
                 if (!hasAdmin || usersData.length === 0) {
-                    console.log('[AUTH] GARANTÍA: Creando usuario admin por defecto (modo local)');
-                    const guaranteedAdmin = {...DEFAULT_ADMIN};
-                    guaranteedAdmin.password = await hashPassword(guaranteedAdmin.password);
-                    guaranteedAdmin.passwordHashed = true;
+                    console.log('[AUTH] 🆕 Creando usuario admin por defecto (no existe en ninguna fuente)');
+                    const newAdmin = {...DEFAULT_ADMIN};
+                    newAdmin.password = await hashPassword(newAdmin.password);
+                    newAdmin.passwordHashed = true;
                     
-                    if (!hasAdmin) {
-                        usersData.push(guaranteedAdmin);
+                    if (usersData.length === 0) {
+                        usersData = [newAdmin];
                     } else {
-                        usersData = [guaranteedAdmin];
+                        usersData.push(newAdmin);
                     }
                     
-                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
                     hasAdmin = true;
-                    console.log('[ADMIN] Admin creado/garantizado correctamente');
+                    
+                    // Guardar inmediatamente en localStorage
+                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+                    
+                    // Intentar guardar en Firebase para futuras sesiones
+                    try {
+                        await saveUsersToFirebase();
+                        await markAdminAsInitialized();
+                        console.log('[AUTH] Admin inicial guardado en Firebase para futuras sesiones');
+                    } catch (e) {
+                        console.warn('[AUTH] No se pudo guardar admin inicial en Firebase:', e.message);
+                    }
                 }
                 
-                // 5. Hashear contraseñas que aún no lo estén (migración)
-                let needsSave = false;
-                for (let user of usersData) {
-                    if (!user.passwordHashed && user.password) {
-                        console.log('[AUTH] Hasheando contraseña para:', user.username);
-                        user.password = await hashPassword(user.password);
-                        user.passwordHashed = true;
-                        needsSave = true;
-                    }
-                }
-                if (needsSave) {
-                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
-                    console.log('[AUTH] Contraseñas hasheadas y guardadas');
-                }
+                // 5. Hashear contraseñas que aún no lo estén
+                await hashPasswordsIfNeeded();
                 
                 console.log('[AUTH] Carga completada. Total usuarios:', usersData.length);
+                console.log('[AUTH] Usuarios:', usersData.map(u => u.username));
                 return usersData;
                 
             } catch (error) {
@@ -3017,7 +3005,7 @@
                 
                 // ULTIMO RECURSO: Crear admin si todo lo demás falló
                 if (!usersData.some(u => u.id === 'admin_default')) {
-                    console.log('[AUTH] ÚLTIMO RECURSO: Creando admin de emergencia');
+                    console.log('[AUTH] 🚨 ÚLTIMO RECURSO: Creando admin de emergencia');
                     const emergencyAdmin = {...DEFAULT_ADMIN};
                     emergencyAdmin.password = await hashPassword(emergencyAdmin.password);
                     emergencyAdmin.passwordHashed = true;
@@ -3026,6 +3014,23 @@
                 }
                 
                 return usersData;
+            }
+        }
+        
+        // Función auxiliar para hashear contraseñas
+        async function hashPasswordsIfNeeded() {
+            let needsSave = false;
+            for (let user of usersData) {
+                if (!user.passwordHashed && user.password) {
+                    console.log('[AUTH] Hasheando contraseña para:', user.username);
+                    user.password = await hashPassword(user.password);
+                    user.passwordHashed = true;
+                    needsSave = true;
+                }
+            }
+            if (needsSave) {
+                localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+                console.log('[AUTH] Contraseñas hasheadas y guardadas');
             }
         }
         
@@ -3205,51 +3210,6 @@
                 
                 // Recargar página para volver al login
                 location.reload();
-            }
-        }
-        
-        // Forzar sincronización de usuarios desde Firebase (para recuperar usuarios de otras sesiones)
-        async function forceSyncFromFirebase(btn) {
-            if (!confirm('¿Sincronizar usuarios desde la nube?\n\nEsto actualizará la lista de usuarios con los datos guardados en Firebase.')) {
-                return;
-            }
-            
-            try {
-                console.log('[FORCE SYNC] Iniciando sincronización forzada...');
-                
-                // Mostrar indicador de carga
-                if (btn) {
-                    btn.disabled = true;
-                    btn.innerHTML = '<svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"/><path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"/></svg> Sincronizando...';
-                }
-                
-                // Cargar directamente desde Firebase
-                const success = await loadUsersFromFirebase();
-                
-                if (success) {
-                    showToast(`✅ Sincronizados ${usersData.length} usuarios desde la nube`, 'success');
-                    renderUsersList();
-                    
-                    // Actualizar sesión si el usuario actual cambió
-                    if (currentUser) {
-                        const updatedUser = usersData.find(u => u.id === currentUser.id);
-                        if (updatedUser) {
-                            currentUser = updatedUser;
-                            updateSessionUI();
-                        }
-                    }
-                } else {
-                    showToast('⚠️ No se encontraron usuarios en la nube', 'warning');
-                }
-                
-            } catch (error) {
-                console.error('[FORCE SYNC] Error:', error);
-                showToast('❌ Error al sincronizar: ' + error.message, 'error');
-            } finally {
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sincronizar desde Nube';
-                }
             }
         }
         
