@@ -1381,20 +1381,7 @@
                 
                 <div id="loginError" class="login-error"></div>
                 
-                <!-- Panel de Diagnóstico (solo visible si hay problemas) -->
-                <div id="debugPanel" style="display: none; margin-top: 1rem; padding: 0.75rem; background: rgba(255,255,255,0.1); border-radius: 8px; font-size: 0.7rem; color: rgba(255,255,255,0.8);">
-                    <div style="font-weight: bold; margin-bottom: 0.5rem; color: #fbbf24;">🔍 DIAGNÓSTICO:</div>
-                    <div id="debugInfo"></div>
-                    <button type="button" onclick="toggleDebugPanel()" style="margin-top: 0.5rem; background: none; border: none; color: rgba(255,255,255,0.5); font-size: 0.65rem; cursor: pointer; text-decoration: underline;">
-                        Ocultar diagnóstico
-                    </button>
-                </div>
-                
-                <button type="button" onclick="showDebugPanel()" style="background: none; border: none; color: rgba(255,255,255,0.4); font-size: 0.65rem; cursor: pointer; text-decoration: underline; margin-top: 0.5rem;">
-                    ¿Problemas? Mostrar diagnóstico
-                </button>
-                
-                <button type="submit" id="loginBtn" class="login-btn" style="margin-top: 0.5rem;">
+                <button type="submit" id="loginBtn" class="login-btn">
                     Iniciar Sesión
                 </button>
             </form>
@@ -2968,15 +2955,6 @@
                     usersData = firebaseData.users;
                     console.log(`[AUTH]    → Cargados ${usersData.length} usuarios desde Firebase`);
                     
-                    // Guardar info de debug
-                    setDebugInfo({
-                        source: 'Firebase (principal)',
-                        firebaseStatus: '✅ Con datos',
-                        userCount: usersData.length,
-                        firebaseUserCount: firebaseData.users.length,
-                        userList: usersData.map(u => ({id: u.id, username: u.username, activo: u.activo}))
-                    });
-                    
                     // Guardar en localStorage como caché
                     localStorage.setItem('aaccee_users', JSON.stringify(usersData));
                     console.log('[AUTH]    → Cache actualizado en localStorage');
@@ -2990,14 +2968,6 @@
                 }
                 
                 console.log('[AUTH] ℹ️ Firebase no tiene usuarios válidos, buscando alternativas...');
-                
-                // Guardar info de debug sobre Firebase vacío
-                setDebugInfo({
-                    source: 'Firebase vacío',
-                    firebaseStatus: '⚠️ Sin usuarios válidos',
-                    firebaseUserCount: firebaseData?.users?.length || 0,
-                    error: firebaseData ? 'Firebase respondió pero sin usuarios válidos' : 'Firebase no respondió'
-                });
                 
                 // ────────────────────────────────────────────────
                 // PASO 3: Si Firebase está vacío, intentar localStorage
@@ -3261,99 +3231,6 @@
                     loginBtn.textContent = 'Iniciar Sesión';
                 }
             }, 500);
-        }
-        
-        // ==================== FUNCIONES DE DIAGNÓSTICO ====================
-        
-        // Variable para guardar info de debug
-        let debugInfoData = {
-            source: 'desconocido',
-            firebaseStatus: 'no verificado',
-            userCount: 0,
-            userList: [],
-            firebaseUserCount: 0,
-            error: null
-        };
-        
-        // Mostrar panel de debug
-        function showDebugPanel() {
-            const panel = document.getElementById('debugPanel');
-            const infoDiv = document.getElementById('debugInfo');
-            
-            if (panel && infoDiv) {
-                panel.style.display = 'block';
-                
-                // Obtener diagnóstico de Firebase si está disponible
-                const fbDiag = window.firebaseDiagnostico || {};
-                
-                // Generar información de debug
-                let html = `
-                    <div><strong>Fuente de datos:</strong> ${debugInfoData.source}</div>
-                    <div><strong>Estado Firebase:</strong> ${debugInfoData.firebaseStatus}</div>
-                    <div><strong>Usuarios cargados:</strong> ${debugInfoData.userCount}</div>
-                    <div><strong>Usuarios en Firebase:</strong> ${debugInfoData.firebaseUserCount}</div>
-                    
-                    <div style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.2);">
-                        <strong style="color: #fbbf24;">🔧 DIAGNÓSTICO FIREBASE:</strong>
-                        <div style="margin-left: 0.5rem; margin-top: 0.25rem;">
-                            <div>Conexión: ${fbDiag.conexion || '⏳ No verificado'}</div>
-                            <div>Escritura: ${fbDiag.escritura || '⏳ No verificado'}</div>
-                            <div>Lectura: ${fbDiag.lectura || '⏳ No verificado'}</div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 0.5rem;"><strong>Lista de usuarios:</strong></div>
-                    <ul style="margin: 0; padding-left: 1rem;">
-                        ${debugInfoData.userList.map(u => `<li>${u.username} (ID: ${u.id}, activo: u.activo)</li>`).join('') || '<li>(ninguno)</li>'}
-                    </ul>
-                `;
-                
-                if (debugInfoData.error) {
-                    html += `<div style="margin-top: 0.5rem; color: #f87171;"><strong>Error:</strong> ${debugInfoData.error}</div>`;
-                }
-                
-                if (fbDiag.permisos && fbDiag.permisos.includes('🚨')) {
-                    html += `
-                        <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(239,68,68,0.2); border-radius: 4px; border-left: 3px solid #f87171;">
-                            <strong style="color: #f87171;">🚨 PROBLEMA CRÍTICO DETECTADO</strong>
-                            <div style="font-size: 0.65rem; margin-top: 0.25rem;">
-                                Las reglas de seguridad de Firebase están bloqueando la lectura/escritura.<br>
-                                <strong>Solución:</strong> Ve a Firebase Console > Realtime Database > Reglas y permite lectura/escritura pública (solo para desarrollo).
-                            </div>
-                        </div>
-                    `;
-                } else if (debugInfoData.firebaseStatus.includes('Sin usuarios') || debugInfoData.userCount === 1) {
-                    html += `
-                        <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(251,191,36,0.15); border-radius: 4px; border-left: 3px solid #fbbf24;">
-                            <strong style="color: #fbbf24;">⚠️ Firebase no tiene tus usuarios</strong>
-                            <div style="font-size: 0.65rem; margin-top: 0.25rem;">
-                                Los usuarios que creaste en otra sesión NO se guardaron en Firebase.<br><br>
-                                <strong>Pasos para arreglarlo:</strong><br>
-                                1. Entra con admin/admin123<br>
-                                2. Crea los usuarios de nuevo<br>
-                                3. Verifica en consola: "[SAVE] ✅ Usuarios guardados en localStorage Y Firebase"<br>
-                                4. Luego prueba en incógnito
-                            </div>
-                        </div>
-                    `;
-                }
-                
-                infoDiv.innerHTML = html;
-            }
-        }
-        
-        // Ocultar panel de debug
-        function toggleDebugPanel() {
-            const panel = document.getElementById('debugPanel');
-            if (panel) {
-                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-            }
-        }
-        
-        // Guardar información de debug (se llama desde loadUsersFromStorage)
-        function setDebugInfo(info) {
-            debugInfoData = {...debugInfoData, ...info};
-            console.log('[DEBUG] Info actualizada:', debugInfoData);
         }
         
         // Función de emergencia para resetear datos de login
@@ -5352,120 +5229,6 @@
         
         // Referencia a la base de datos
         const dbRef = database.ref(FIREBASE_PATH);
-        
-        // ==================== FIREBASE DIAGNÓSTICO PROFUNDO ====================
-        
-        // Función para diagnosticar problemas de Firebase
-        async function diagnosticarFirebase() {
-            console.log('[FIREBASE DIAG] ══════════════════════════════════════');
-            console.log('[FIREBASE DIAG] Iniciando diagnóstico profundo de Firebase...');
-            
-            const resultados = {
-                conexion: null,
-                escritura: null,
-                lectura: null,
-                permisos: null,
-                error: null
-            };
-            
-            // 1. Probar conexión básica
-            try {
-                const testRef = database.ref('.info/connected');
-                const connectedSnapshot = await testRef.once('value');
-                const isConnected = connectedSnapshot.val();
-                resultados.conexion = isConnected ? '✅ Conectado' : '❌ Desconectado';
-                console.log(`[FIREBASE DIAG] Conexión: ${resultados.conexion}`);
-            } catch (e) {
-                resultados.conexion = `❌ Error: ${e.message}`;
-                resultados.error = e;
-                console.error('[FIREBASE DIAG] Error de conexión:', e);
-            }
-            
-            // 2. Probar ESCRITURA en la ruta de usuarios
-            try {
-                const testWriteRef = usersDbRef.child('_test_write_' + Date.now());
-                await testWriteRef.set({
-                    test: true,
-                    timestamp: new Date().toISOString(),
-                    origen: window.location.href
-                });
-                resultados.escritura = '✅ Escritura OK';
-                console.log(`[FIREBASE DIAG] Escritura: ${resultados.escritura}`);
-                
-                // 3. Probar LECTURA inmediata de lo que acabamos de escribir
-                try {
-                    const readSnapshot = await testWriteRef.once('value');
-                    const testData = readSnapshot.val();
-                    resultados.lectura = testData ? '✅ Lectura OK' : '⚠️ Leyó NULL';
-                    console.log(`[FIREBASE DIAG] Lectura: ${resultados.lectura}`);
-                    if (testData) {
-                        console.log('[FIREBASE DATOS LEÍDOS:', testData);
-                    }
-                    
-                    // Limpiar dato de prueba
-                    await testWriteRef.remove();
-                    console.log('[FIREBASE DIAG] Dato de prueba eliminado');
-                    
-                } catch (readErr) {
-                    resultados.lectura = `❌ Error lectura: ${readErr.message}`;
-                    console.error('[FIREBASE DIAG] Error de lectura:', readErr);
-                }
-                
-            } catch (writeErr) {
-                resultados.escritura = `❌ Error escritura: ${writeErr.message}`;
-                resultados.permisos = `❌ Posible problema de permisos`;
-                resultados.error = writeErr;
-                console.error('[FIREBASE DIAG] Error de escritura:', writeErr);
-                
-                // Verificar si es error de permisos
-                if (writeErr.message.includes('PERMISSION_DENIED') || 
-                    writeErr.code === 'PERMISSION_DENIED') {
-                    resultados.permisos = '🚨 PERMISO DENEGADO - Revisar reglas de seguridad en Firebase Console';
-                    console.error('[FIREBASE DIAG] 🚨 PERMISO DENEGADO');
-                    console.error('[FIREBASE DIAG] Las reglas de seguridad no permiten escritura desde este dominio');
-                }
-            }
-            
-            // 4. Verificar contenido ACTUAL de la ruta de usuarios
-            try {
-                const currentData = await usersDbRef.once('value');
-                const val = currentData.val();
-                console.log('[FIREBASE DIAG] Contenido actual de usersDbRef:');
-                console.log('[FIREBASE DIAG]   - Ruta completa:', usersDbRef.toString());
-                console.log('[FIREBASE DIAG]   - Valor:', val);
-                console.log('[FIREBASE DIAG]   - Tipo:', typeof val);
-                if (val) {
-                    console.log('[FIREBASE DIAG]   - Claves:', Object.keys(val));
-                    if (val.users) {
-                        console.log('[FIREBASE DIAG]   - Usuarios encontrados:', val.users.length);
-                    }
-                } else {
-                    console.log('[FIREBASE DIAG]   - ⚠️ ESTÁ VACÍO o es NULL');
-                }
-            } catch (e) {
-                console.error('[FIREBASE DIAG] Error leyendo contenido actual:', e);
-            }
-            
-            console.log('[FIREBASE DIAG] ══════════════════════════════════════');
-            console.log('[FIREBASE DIAG] RESUMEN:', resultados);
-            
-            return resultados;
-        }
-        
-        // Ejecutar diagnóstico al inicio (en background)
-        setTimeout(() => {
-            diagnosticarFirebase().then(result => {
-                // Guardar resultado para el panel de debug
-                window.firebaseDiagnostico = result;
-                
-                // Mostrar advertencia si hay problemas
-                if (result.lectura && result.lectura.includes('❌')) {
-                    console.warn('[FIREBASE DIAG] ⚠️ PROBLEMA DETECTADO: Firebase no funciona correctamente');
-                    console.warn('[FIREBASE DIAG] Esto explica por qué no se guardan/cargan usuarios entre sesiones');
-                    console.warn('[FIREBASE DIAG] Solución: Verificar las reglas de seguridad en Firebase Console');
-                }
-            });
-        }, 2000);
         
         // Guardar datos en Firebase (SIN borrar usuarios)
         async function saveToFirebase() {
