@@ -2,35 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="theme-color" content="#0d7377">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <title>AAEE - IES Virgen de Villadiego</title>
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48x48.png">
-    
-    <!-- Apple Touch Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="icons/icon-128x128.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="icons/icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
-    
-    <!-- Android/Chrome Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="256x256" href="icons/icon-256x256.png">
-    <link rel="icon" type="image/png" sizes="384x384" href="icons/icon-384x384.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AACCEE - IES Virgen de Villadiego</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -302,35 +275,6 @@
             cursor: grab;
             transition: all 0.2s;
             user-select: none;
-        }
-
-        /* Colores de actividad según estado en el cronograma */
-        
-        /* PROPUESTA: Sin fecha, sin check - Tono Ámbar/Naranja */
-        .activity-tag.estado-propuesta {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            border-left-color: #92400e !important;
-        }
-        .activity-tag.estado-propuesta:hover {
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-        
-        /* REALIZADA: Tiene fecha asignada - Tono Verde */
-        .activity-tag.estado-realizada {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-left-color: #065f46 !important;
-        }
-        .activity-tag.estado-realizada:hover {
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-        }
-        
-        /* NO REALIZADA: Check marcado - Tono Rojo */
-        .activity-tag-no-realizada {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            border-left-color: #991b1b !important;
-        }
-        .activity-tag-no-realizada:hover {
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
         }
 
         .activity-tag:hover {
@@ -654,38 +598,6 @@
             color: #b45309;
         }
 
-        /* Estilos AGRESIVOS para labels del modal de edición - Máxima prioridad */
-        #cronoEditModal label,
-        #cronoEditModal label *,
-        #cronoEditModal span[class*="font"],
-        #cronoEditModal .block,
-        #cronoEditModal [class*="text-sm"] {
-            color: #111827 !important;
-            font-weight: 600 !important;
-        }
-        
-        /* Clase especial para forzar labels visibles */
-        .force-visible-label {
-            color: #111827 !important;
-            font-weight: 700 !important;
-            text-shadow: none !important;
-            opacity: 1 !important;
-        }
-        
-        /* Modo oscuro - labels blancos */
-        .dark #cronoEditModal label,
-        .dark #cronoEditModal label *,
-        .dark #cronoEditModal span[class*="font"],
-        [data-theme="dark"] #cronoEditModal label,
-        [data-theme="dark"] #cronoEditModal label * {
-            color: #f9fafb !important;
-        }
-        
-        .dark .force-visible-label,
-        [data-theme="dark"] .force-visible-label {
-            color: #f9fafb !important;
-        }
-
         .user-actions {
             display: flex;
             gap: 0.5rem;
@@ -736,643 +648,22 @@
             background: rgba(220, 38, 38, 0.05);
         }
 
-        /* ==================== RESPONSIVE DESIGN - MULTIPLATFORMA ==================== */
-        
-        /* ===== NAVEGACIÓN MÓVIL (Hamburguesa) ===== */
-        .mobile-menu-btn {
-            display: none;
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .mobile-menu-btn svg {
-            width: 24px;
-            height: 24px;
-        }
-        
-        .mobile-nav {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 9999;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-        }
-        
-        .mobile-nav.active {
-            display: flex;
-        }
-        
-        .mobile-nav-panel {
-            background: var(--card);
-            width: 280px;
-            max-width: 85vw;
-            height: 100%;
-            padding: 1.5rem;
-            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
-            overflow-y: auto;
-            animation: slideInRight 0.3s ease-out;
-        }
-        
-        @keyframes slideInRight {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
-        }
-        
-        .mobile-nav-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .mobile-nav-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--muted);
-            padding: 0.25rem;
-        }
-        
-        .mobile-nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .mobile-nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            color: var(--fg);
-            text-decoration: none;
-            transition: all 0.2s;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        
-        .mobile-nav-link:hover,
-        .mobile-nav-link.active {
-            background: rgba(13, 115, 119, 0.1);
-            color: var(--accent);
-        }
-        
-        .mobile-nav-link.active {
-            background: var(--accent);
-            color: white;
-        }
-        
-        /* ===== TOUCH OPTIMIZATIONS ===== */
-        @media (hover: none) and (pointer: coarse) {
-            /* Dispositivos táctiles */
-            .btn {
-                min-height: 48px; /* Tamaño mínimo táctil */
-                padding: 0.875rem 1.5rem;
-            }
-            
-            .nav-tab {
-                min-height: 44px;
-                padding: 0.75rem 1rem;
-            }
-            
-            .form-input {
-                min-height: 48px;
-                font-size: 16px; /* Prevenir zoom en iOS */
-            }
-            
-            .activity-tag {
-                padding: 0.625rem 0.875rem;
-                min-height: 44px;
-            }
-            
-            .accordion-header {
-                min-height: 48px;
-            }
-            
-            /* Aumentar áreas clicables */
-            input[type="checkbox"],
-            input[type="radio"] {
-                width: 24px;
-                height: 24px;
-            }
-            
-            /* Eliminar hover effects en táctil */
-            .btn:hover {
-                transform: none;
-            }
-            .card:hover {
-                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            }
-        }
-        
-        /* ===== TABLET (768px - 1024px) ===== */
-        @media (max-width: 1024px) and (min-width: 769px) {
-            .login-container {
-                max-width: 400px;
-                padding: 2rem;
-            }
-            
-            header .max-w-7xl {
-                padding: 0 1.5rem;
-            }
-            
-            main .max-w-7xl {
-                padding: 0 1.5rem;
-            }
-            
-            /* Grid adjustments for tablet */
-            .grid.md\\:grid-cols-2 {
-                gap: 1.25rem;
-            }
-            
-            /* Cronograma tablet */
-            .crono-table {
-                font-size: 0.8rem;
-            }
-            
-            .crono-cell {
-                min-height: 80px;
-                padding: 0.5rem;
-            }
-        }
-        
-        /* ===== MÓVIL (< 768px) ===== */
+        /* Responsive */
         @media (max-width: 768px) {
-            /* Mostrar botón hamburguesa */
-            .mobile-menu-btn {
-                display: flex;
-            }
-            
-            /* Ocultar navegación desktop */
             .nav-tabs {
-                display: none !important;
-            }
-            
-            /* Header compacto */
-            header {
-                padding: 0.75rem 0 !important;
-            }
-            
-            header h1 {
-                font-size: 1rem !important;
-            }
-            
-            header p {
-                font-size: 0.7rem !important;
-            }
-            
-            /* Session info compacta */
-            .session-info {
-                padding: 0.35rem 0.6rem;
-                font-size: 0.75rem;
-                gap: 0.4rem;
-            }
-            
-            .session-user {
-                max-width: 80px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-            
-            .logout-btn span {
-                display: none; /* Ocultar texto "Salir" en móvil */
-            }
-            
-            /* Login móvil */
-            .login-container {
-                padding: 1.5rem;
-                margin: 0.5rem;
-                border-radius: 1.25rem;
-            }
-            
-            .login-logo {
-                width: 64px;
-                height: 64px;
-                margin-bottom: 1rem;
-            }
-            
-            .login-title {
-                font-size: 1.4rem;
-            }
-            
-            .login-subtitle {
-                font-size: 0.8rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            /* Cards móviles */
-            .card {
-                border-radius: 0.75rem;
-                padding: 1rem !important;
-            }
-            
-            .card p-6 {
-                padding: 1rem !important;
-            }
-            
-            /* Grid stack en móvil */
-            .grid {
-                grid-template-columns: 1fr !important;
-                gap: 1rem !important;
-            }
-            
-            .md\\:grid-cols-2,
-            .md\\:col-span-2 {
-                grid-column: span 1 !important;
-            }
-            
-            /* Formularios móviles */
-            .form-input {
-                padding: 0.75rem;
-                font-size: 16px; /* Prevenir zoom iOS */
-            }
-            
-            label {
-                font-size: 0.875rem;
-                margin-bottom: 0.375rem;
-            }
-            
-            /* Botones móviles */
-            .btn {
-                width: 100%;
-                justify-content: center;
-                padding: 0.875rem 1rem;
-            }
-            
-            .btn-sm {
-                padding: 0.625rem 0.875rem;
-            }
-            
-            /* Accordion móvil */
-            .accordion-header {
-                padding: 1rem;
                 flex-wrap: wrap;
-                gap: 0.5rem;
             }
-            
-            /* Cronograma MÓVIL - Scroll horizontal */
-            .crono-wrapper {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scroll-snap-type: x mandatory;
-                margin: 0 -1rem;
-                padding: 0 1rem;
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
             }
-            
-            .crono-table {
-                min-width: 600px; /* Forzar ancho mínimo para scroll */
+            .crono-grid {
                 font-size: 0.75rem;
             }
-            
-            .crono-cell {
-                min-height: 90px;
-                padding: 0.5rem;
-                border-radius: 0.5rem;
-            }
-            
             .activity-tag {
                 font-size: 0.7rem;
-                padding: 0.4rem 0.6rem;
-                margin-bottom: 0.375rem;
-                word-break: break-word;
-            }
-            
-            .activity-tag .text-xs {
-                font-size: 0.6rem;
-            }
-            
-            /* Tabla del cronograma */
-            #cronogramaTable {
-                display: block;
-            }
-            
-            #cronogramaTable thead,
-            #cronogramaTable tbody,
-            #cronogramaTable th,
-            #cronogramaTable td,
-            #cronogramaTable tr {
-                display: block;
-            }
-            
-            #cronogramaTable thead tr {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
-            }
-            
-            #cronogramaTable tr {
-                border: 1px solid var(--border);
-                border-radius: 0.5rem;
-                margin-bottom: 0.75rem;
-                padding: 0.75rem;
-                background: var(--card);
-            }
-            
-            #cronogramaTable td {
-                border: none;
-                position: relative;
-                padding-left: 50%;
-                text-align: left !important;
-            }
-            
-            #cronogramaTable td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0.75rem;
-                top: 0.75rem;
-                font-weight: 600;
-                color: var(--accent);
-                font-size: 0.75rem;
-                text-transform: uppercase;
-            }
-            
-            /* Modales en móvil - Pantalla completa */
-            .modal {
-                width: 100% !important;
-                max-width: 100% !important;
-                max-height: 100vh !important;
-                border-radius: 1rem 1rem 0 0 !important;
-                margin-top: auto;
-            }
-            
-            .modal-overlay .modal {
-                border-radius: 1.5rem 1.5rem 0 0 !important;
-            }
-            
-            /* Modal de edición del cronograma en móvil */
-            #cronoEditModal > div:last-child {
-                inset: 0 !important;
-                border-radius: 0 !important;
-            }
-            
-            /* Toast notifications móviles */
-            .toast-container {
-                left: 1rem;
-                right: 1rem;
-                bottom: 1rem;
-            }
-            
-            .toast {
-                font-size: 0.875rem;
-                padding: 0.875rem 1rem;
-            }
-            
-            /* User cards en móvil */
-            .user-card {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 0.875rem;
-            }
-            
-            .user-info {
-                width: 100%;
-            }
-            
-            .user-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-            
-            /* Informes móviles */
-            .informe-filters {
-                flex-direction: column;
-            }
-            
-            .informe-filters > div {
-                width: 100%;
-            }
-            
-            /* Tablas de informes scrollables */
-            .table-wrapper {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                margin: 0 -1rem;
-                padding: 0 1rem;
-            }
-            
-            table {
-                min-width: 500px;
-                font-size: 0.8rem;
-            }
-            
-            th, td {
-                padding: 0.5rem 0.375rem !important;
-            }
-            
-            /* Importación Excel móvil */
-            #importPreviewContainer {
-                max-height: 200px;
-            }
-            
-            /* Splash screen móvil */
-            .splash-logo {
-                width: 80px;
-                height: 80px;
-            }
-            
-            .splash-content h1 {
-                font-size: 1.5rem !important;
-            }
-            
-            .splash-content p {
-                font-size: 0.9rem !important;
-            }
-            
-            /* Footer/info sections */
-            footer, 
-            .info-section {
-                padding: 1.5rem 1rem !important;
-            }
-            
-            /* Hide less important elements on mobile */
-            .hide-mobile {
-                display: none !important;
-            }
-            
-            /* Show mobile-only elements */
-            .show-mobile {
-                display: block !important;
-            }
-        }
-        
-        /* ===== MÓVIL PEQUEÑO (< 480px) ===== */
-        @media (max-width: 480px) {
-            :root {
-                font-size: 14px;
-            }
-            
-            .login-container {
-                padding: 1.25rem;
-                margin: 0.25rem;
-            }
-            
-            .card {
-                padding: 0.875rem !important;
-                border-radius: 0.625rem;
-            }
-            
-            h2 {
-                font-size: 1.1rem !important;
-            }
-            
-            .activity-tag {
-                font-size: 0.65rem;
                 padding: 0.375rem 0.5rem;
             }
-            
-            .crono-cell {
-                min-height: 70px;
-                padding: 0.375rem;
-            }
-            
-            /* Buttons even more compact but still touchable */
-            .btn {
-                padding: 0.75rem 0.875rem;
-                font-size: 0.875rem;
-            }
-            
-            /* Modal fullscreen */
-            .modal-overlay {
-                align-items: flex-end;
-            }
-            
-            .modal {
-                max-height: 90vh;
-                border-radius: 1.25rem 1.25rem 0 0 !important;
-            }
-        }
-        
-        /* ===== LANDSCAPE MÓVIL ===== */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .login-container {
-                max-width: 450px;
-                padding: 1.5rem;
-                max-height: 95vh;
-                overflow-y: auto;
-            }
-            
-            .splash-logo {
-                width: 60px;
-                height: 60px;
-                margin-bottom: 0.75rem;
-            }
-            
-            .splash-content h1 {
-                font-size: 1.25rem !important;
-                margin-bottom: 0.25rem;
-            }
-            
-            .splash-content p {
-                margin-bottom: 0.5rem;
-            }
-            
-            /* Modals in landscape */
-            .modal {
-                max-height: 95vh;
-            }
-            
-            #cronoEditModal > div:last-child {
-                max-height: 95vh;
-            }
-        }
-        
-        /* ===== PRINT STYLES ===== */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            
-            .card {
-                box-shadow: none !important;
-                border: 1px solid #ccc !important;
-                break-inside: avoid;
-            }
-            
-            .crono-table {
-                font-size: 10pt !important;
-            }
-            
-            .activity-tag {
-                background: lightgray !important;
-                color: black !important;
-                break-inside: avoid;
-            }
-        }
-        
-        /* ===== HIGH DPI / RETINA ===== */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .login-logo,
-            .splash-logo,
-            .user-avatar {
-                image-rendering: -webkit-optimize-contrast;
-            }
-            
-            border {
-                border-width: 0.5px;
-            }
-        }
-        
-        /* ===== ACCESSIBILITY ===== */
-        @media (prefers-contrast: high) {
-            :root {
-                --border: #000000;
-                --muted: #333333;
-            }
-            
-            .form-input {
-                border-width: 2px;
-            }
-            
-            .btn {
-                border: 2px solid currentColor;
-            }
-        }
-        
-        /* Focus visible para navegación por teclado */
-        *:focus-visible {
-            outline: 3px solid var(--accent);
-            outline-offset: 2px;
-        }
-        
-        /* Skip link para accesibilidad */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--accent);
-            color: white;
-            padding: 0.5rem 1rem;
-            z-index: 10000;
-            transition: top 0.2s;
-        }
-        
-        .skip-link:focus {
-            top: 0;
         }
     </style>
 </head>
@@ -1387,7 +678,7 @@
                     <path d="M12 14v7"/>
                 </svg>
             </div>
-            <h1 class="login-title">AAEE Manager</h1>
+            <h1 class="login-title">AACCEE Manager</h1>
             <p class="login-subtitle">IES Virgen de Villadiego - Peñaflor (Sevilla)</p>
             
             <form id="loginForm" class="login-form" onsubmit="handleLogin(event)">
@@ -1406,6 +697,12 @@
                 <button type="submit" id="loginBtn" class="login-btn">
                     Iniciar Sesión
                 </button>
+                
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button type="button" onclick="resetLoginData()" style="background: none; border: none; color: rgba(255,255,255,0.6); font-size: 0.75rem; cursor: pointer; text-decoration: underline;">
+                        ¿Problemas para acceder? Resetear datos
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -1426,59 +723,6 @@
         </div>
     </div>
 
-    <!-- Skip Link para Accesibilidad -->
-    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-    
-    <!-- Mobile Navigation Drawer -->
-    <div id="mobileNav" class="mobile-nav" onclick="closeMobileNav(event)">
-        <div class="mobile-nav-panel" onclick="event.stopPropagation()">
-            <div class="mobile-nav-header">
-                <span style="font-weight: 700; color: var(--accent);">Menú</span>
-                <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Cerrar menú">✕</button>
-            </div>
-            <nav class="mobile-nav-links">
-                <button class="mobile-nav-link" data-mobile-tab="config" onclick="switchTabMobile('config')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                    </svg>
-                    Configuración
-                </button>
-                <button class="mobile-nav-link" data-mobile-tab="actividades" onclick="switchTabMobile('actividades')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-                    </svg>
-                    Actividades
-                </button>
-                <button class="mobile-nav-link" data-mobile-tab="cronograma" onclick="switchTabMobile('cronograma')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
-                    Cronograma
-                </button>
-                <button class="mobile-nav-link" data-mobile-tab="informes" onclick="switchTabMobile('informes')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
-                    </svg>
-                    Informes
-                </button>
-            </nav>
-            
-            <!-- User info en menú móvil -->
-            <div id="mobileUserInfo" class="hidden" style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
-                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
-                    <div id="mobileUserAvatar" class="user-avatar" style="width: 40px; height: 40px; font-size: 1rem;">U</div>
-                    <div>
-                        <div id="mobileUserName" style="font-weight: 600;">Usuario</div>
-                        <div id="mobileUserRole" style="font-size: 0.75rem; color: var(--muted);">Rol</div>
-                    </div>
-                </div>
-                <button onclick="handleLogout(); closeMobileNav();" class="btn btn-secondary btn-sm" style="width: 100%;">
-                    Cerrar Sesión
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Main App -->
     <div id="app" class="hidden">
         <!-- Header -->
@@ -1493,19 +737,10 @@
                             </svg>
                         </div>
                         <div>
-                            <h1 class="font-display text-lg md:text-xl font-bold" style="color: var(--accent);">AAEE Manager</h1>
+                            <h1 class="font-display text-lg md:text-xl font-bold" style="color: var(--accent);">AACCEE Manager</h1>
                             <p class="text-xs" style="color: var(--muted);">IES Virgen de Villadiego</p>
                         </div>
                     </div>
-                    
-                    <!-- Botón Menú Móvil (Hamburguesa) -->
-                    <button class="mobile-menu-btn" onclick="openMobileNav()" aria-label="Abrir menú">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="3" y1="6" x2="21" y2="6"/>
-                            <line x1="3" y1="12" x2="21" y2="12"/>
-                            <line x1="3" y1="18" x2="21" y2="18"/>
-                        </svg>
-                    </button>
                     
                     <nav class="nav-tabs flex gap-2 overflow-x-auto pb-2 md:pb-0">
                         <button class="nav-tab active" data-tab="config">Configuración</button>
@@ -1545,7 +780,7 @@
         </header>
 
         <!-- Main Content -->
-        <main id="main-content" class="max-w-7xl mx-auto px-4 py-6">
+        <main class="max-w-7xl mx-auto px-4 py-6">
             <!-- Tab: Configuración -->
             <section id="tab-config" class="tab-content fade-in">
                 <div class="grid gap-6 md:grid-cols-2">
@@ -1962,131 +1197,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Importar desde Curso Anterior -->
-                    <div class="card overflow-hidden">
-                        <div class="accordion-header" onclick="toggleAccordion(this)">
-                            <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: var(--accent);">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                Importar actividades desde curso anterior
-                            </h2>
-                            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </div>
-                        <div class="accordion-content">
-                            <div class="p-6 space-y-4">
-                                <!-- Info del curso anterior -->
-                                <div id="importCursoAnteriorInfo" class="p-4 rounded-lg" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%); border: 1px solid rgba(245, 158, 11, 0.3);">
-                                    <h3 class="font-semibold mb-2 flex items-center gap-2" style="color: #d97706;">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        Importar actividades del curso escolar anterior
-                                    </h3>
-                                    <p class="text-sm mb-3" style="color: var(--muted);">
-                                        Selecciona las actividades que deseas copiar al curso actual. Las fechas y estados se reiniciarán.
-                                    </p>
-                                    
-                                    <!-- Selector de curso anterior -->
-                                    <div id="selectorCursoAnteriorContainer">
-                                        <label class="block text-sm font-medium mb-2">Curso escolar de origen:</label>
-                                        <select id="cursoAnteriorSelect" class="form-input form-select" onchange="cargarActividadesCursoAnterior()">
-                                            <option value="">Selecciona un curso anterior...</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Lista de actividades del curso anterior -->
-                                <div id="importCursoAnteriorContainer" class="hidden">
-                                    <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
-                                        <h4 class="font-medium text-sm">
-                                            Actividades disponibles (<span id="cursoAnteriorCount">0</span> encontradas)
-                                        </h4>
-                                        <div class="flex gap-2">
-                                            <button onclick="seleccionarTodasCursoAnterior()" class="text-xs px-3 py-1.5 rounded-md transition-colors font-medium"
-                                                    style="background: rgba(13, 115, 119, 0.1); color: var(--accent); border: 1px solid var(--accent);">
-                                                Seleccionar todas
-                                            </button>
-                                            <button onclick="deseleccionarTodasCursoAnterior()" class="text-xs px-3 py-1.5 rounded-md transition-colors font-medium"
-                                                    style="background: var(--bg); border: 1px solid var(--border);">
-                                                Deseleccionar todas
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Filtros opcionales -->
-                                    <div class="mb-3 p-3 rounded-lg" style="background: var(--bg);">
-                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                            <div>
-                                                <label class="block text-xs font-medium mb-1" style="color: var(--muted);">Filtrar por curso:</label>
-                                                <select id="filtroCursoAnterior" class="form-input form-select text-sm" onchange="filtrarActividadesCursoAnterior()">
-                                                    <option value="">Todos los cursos</option>
-                                                    <option value="1º ESO">1º ESO</option>
-                                                    <option value="2º ESO">2º ESO</option>
-                                                    <option value="3º ESO">3º ESO</option>
-                                                    <option value="4º ESO">4º ESO</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label class="block text-xs font-medium mb-1" style="color: var(--muted);">Filtrar por trimestre:</label>
-                                                <select id="filtroTrimestreAnterior" class="form-input form-select text-sm" onchange="filtrarActividadesCursoAnterior()">
-                                                    <option value="">Todos los trimestres</option>
-                                                    <option value="Primer Trimestre">Primer Trimestre</option>
-                                                    <option value="Segundo Trimestre">Segundo Trimestre</option>
-                                                    <option value="Tercer Trimestre">Tercer Trimestre</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label class="block text-xs font-medium mb-1" style="color: var(--muted);">Buscar:</label>
-                                                <input type="text" id="busquedaCursoAnterior" class="form-input text-sm" placeholder="Nombre de actividad..." 
-                                                       oninput="filtrarActividadesCursoAnterior()">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Lista de actividades con checkboxes -->
-                                    <div id="listaActividadesCursoAnterior" class="space-y-2 max-h-96 overflow-y-auto rounded-lg p-3" 
-                                         style="background: var(--bg); border: 1px solid var(--border);">
-                                        <p class="text-sm text-center py-4" style="color: var(--muted);">
-                                            Selecciona un curso anterior para ver sus actividades
-                                        </p>
-                                    </div>
-
-                                    <!-- Resumen y botones -->
-                                    <div class="mt-4 p-3 rounded-lg flex items-center justify-between flex-wrap gap-3" style="background: linear-gradient(135deg, rgba(13, 115, 119, 0.08) 0%, transparent 100%);">
-                                        <span class="text-sm font-medium">
-                                            <span id="cursoAnteriorSeleccionadas">0</span> actividades seleccionadas
-                                        </span>
-                                        <div class="flex gap-3">
-                                            <button onclick="cancelarImportacionCursoAnterior()" class="btn btn-secondary btn-sm">
-                                                Cancelar
-                                            </button>
-                                            <button onclick="ejecutarImportacionCursoAnterior()" class="btn btn-primary btn-sm" disabled id="btnImportarCursoAnterior">
-                                                <span class="flex items-center gap-2">
-                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                        <polyline points="20 6 9 17 4 12"/>
-                                                    </svg>
-                                                    Importar seleccionadas
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Mensaje cuando no hay cursos anteriores -->
-                                <div id="sinCursosAnteriores" class="hidden text-center py-6">
-                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mx-auto mb-3" style="color: var(--muted);">
-                                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                    <p class="font-medium" style="color: var(--muted);">No hay cursos escolares anteriores disponibles</p>
-                                    <p class="text-sm mt-1" style="color: var(--muted);">Crea al menos dos cursos escolares para poder importar actividades entre ellos.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -2100,8 +1210,8 @@
                         Cronograma de Actividades
                     </h2>
                     <p class="text-sm mb-4" style="color: var(--muted);">Arrastra las etiquetas entre celdas para reorganizar las actividades</p>
-                    <div class="crono-wrapper overflow-x-auto">
-                        <table id="cronogramaTable" class="w-full border-collapse cronograma-table">
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse cronograma-table">
                             <thead>
                                 <tr>
                                     <th class="p-3 text-left font-semibold" style="background: rgba(13, 115, 119, 0.1);">Curso</th>
@@ -2382,251 +1492,7 @@
         </div>
     </div>
 
-    <!-- Modal de Edición desde Cronograma -->
-    <div id="cronoEditModal" class="fixed inset-0 z-50 hidden">
-        <!-- Overlay -->
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="cerrarModalCronoEdit()"></div>
-        
-        <!-- Modal Content -->
-        <div class="absolute inset-4 md:inset-10 lg:inset-16 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
-            <!-- Header -->
-            <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-200 dark:border-gray-700" style="background: linear-gradient(135deg, rgba(13, 115, 119, 0.05) 0%, transparent 100%);">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--accent);">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-bold" style="color: var(--fg);">Editar Actividad</h2>
-                        <p id="cronoEditActivityName" class="text-sm" style="color: var(--muted);">Nombre de la actividad</p>
-                    </div>
-                </div>
-                <button onclick="cerrarModalCronoEdit()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                    </svg>
-                </button>
-            </div>
-            
-            <!-- Form Body -->
-            <div class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
-                <input type="hidden" id="cronoEditId">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-1 force-visible-label">Curso <span class="text-red-500">*</span></label>
-                        <select id="cronoEditCurso" class="form-input form-select">
-                            <option value="1º ESO">1º ESO</option>
-                            <option value="2º ESO">2º ESO</option>
-                            <option value="3º ESO">3º ESO</option>
-                            <option value="4º ESO">4º ESO</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-1 force-visible-label">Trimestre <span class="text-red-500">*</span></label>
-                        <select id="cronoEditTrimestre" class="form-input form-select">
-                            <option value="Primer Trimestre">Primer Trimestre</option>
-                            <option value="Segundo Trimestre">Segundo Trimestre</option>
-                            <option value="Tercer Trimestre">Tercer Trimestre</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1 force-visible-label">Nombre de la actividad <span class="text-red-500">*</span></label>
-                    <input type="text" id="cronoEditNombre" class="form-input">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1 force-visible-label">Descripción</label>
-                    <textarea id="cronoEditDescripcion" class="form-input" rows="3"></textarea>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1 force-visible-label">Departamentos implicados <span class="text-red-500">*</span></label>
-                    <select id="cronoEditDeptCount" class="form-input form-select" onchange="updateCronoEditDeptFields()">
-                        <option value="0">0 - Otro organizador</option>
-                        <option value="1">1 departamento</option>
-                        <option value="2">2 departamentos</option>
-                        <option value="3">3 departamentos</option>
-                        <option value="todos">Todos</option>
-                    </select>
-                </div>
-                
-                <div id="cronoEditOrganizadorField" class="hidden">
-                    <label class="block text-sm font-medium mb-1 force-visible-label">Organizador</label>
-                    <input type="text" id="cronoEditOrganizador" class="form-input">
-                </div>
-                
-                <div id="cronoEditDeptFields" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-                    <div>
-                        <label class="block text-sm font-medium mb-1 force-visible-label">Fecha de realización</label>
-                        <input type="date" id="cronoEditFecha" class="form-input">
-                    </div>
-                    <div class="flex items-end pb-1">
-                        <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" id="cronoEditNoRealizada" class="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500" onchange="toggleCronoEditFecha()">
-                            <span class="text-sm font-medium force-visible-label">La actividad no se realizó</span>
-                        </label>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1 force-visible-label">Profesorado acompañante</label>
-                    <select id="cronoEditProfCount" class="form-input form-select mb-3" onclick="updateCronoEditProfFields()">
-                        <option value="1">1 profesor/a</option>
-                        <option value="2">2 profesores/as</option>
-                        <option value="3">3 profesores/as</option>
-                        <option value="4">4 profesores/as</option>
-                    </select>
-                    <div id="cronoEditProfFields" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1 force-visible-label">Coste por alumno (€)</label>
-                    <input type="number" id="cronoEditCostePorAlumno" class="form-input" placeholder="0" step="1" min="0">
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium mb-1 force-visible-label">Observaciones</label>
-                    <textarea id="cronoEditObservaciones" class="form-input" rows="2" placeholder="Notas o comentarios adicionales sobre la actividad"></textarea>
-                </div>
-            </div>
-            
-            <!-- Footer -->
-            <div class="flex gap-3 p-4 md:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                <button onclick="cerrarModalCronoEdit()" class="btn btn-secondary flex-1">Cancelar</button>
-                <button onclick="guardarCronoEdit()" class="btn btn-primary flex-1">Guardar Cambios</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // ==================== MOBILE NAVIGATION ====================
-        
-        /**
-         * Abre el menú de navegación móvil
-         */
-        function openMobileNav() {
-            const nav = document.getElementById('mobileNav');
-            if (nav) {
-                nav.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Prevenir scroll del fondo
-                
-                // Actualizar info de usuario en el menú móvil
-                updateMobileUserInfo();
-                
-                // Actualizar estado activo de los links
-                updateMobileNavActiveTab();
-            }
-        }
-        
-        /**
-         * Cierra el menú de navegación móvil
-         * @param {Event} event - Evento opcional (para cerrar al hacer click fuera)
-         */
-        function closeMobileNav(event) {
-            // Si el evento viene del panel interior, no cerrar
-            if (event && event.target.closest('.mobile-nav-panel')) {
-                return;
-            }
-            
-            const nav = document.getElementById('mobileNav');
-            if (nav) {
-                nav.classList.remove('active');
-                document.body.style.overflow = ''; // Restaurar scroll
-            }
-        }
-        
-        /**
-         * Cambia de pestaña desde el menú móvil y lo cierra
-         * @param {string} tabName - Nombre de la pestaña a activar
-         */
-        function switchTabMobile(tabName) {
-            // Cerrar menú móvil
-            closeMobileNav();
-            
-            // Pequeño delay para que se cierre el menú antes de cambiar
-            setTimeout(() => {
-                // Buscar y hacer click en la pestaña correspondiente
-                const tabButton = document.querySelector(`.nav-tab[data-tab="${tabName}"]`);
-                if (tabButton) {
-                    tabButton.click();
-                }
-                
-                // Scroll al contenido principal en móvil
-                const mainContent = document.getElementById('main-content');
-                if (mainContent && window.innerWidth < 768) {
-                    mainContent.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 150);
-        }
-        
-        /**
-         * Actualiza el estado activo de los links del menú móvil
-         */
-        function updateMobileNavActiveTab() {
-            // Quitar clase active de todos los links móviles
-            document.querySelectorAll('.mobile-nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            // Encontrar qué pestaña está activa
-            const activeTab = document.querySelector('.nav-tab.active');
-            if (activeTab) {
-                const tabName = activeTab.getAttribute('data-tab');
-                const mobileLink = document.querySelector(`.mobile-nav-link[data-mobile-tab="${tabName}"]`);
-                if (mobileLink) {
-                    mobileLink.classList.add('active');
-                }
-            }
-        }
-        
-        /**
-         * Actualiza la información del usuario en el menú móvil
-         */
-        function updateMobileUserInfo() {
-            const userInfo = document.getElementById('sessionInfo');
-            const mobileUserInfo = document.getElementById('mobileUserInfo');
-            
-            if (!userInfo || !mobileUserInfo) return;
-            
-            // Verificar si hay sesión activa
-            if (userInfo.classList.contains('hidden')) {
-                mobileUserInfo.classList.add('hidden');
-                return;
-            }
-            
-            mobileUserInfo.classList.remove('hidden');
-            
-            // Obtener datos del usuario
-            const userName = document.getElementById('sessionUserName');
-            const userRole = document.getElementById('sessionUserRole');
-            const mobileUserName = document.getElementById('mobileUserName');
-            const mobileUserRole = document.getElementById('mobileUserRole');
-            const mobileUserAvatar = document.getElementById('mobileUserAvatar');
-            
-            if (userName && mobileUserName) {
-                mobileUserName.textContent = userName.textContent;
-                mobileUserAvatar.textContent = userName.textContent.charAt(0).toUpperCase();
-            }
-            
-            if (userRole && mobileUserRole) {
-                mobileUserRole.textContent = userRole.textContent;
-            }
-        }
-        
-        // Cerrar menú móvil con tecla Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeMobileNav();
-            }
-        });
-        
         // ==================== SECURITY UTILITIES ====================
         
         /**
@@ -2696,7 +1562,7 @@
             rol: 'admin',
             activo: true,
             createdAt: new Date().toISOString(),
-            forcePasswordChange: false // NO forzar cambio de contraseña (usa la de Firebase)
+            forcePasswordChange: true // Forzar cambio de contraseña en primer login
         };
 
         const DEPARTAMENTOS = [
@@ -2933,151 +1799,91 @@
 
         // ==================== AUTHENTICATION SYSTEM ====================
         
-        // Cargar usuarios desde localStorage y/o Firebase
-        // PRIORIDAD ABSOLUTA: Firebase > localStorage > admin por defecto
-        // REGLA DE ORO: NUNCA sobrescribir datos de Firebase con datos locales
+        // Cargar usuarios desde localStorage
         async function loadUsersFromStorage() {
-            console.log('[AUTH] ==================================================');
             console.log('[AUTH] Iniciando carga de usuarios...');
-            console.log('[AUTH] PRIORIDAD: Firebase > localStorage > admin por defecto');
-            console.log('[AUTH] ==================================================');
             
             try {
-                // ────────────────────────────────────────────────
-                // PASO 1: Intentar cargar desde Firebase (FUENTE PRINCIPAL)
-                // ────────────────────────────────────────────────
-                console.log('[AUTH] 📡 PASO 1: Conectando a Firebase...');
-                
-                let firebaseData = null;
-                let firebaseError = null;
-                
-                try {
-                    const snapshot = await usersDbRef.once('value');
-                    firebaseData = snapshot.val();
-                    console.log('[AUTH] 📦 Firebase respondió:', firebaseData ? 'TIENE DATOS' : 'VACÍO');
-                    
-                    if (firebaseData) {
-                        console.log('[AUTH]    - lastUpdated:', firebaseData.lastUpdated);
-                        console.log('[AUTH]    - users:', firebaseData.users ? `${firebaseData.users.length} usuarios` : 'SIN ARRAY');
-                        if (firebaseData.users) {
-                            console.log('[AUTH]    - lista:', firebaseData.users.map(u => u.username));
-                        }
-                    }
-                } catch (err) {
-                    firebaseError = err;
-                    console.warn('[AUTH] ⚠️ Error conectando a Firebase:', err.message);
-                }
-                
-                // ────────────────────────────────────────────────
-                // PASO 2: Si Firebase tiene usuarios, usarlos SIEMPRE
-                // ────────────────────────────────────────────────
-                if (firebaseData && firebaseData.users && Array.isArray(firebaseData.users) && firebaseData.users.length > 0) {
-                    console.log('[AUTH] ✅ PASO 2: Usando usuarios de Firebase como fuente PRINCIPAL');
-                    
-                    usersData = firebaseData.users;
-                    console.log(`[AUTH]    → Cargados ${usersData.length} usuarios desde Firebase`);
-                    
-                    // Guardar en localStorage como caché
-                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
-                    console.log('[AUTH]    → Cache actualizado en localStorage');
-                    
-                    // Hashear contraseñas si es necesario
-                    await hashPasswordsIfNeeded();
-                    
-                    console.log('[AUTH] ✅ CARGA COMPLETADA DESDE FIREBASE');
-                    console.log('[AUTH] Usuarios disponibles:', usersData.map(u => u.username));
-                    return usersData;
-                }
-                
-                console.log('[AUTH] ℹ️ Firebase no tiene usuarios válidos, buscando alternativas...');
-                
-                // ────────────────────────────────────────────────
-                // PASO 3: Si Firebase está vacío, intentar localStorage
-                // ────────────────────────────────────────────────
+                // 1. Cargar desde localStorage primero (fuente rápida)
                 const saved = localStorage.getItem('aaccee_users');
-                let localUsers = [];
-                
                 if (saved) {
                     try {
-                        localUsers = JSON.parse(saved);
-                        console.log(`[AUTH] 📁 PASO 3: LocalStorage tiene ${localUsers.length} usuarios`);
-                    } catch (e) {
-                        console.warn('[AUTH] ⚠️ Error leyendo localStorage:', e);
-                        localUsers = [];
+                        usersData = JSON.parse(saved);
+                        console.log('[AUTH] Usuarios cargados desde localStorage:', usersData.length);
+                    } catch (parseError) {
+                        console.error('[AUTH] Error parseando usuarios locales:', parseError);
+                        usersData = [];
                     }
                 } else {
-                    console.log('[AUTH] 📁 PASO 3: LocalStorage vacío (primera vez en este navegador)');
-                }
-                
-                // ────────────────────────────────────────────────
-                // PASO 4: Usar localStorage si tiene datos
-                // ────────────────────────────────────────────────
-                if (localUsers.length > 0) {
-                    usersData = localUsers;
-                    console.log(`[AUTH] ✅ PASO 4: Usando ${usersData.length} usuarios del localStorage`);
-                    
-                    // IMPORTANTE: Subir estos usuarios a Firebase para futuras sesiones
-                    // PERO SOLO si Firebase estaba vacío (no sobrescribir)
-                    if (!firebaseData || !firebaseData.users || firebaseData.users.length === 0) {
-                        console.log('[AUTH]    → Sincronizando usuarios locales a Firebase...');
-                        try {
-                            await saveUsersToFirebase();
-                            console.log('[AUTH]    → Usuarios sincronizados a Firebase');
-                        } catch (syncErr) {
-                            console.warn('[AUTH]    ⚠️ No se pudo sincronizar a Firebase:', syncErr.message);
-                        }
-                    }
-                } else {
+                    console.log('[AUTH] No hay usuarios en localStorage');
                     usersData = [];
-                    console.log('[AUTH] PASO 4: No hay usuarios en ninguna fuente');
                 }
                 
-                // ────────────────────────────────────────────────
-                // PASO 5: Crear admin solo si absolutamente necesario
-                // ────────────────────────────────────────────────
+                // 2. Verificar si tenemos el usuario admin básico
                 const hasAdmin = usersData.some(u => u.id === 'admin_default');
                 
-                if (!hasAdmin) {
-                    console.log('[AUTH] 🆕 PASO 5: Creando usuario admin por defecto...');
+                // 3. Intentar sincronizar con Firebase (no bloqueante crítico)
+                let firebaseAvailable = false;
+                try {
+                    const isAdminInitialized = await checkAdminInitialized();
+                    firebaseAvailable = true;
+                    console.log('[AUTH] Firebase disponible, adminInitialized:', isAdminInitialized);
                     
-                    const newAdmin = {...DEFAULT_ADMIN};
-                    newAdmin.password = await hashPassword(newAdmin.password);
-                    newAdmin.passwordHashed = true;
+                    // Si no tenemos admin localmente y Firebase dice que no fue inicializado, crearlo
+                    if (!hasAdmin && !isAdminInitialized) {
+                        console.log('[AUTH] Creando usuario admin por defecto...');
+                        usersData.push({...DEFAULT_ADMIN});
+                        await saveUsersToStorage();
+                        await markAdminAsInitialized();
+                    }
                     
-                    usersData.push(newAdmin);
-                    console.log('[AUTH]    → Admin creado con contraseña hasheada');
+                    // Cargar usuarios actualizados desde Firebase
+                    await loadUsersFromFirebase();
                     
-                    // Guardar en localStorage
-                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+                } catch (firebaseError) {
+                    console.warn('[AUTH] Firebase no disponible, usando datos locales:', firebaseError.message);
                     
-                    // Solo guardar en Firebase si estaba vacío (NO sobrescribir datos existentes)
-                    if (!firebaseData || !firebaseData.users || firebaseData.users.length === 0) {
-                        console.log('[AUTH]    → Guardando admin inicial en Firebase...');
-                        try {
-                            await saveUsersToFirebase();
-                            console.log('[AUTH]    → Admin guardado en Firebase');
-                        } catch (e) {
-                            console.warn('[AUTH]    ⚠️ No se pudo guardar admin en Firebase:', e.message);
+                    // CRITICAL: Si no tenemos usuarios en absoluto, crear el admin por defecto
+                    if (usersData.length === 0) {
+                        console.log('[AUTH] Sin usuarios y sin Firebase - creando admin local');
+                        usersData.push({...DEFAULT_ADMIN});
+                        
+                        // Hashear la contraseña del admin inmediatamente
+                        const adminUser = usersData.find(u => u.id === 'admin_default');
+                        if (adminUser && !adminUser.passwordHashed) {
+                            adminUser.password = await hashPassword(adminUser.password);
+                            adminUser.passwordHashed = true;
                         }
-                    } else {
-                        console.log('[AUTH]    ⚠️ Firebase ya tiene datos, NO sobrescribimos');
+                        
+                        // Guardar en localStorage
+                        localStorage.setItem('aaccee_users', JSON.stringify(usersData));
                     }
                 }
                 
-                // Hashear contraseñas pendientes
-                await hashPasswordsIfNeeded();
+                // 4. Hashear contraseñas que aún no lo estén (migración)
+                let needsSave = false;
+                for (let user of usersData) {
+                    if (!user.passwordHashed && user.password) {
+                        console.log('[AUTH] Hasheando contraseña para:', user.username);
+                        user.password = await hashPassword(user.password);
+                        user.passwordHashed = true;
+                        needsSave = true;
+                    }
+                }
+                if (needsSave) {
+                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+                    console.log('[AUTH] Contraseñas hasheadas y guardadas');
+                }
                 
-                console.log('[AUTH] ✅ CARGA COMPLETADA');
-                console.log('[AUTH] Total usuarios:', usersData.length);
-                console.log('[AUTH] Disponibles:', usersData.map(u => u.username));
+                console.log('[AUTH] Carga completada. Total usuarios:', usersData.length);
                 return usersData;
                 
             } catch (error) {
-                console.error('[AUTH] 🚨 ERROR CRÍTICO en loadUsersFromStorage:', error);
+                console.error('[AUTH] Error crítico en loadUsersFromStorage:', error);
                 
-                // ÚLTIMO RECURSO
-                if (!usersData.some(u => u.id === 'admin_default')) {
-                    console.log('[AUTH] 🚨 Creando admin de emergencia...');
+                // ULTIMO RECURSO: Crear admin si todo lo demás falló
+                if (usersData.length === 0) {
+                    console.log('[AUTH] ÚLTIMO RECURSO: Creando admin de emergencia');
                     const emergencyAdmin = {...DEFAULT_ADMIN};
                     emergencyAdmin.password = await hashPassword(emergencyAdmin.password);
                     emergencyAdmin.passwordHashed = true;
@@ -3089,39 +1895,12 @@
             }
         }
         
-        // Función auxiliar para hashear contraseñas
-        async function hashPasswordsIfNeeded() {
-            let needsSave = false;
-            for (let user of usersData) {
-                if (!user.passwordHashed && user.password) {
-                    console.log('[AUTH] Hasheando contraseña para:', user.username);
-                    user.password = await hashPassword(user.password);
-                    user.passwordHashed = true;
-                    needsSave = true;
-                }
-            }
-            if (needsSave) {
-                localStorage.setItem('aaccee_users', JSON.stringify(usersData));
-                console.log('[AUTH] Contraseñas hasheadas y guardadas');
-            }
-        }
-        
-        // Guardar usuarios en localStorage y Firebase (versión síncrona que espera a Firebase)
-        async function saveUsersToStorage() {
-            // 1. Guardar en localStorage inmediatamente (rápido)
+        // Guardar usuarios en localStorage y Firebase
+        function saveUsersToStorage() {
             localStorage.setItem('aaccee_users', JSON.stringify(usersData));
-            
-            // 2. Sincronizar con Firebase (importante: esperar a que termine)
+            // Sincronizar con Firebase
             if (typeof saveUsersToFirebase === 'function') {
-                try {
-                    await saveUsersToFirebase();
-                    console.log('[SAVE] ✅ Usuarios guardados en localStorage Y Firebase');
-                } catch (firebaseError) {
-                    console.error('[SAVE] ⚠️ Error guardando en Firebase:', firebaseError);
-                    console.error('[SAVE] ⚠️ Los datos están en localStorage pero NO en Firebase');
-                    console.error('[SAVE] ⚠️ Esto causará problemas en otros dispositivos/navegadores');
-                    // No lanzamos error para no romper el flujo, pero advertimos
-                }
+                saveUsersToFirebase();
             }
         }
         
@@ -3255,6 +2034,35 @@
             }, 500);
         }
         
+        // Función de emergencia para resetear datos de login
+        async function resetLoginData() {
+            if (confirm('¿Estás seguro de que quieres resetear los datos de acceso?\n\nEsto eliminará todos los usuarios y creará un nuevo administrador por defecto.\n\nUsuario: admin\nContraseña: admin123')) {
+                try {
+                    console.log('[RESET] Iniciando reset de datos de usuario...');
+                    
+                    // Crear nuevo admin fresh
+                    const newAdmin = {...DEFAULT_ADMIN};
+                    newAdmin.password = await hashPassword(newAdmin.password);
+                    newAdmin.passwordHashed = true;
+                    
+                    // Resetear todo
+                    usersData = [newAdmin];
+                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+                    localStorage.removeItem('aaccee_session');
+                    
+                    console.log('[RESET] Datos reseteados correctamente');
+                    
+                    // Mostrar mensaje y recargar
+                    alert('Datos reseteados correctamente.\n\nAhora puedes acceder con:\n• Usuario: admin\n• Contraseña: admin123');
+                    location.reload();
+                    
+                } catch (error) {
+                    console.error('[RESET] Error durante el reset:', error);
+                    alert('Error al resetear datos. Intenta borrar el caché del navegador.');
+                }
+            }
+        }
+        
         // Manejar logout
         function handleLogout() {
             if (confirm('¿Seguro que quieres cerrar la sesión?')) {
@@ -3274,16 +2082,10 @@
             const sessionUserName = document.getElementById('sessionUserName');
             const sessionUserRole = document.getElementById('sessionUserRole');
             
-            // Validar que los elementos existen antes de usarlos
-            if (!sessionInfo || !sessionUserName || !sessionUserRole) {
-                console.warn('[SESSION] Elementos de sesión no encontrados en el DOM');
-                return;
-            }
-            
             sessionInfo.classList.remove('hidden');
             sessionUserName.textContent = currentUser.nombre.split(' ')[0]; // Primer nombre
             sessionUserRole.textContent = currentUser.rol === 'admin' ? 'Admin' : (currentUser.rol === 'dace' ? 'DACE' : 'Usuario');
-            sessionUserRole.className = `session-role ${currentUser.rol === 'admin' ? 'role-admin' : (currentUser.rol === 'dace' ? 'role-dace': 'role-user')}`;
+            sessionUserRole.className = `session-role ${currentUser.rol === 'admin' ? 'role-admin' : (currentUser.rol === 'dace' ? 'role-dace' : 'role-user')}`;
             
             // Mostrar panel de gestión de usuarios si es admin
             const userPanel = document.getElementById('userManagementPanel');
@@ -3541,35 +2343,19 @@
         // ==================== THEME ====================
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
-            const sunIcon = document.getElementById('sunIcon');
-            const moonIcon = document.getElementById('moonIcon');
-            
             if (savedTheme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                if (sunIcon) sunIcon.classList.add('hidden');
-                if (moonIcon) moonIcon.classList.remove('hidden');
-            } else {
-                // Asegurar estado correcto para modo claro
-                if (sunIcon) sunIcon.classList.remove('hidden');
-                if (moonIcon) moonIcon.classList.add('hidden');
+                document.getElementById('sunIcon').classList.add('hidden');
+                document.getElementById('moonIcon').classList.remove('hidden');
             }
         }
-        
-        // Inicializar theme cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeToggle = document.getElementById('themeToggle');
-            if (themeToggle) {
-                themeToggle.addEventListener('click', () => {
-                    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-                    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-                    localStorage.setItem('theme', isDark ? 'light' : 'dark');
-                    
-                    const sunIcon = document.getElementById('sunIcon');
-                    const moonIcon = document.getElementById('moonIcon');
-                    if (sunIcon) sunIcon.classList.toggle('hidden');
-                    if (moonIcon) moonIcon.classList.toggle('hidden');
-                });
-            }
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+            document.getElementById('sunIcon').classList.toggle('hidden');
+            document.getElementById('moonIcon').classList.toggle('hidden');
         });
 
         // ==================== CURSOS ESCOLARES ====================
@@ -3904,26 +2690,8 @@
                     targetContent.classList.remove('hidden');
                     targetContent.classList.add('fade-in');
                     
-                    // Sincronizar menú móvil
-                    updateMobileNavActiveTab();
-                    
                     if (tab.dataset.tab === 'cronograma') {
                         renderCronograma();
-                    }
-                    
-                    // Inicializar importación desde curso anterior al abrir pestaña Actividades
-                    if (tab.dataset.tab === 'actividades') {
-                        inicializarImportacionCursoAnterior();
-                    }
-                    
-                    // En móvil, scroll al contenido después de cambiar tab
-                    if (window.innerWidth < 768) {
-                        setTimeout(() => {
-                            const mainContent = document.getElementById('main-content');
-                            if (mainContent) {
-                                mainContent.scrollIntoView({ behavior: 'smooth' });
-                            }
-                        }, 100);
                     }
                 });
             });
@@ -4112,35 +2880,10 @@
                 tag.style.borderLeftWidth = '4px';
             }
             
-            // Determinar estado y aplicar clase de color correspondiente
-            const esRealizada = esActividadRealizada(actividad);
-            const esNoRealizada = actividad.noRealizada === true;
-            
-            if (esNoRealizada) {
-                // NO REALIZADA: Check marcado - Rojo
-                tag.classList.add('activity-tag-no-realizada');
-            } else if (esRealizada) {
-                // REALIZADA: Tiene fecha o profesorado - Verde
-                tag.classList.add('estado-realizada');
-            } else {
-                // PROPUESTA: Sin fecha, sin check - Ámbar/Naranja
-                tag.classList.add('estado-propuesta');
-            }
-            
-            // Indicador visual del estado
-            let estadoIndicador = '';
-            if (esNoRealizada) {
-                estadoIndicador = '<span class="inline-block px-1.5 py-0.5 text-xs font-bold rounded bg-white/20">✗ NO REALIZADA</span>';
-            } else if (esRealizada) {
-                estadoIndicador = '<span class="inline-block px-1.5 py-0.5 text-xs font-bold rounded bg-white/20">✓ REALIZADA</span>';
-            } else {
-                estadoIndicador = '<span class="inline-block px-1.5 py-0.5 text-xs font-bold rounded bg-white/20">○ PROPUESTA</span>';
-            }
-            
             tag.innerHTML = `
                 <div class="font-semibold">${escapeHTML(actividad.nombre)}</div>
-                <div class="text-xs opacity-90 mt-1">${estadoIndicador}</div>
                 ${actividad.fecha ? `<div class="text-xs opacity-80 mt-1">📅 ${escapeHTML(formatDate(actividad.fecha))}</div>` : ''}
+                ${actividad.noRealizada ? '<div class="text-xs mt-1" style="color: #dc2626;">[X] No realizada</div>' : ''}
             `;
             
             tag.addEventListener('dragstart', handleDragStart);
@@ -4169,218 +2912,32 @@
                 return;
             }
             
-            console.log('[CRONO] Abriendo modal de edición para:', act.nombre);
+            console.log('[CRONO] Editando actividad desde cronograma:', act.nombre);
             
-            // Guardar ID de la actividad que se está editando
-            document.getElementById('cronoEditId').value = activityId;
-            
-            // Mostrar nombre en el header
-            document.getElementById('cronoEditActivityName').textContent = act.nombre;
-            
-            // Cargar datos en el formulario
-            document.getElementById('cronoEditCurso').value = act.curso;
-            document.getElementById('cronoEditTrimestre').value = act.trimestre;
-            document.getElementById('cronoEditNombre').value = act.nombre;
-            document.getElementById('cronoEditDescripcion').value = act.descripcion || '';
-            document.getElementById('cronoEditFecha').value = act.fecha || '';
-            document.getElementById('cronoEditCostePorAlumno').value = act.costePorAlumno || '';
-            document.getElementById('cronoEditObservaciones').value = act.observaciones || '';
-            
-            // Cargar departamentos/organizador
-            if (act.organizador) {
-                document.getElementById('cronoEditDeptCount').value = '0';
-                document.getElementById('cronoEditOrganizador').value = act.organizador;
-                document.getElementById('cronoEditOrganizadorField').classList.remove('hidden');
-                document.getElementById('cronoEditDeptFields').innerHTML = '';
-            } else if (act.departamentos && act.departamentos.length === DEPARTAMENTOS.length) {
-                document.getElementById('cronoEditDeptCount').value = 'todos';
-                document.getElementById('cronoEditOrganizadorField').classList.add('hidden');
-                document.getElementById('cronoEditDeptFields').innerHTML = '';
-            } else {
-                const deptos = act.departamentos || [];
-                document.getElementById('cronoEditDeptCount').value = deptos.length.toString();
-                document.getElementById('cronoEditOrganizadorField').classList.add('hidden');
-                updateCronoEditDeptFields(deptos);
+            // Cambiar a la pestaña de Actividades
+            const activTab = document.querySelector('[data-tab="actividades"]');
+            if (activTab) {
+                activTab.click();
             }
             
-            // Cargar profesorado
-            document.getElementById('cronoEditProfCount').value = (act.profesorado && act.profesorado.length) || 1;
-            updateCronoEditProfFields(act.profesorado || []);
-            
-            // Cargar checkbox "no realizada"
-            const noRealizadaCheckbox = document.getElementById('cronoEditNoRealizada');
-            const fechaInput = document.getElementById('cronoEditFecha');
-            if (act.noRealizada) {
-                noRealizadaCheckbox.checked = true;
-                fechaInput.disabled = true;
-                fechaInput.classList.add('opacity-50', 'bg-gray-100');
-            } else {
-                noRealizadaCheckbox.checked = false;
-                fechaInput.disabled = false;
-                fechaInput.classList.remove('opacity-50', 'bg-gray-100');
-            }
-            
-            // Mostrar el modal
-            document.getElementById('cronoEditModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevenir scroll del fondo
-            
-            // FORZAR colores de labels via JavaScript (solución definitiva)
+            // Esperar un poco a que la pestaña se cambie y luego seleccionar la actividad
             setTimeout(() => {
-                const modal = document.getElementById('cronoEditModal');
-                if (!modal) return;
+                // Seleccionar la actividad en el dropdown
+                const editSelect = document.getElementById('editSelect');
+                if (editSelect) {
+                    editSelect.value = activityId;
+                    // Disparar el evento change para cargar el formulario
+                    editSelect.dispatchEvent(new Event('change'));
+                }
                 
-                // Detectar si estamos en modo oscuro
-                const isDark = document.documentElement.classList.contains('dark') || 
-                               document.documentElement.getAttribute('data-theme') === 'dark' ||
-                               window.matchMedia('(prefers-color-scheme: dark)').matches;
+                // Hacer scroll suave al formulario de edición
+                const editForm = document.getElementById('editForm');
+                if (editForm) {
+                    editForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
                 
-                const labelColor = isDark ? '#f9fafb' : '#111827';
-                
-                // Aplicar a todos los labels del modal
-                modal.querySelectorAll('label').forEach(label => {
-                    label.style.setProperty('color', labelColor, 'important');
-                    label.style.setProperty('font-weight', '700', 'important');
-                    label.style.setProperty('opacity', '1', 'important');
-                });
-                
-                // Aplicar a los spans con clase font-medium dentro del modal
-                modal.querySelectorAll('span.font-medium, span[class*="font"]').forEach(span => {
-                    if (!span.classList.contains('text-red-500') && 
-                        !span.classList.contains('text-red-600')) {
-                        span.style.setProperty('color', labelColor, 'important');
-                    }
-                });
-            }, 10);
-        }
-        
-        function cerrarModalCronoEdit() {
-            document.getElementById('cronoEditModal').classList.add('hidden');
-            document.body.style.overflow = ''; // Restaurar scroll
-        }
-        
-        function toggleCronoEditFecha() {
-            const checkbox = document.getElementById('cronoEditNoRealizada');
-            const fechaInput = document.getElementById('cronoEditFecha');
-            
-            if (checkbox.checked) {
-                fechaInput.value = '';
-                fechaInput.disabled = true;
-                fechaInput.classList.add('opacity-50', 'bg-gray-100');
-            } else {
-                fechaInput.disabled = false;
-                fechaInput.classList.remove('opacity-50', 'bg-gray-100');
-            }
-        }
-        
-        function updateCronoEditDeptFields(selectedDepts = []) {
-            const count = document.getElementById('cronoEditDeptCount').value;
-            const container = document.getElementById('cronoEditDeptFields');
-            const organizadorField = document.getElementById('cronoEditOrganizadorField');
-            
-            if (count === '0') {
-                container.innerHTML = '';
-                organizadorField.classList.remove('hidden');
-                return;
-            }
-            
-            organizadorField.classList.add('hidden');
-            
-            if (count === 'todos') {
-                container.innerHTML = '<p class="text-sm col-span-full" style="color: var(--muted);">Todos los departamentos seleccionados</p>';
-                return;
-            }
-            
-            container.innerHTML = DEPARTAMENTOS.slice(0, parseInt(count)).map((dept, i) => `
-                <div>
-                    <label class="block text-sm font-medium mb-1" style="color: #1f2937; font-weight: 600;">Departamento ${i + 1}</label>
-                    <select id="cronoEditDept${i}" class="form-input form-select">
-                        ${DEPARTAMENTOS.map(d => `<option value="${d}" ${selectedDepts[i] === d ? 'selected' : ''}>${d}</option>`).join('')}
-                    </select>
-                </div>
-            `).join('');
-        }
-        
-        function updateCronoEditProfFields(profesores = []) {
-            const count = document.getElementById('cronoEditProfCount').value;
-            const container = document.getElementById('cronoEditProfFields');
-            
-            container.innerHTML = Array.from({length: parseInt(count)}, (_, i) => `
-                <div>
-                    <label class="block text-sm font-medium mb-1" style="color: #1f2937; font-weight: 600;">Profesor/a ${i + 1}</label>
-                    <input type="text" id="cronoEditProf${i}" class="form-input" placeholder="Nombre completo" value="${profesores[i] || ''}">
-                </div>
-            `).join('');
-        }
-        
-        function guardarCronoEdit() {
-            const activityId = document.getElementById('cronoEditId').value;
-            if (!activityId) return;
-            
-            const act = appData.actividades.find(a => a.id === activityId);
-            if (!act) {
-                showToast('Actividad no encontrada', 'error');
-                return;
-            }
-            
-            // Validar campos obligatorios
-            const nombre = document.getElementById('cronoEditNombre').value.trim();
-            if (!nombre) {
-                showToast('El nombre de la actividad es obligatorio', 'warning');
-                return;
-            }
-            
-            // Actualizar datos básicos
-            act.nombre = nombre;
-            act.curso = document.getElementById('cronoEditCurso').value;
-            act.trimestre = document.getElementById('cronoEditTrimestre').value;
-            act.descripcion = document.getElementById('cronoEditDescripcion').value.trim();
-            
-            // Actualizar departamentos/organizador
-            const deptCount = document.getElementById('cronoEditDeptCount').value;
-            if (deptCount === '0') {
-                act.departamentos = [];
-                act.organizador = document.getElementById('cronoEditOrganizador').value.trim();
-            } else if (deptCount === 'todos') {
-                act.departamentos = [...DEPARTAMENTOS];
-                act.organizador = '';
-            } else {
-                act.organizador = '';
-                act.departamentos = Array.from({length: parseInt(deptCount)}, (_, i) => 
-                    document.getElementById(`cronoEditDept${i}`).value
-                ).filter(v => v);
-            }
-            
-            // Actualizar fecha y estado "no realizada"
-            act.noRealizada = document.getElementById('cronoEditNoRealizada').checked;
-            if (act.noRealizada) {
-                act.fecha = '';
-            } else {
-                act.fecha = document.getElementById('cronoEditFecha').value;
-            }
-            
-            // Actualizar profesorado
-            const profCount = document.getElementById('cronoEditProfCount').value;
-            act.profesorado = Array.from({length: parseInt(profCount)}, (_, i) =>
-                document.getElementById(`cronoEditProf${i}`).value.trim()
-            ).filter(v => v);
-            
-            // Actualizar coste y observaciones
-            const costeInput = document.getElementById('cronoEditCostePorAlumno').value;
-            act.costePorAlumno = costeInput !== '' ? parseFloat(costeInput) : '';
-            act.observaciones = document.getElementById('cronoEditObservaciones').value.trim();
-            
-            // Guardar
-            saveToLocalStorage();
-            
-            // Actualizar vistas
-            renderCronograma();
-            renderEditSelect();
-            
-            // Cerrar modal
-            cerrarModalCronoEdit();
-            
-            showToast('Actividad actualizada correctamente', 'success');
-            console.log('[CRONO] Actividad actualizada:', act.nombre);
+                showToast(`Editando: ${act.nombre}`, 'info');
+            }, 100);
         }
 
         // ==================== DRAG & DROP ====================
@@ -4823,15 +3380,14 @@
                 }
             }
             
-            // Verificar duplicados: mismo curso, trimestre Y nombre (excluyendo la actividad actual si es edición)
+            // Verificar duplicados solo dentro del mismo curso escolar
             const exists = appData.actividades.some(a => 
                 a.curso === curso && 
                 a.trimestre === trimestre && 
-                a.cursoEscolarId === appData.config.cursoEscolarActivo &&
-                a.nombre.toLowerCase() === nombre.toLowerCase()
+                a.cursoEscolarId === appData.config.cursoEscolarActivo
             );
             if (exists) {
-                showToast('Ya existe una actividad con este nombre en este curso y trimestre', 'warning');
+                showToast('Ya existe una actividad para este curso y trimestre', 'warning');
                 return;
             }
             
@@ -4929,15 +3485,14 @@
                 document.getElementById('editOrganizador').value = act.organizador;
                 document.getElementById('editOrganizadorField').classList.remove('hidden');
                 document.getElementById('editDeptFields').innerHTML = '';
-            } else if (act.departamentos && act.departamentos.length === DEPARTAMENTOS.length) {
+            } else if (act.departamentos.length === DEPARTAMENTOS.length) {
                 document.getElementById('editDeptCount').value = 'todos';
                 document.getElementById('editOrganizadorField').classList.add('hidden');
                 document.getElementById('editDeptFields').innerHTML = '';
             } else {
-                const deptos = act.departamentos || [];
-                document.getElementById('editDeptCount').value = deptos.length.toString();
+                document.getElementById('editDeptCount').value = act.departamentos.length.toString();
                 document.getElementById('editOrganizadorField').classList.add('hidden');
-                updateEditDeptFields(deptos);
+                updateEditDeptFields(act.departamentos);
             }
             
             document.getElementById('editProfCount').value = (act.profesorado && act.profesorado.length) || 1;
@@ -5248,16 +3803,15 @@
         // Referencia a la base de datos
         const dbRef = database.ref(FIREBASE_PATH);
         
-        // Guardar datos en Firebase (SIN borrar usuarios)
+        // Guardar datos en Firebase
         async function saveToFirebase() {
             try {
-                // Usar update() en lugar de set() para NO borrar 'users'
-                await dbRef.update({
+                await dbRef.set({
                     config: appData.config,
                     actividades: appData.actividades,
                     lastUpdated: new Date().toISOString()
                 });
-                console.log('Datos guardados en Firebase (usuarios preservados)');
+                console.log('Datos guardados en Firebase');
             } catch (error) {
                 console.error('Error al guardar en Firebase:', error);
                 showToast('Error al guardar en la nube', 'error');
@@ -5348,57 +3902,37 @@
         // Guardar usuarios en Firebase
         async function saveUsersToFirebase() {
             try {
-                console.log('[FIREBASE SAVE] Guardando', usersData.length, 'usuarios en Firebase...');
-                console.log('[FIREBASE SAVE] Usuarios:', usersData.map(u => u.username));
-                
                 await usersDbRef.set({
                     users: usersData,
-                    lastUpdated: new Date().toISOString(),
-                    source: window.location.href // Para debug: saber desde dónde se guardó
+                    lastUpdated: new Date().toISOString()
                 });
-                console.log('[FIREBASE SAVE] ✅ Usuarios guardados correctamente en Firebase');
+                console.log('Usuarios guardados en Firebase');
             } catch (error) {
-                console.error('[FIREBASE SAVE] ❌ Error al guardar usuarios:', error);
-                console.error('[FIREBASE SAVE] Detalle:', error.message, error.code);
+                console.error('Error al guardar usuarios en Firebase:', error);
             }
         }
         
         // Cargar usuarios desde Firebase
         async function loadUsersFromFirebase() {
             try {
-                console.log('[FIREBASE USERS] Intentando cargar usuarios desde Firebase...');
                 const snapshot = await usersDbRef.once('value');
                 const data = snapshot.val();
                 
-                console.log('[FIREBASE USERS] Datos recibidos:', data ? 'EXISTEN' : 'VACÍOS/NULL');
-                
-                if (data && data.users && Array.isArray(data.users) && data.users.length > 0) {
-                    const usuariosAntes = usersData.length;
+                if (data && data.users) {
                     usersData = data.users;
-                    console.log(`[FIREBASE USERS] ✅ Usuarios cargados: ${usuariosAntes} → ${usersData.length}`);
-                    console.log('[FIREBASE USERS] Lista:', usersData.map(u => u.username));
                     
                     // Solo agregar admin si no existe Y no fue inicializado previamente en Firebase
                     if (!usersData.find(u => u.id === 'admin_default') && !adminInitializedFlag) {
-                        console.log('[FIREBASE USERS] Añadiendo admin por defecto...');
-                        const newAdmin = {...DEFAULT_ADMIN};
-                        newAdmin.password = await hashPassword(newAdmin.password);
-                        newAdmin.passwordHashed = true;
-                        usersData.push(newAdmin);
+                        usersData.push({...DEFAULT_ADMIN});
                         await markAdminAsInitialized();
                     }
                     
                     saveUsersToStorage();
-                    console.log('[FIREBASE USERS] ✅ Sincronización completada desde Firebase');
-                    return true; // Éxito
-                } else {
-                    console.log('[FIREBASE USERS] ⚠️ No hay usuarios válidos en Firebase');
-                    return false; // Sin datos
+                    console.log('Usuarios cargados desde Firebase');
                 }
             } catch (error) {
-                console.error('[FIREBASE USERS] ❌ Error al cargar usuarios:', error);
+                console.error('Error al cargar usuarios desde Firebase:', error);
                 showToast('No se pudieron sincronizar usuarios desde la nube', 'warning');
-                return false; // Error
             }
         }
 
@@ -5610,374 +4144,6 @@
             document.getElementById('importFileName').textContent = 'Ningún archivo seleccionado';
             document.getElementById('importPreviewContainer').classList.add('hidden');
             document.getElementById('importPreviewList').innerHTML = '';
-        }
-
-        // ==================== IMPORTAR DESDE CURSO ANTERIOR ====================
-        
-        // Variable global para almacenar las actividades del curso anterior
-        let actividadesCursoAnterior = [];
-        
-        /**
-         * Inicializa el selector de cursos anteriores
-         * Se llama al abrir la pestaña de Actividades o al cambiar curso activo
-         */
-        function inicializarImportacionCursoAnterior() {
-            const select = document.getElementById('cursoAnteriorSelect');
-            const containerInfo = document.getElementById('importCursoAnteriorInfo');
-            const containerLista = document.getElementById('importCursoAnteriorContainer');
-            const sinCursos = document.getElementById('sinCursosAnteriores');
-            
-            if (!select) return;
-            
-            // Limpiar selector
-            select.innerHTML = '<option value="">Selecciona un curso anterior...</option>';
-            
-            // Obtener cursos escolares (excluyendo el actual)
-            const cursosEscolares = appData.config.cursosEscolares || [];
-            const cursoActivoId = appData.config.cursoEscolarActivo;
-            
-            // Filtrar cursos que NO sean el actual
-            const cursosAnteriores = cursosEscolares.filter(c => c.id !== cursoActivoId);
-            
-            if (cursosAnteriores.length === 0 || !cursoActivoId) {
-                // No hay cursos anteriores
-                containerInfo.classList.add('hidden');
-                containerLista.classList.add('hidden');
-                sinCursos.classList.remove('hidden');
-                return;
-            }
-            
-            // Hay cursos disponibles
-            containerInfo.classList.remove('hidden');
-            sinCursos.classList.add('hidden');
-            
-            // Añadir opciones al selector (ordenados por fecha, más reciente primero)
-            cursosAnteriores.sort((a, b) => new Date(b.creadoEn || 0) - new Date(a.creadoEn || 0));
-            
-            cursosAnteriores.forEach(curso => {
-                const option = document.createElement('option');
-                option.value = curso.id;
-                option.textContent = `${curso.nombre}${curso.activo ? ' (actual)' : ''}`;
-                select.appendChild(option);
-            });
-        }
-        
-        /**
-         * Carga las actividades del curso anterior seleccionado
-         */
-        function cargarActividadesCursoAnterior() {
-            const select = document.getElementById('cursoAnteriorSelect');
-            const container = document.getElementById('importCursoAnteriorContainer');
-            const lista = document.getElementById('listaActividadesCursoAnterior');
-            const countEl = document.getElementById('cursoAnteriorCount');
-            
-            const cursoId = select.value;
-            
-            if (!cursoId) {
-                container.classList.add('hidden');
-                return;
-            }
-            
-            container.classList.remove('hidden');
-            
-            // Obtener actividades del curso seleccionado de Firebase/LocalStorage
-            cargarActividadesDeCurso(cursoId).then(actividades => {
-                actividadesCursoAnterior = actividades;
-                countEl.textContent = actividades.length;
-                
-                // Renderizar la lista
-                renderizarListaActividadesCursoAnterior(actividades);
-                
-                // Resetear filtros
-                document.getElementById('filtroCursoAnterior').value = '';
-                document.getElementById('filtroTrimestreAnterior').value = '';
-                document.getElementById('busquedaCursoAnterior').value = '';
-                
-                actualizarContadorSeleccionadasCursoAnterior();
-            }).catch(error => {
-                console.error('[IMPORT CURSO ANT] Error:', error);
-                lista.innerHTML = '<p class="text-sm text-center py-4" style="color: var(--danger);">Error al cargar las actividades</p>';
-            });
-        }
-        
-        /**
-         * Carga las actividades de un curso escolar específico desde Firebase
-         * @param {string} cursoId - ID del curso escolar
-         * @returns {Promise<Array>} - Array de actividades
-         */
-        async function cargarActividadesDeCurso(cursoId) {
-            // Primero intentar desde Firebase si está disponible
-            if (typeof firebase !== 'undefined' && firebase.database) {
-                try {
-                    const dbRef = firebase.database().ref('aaccee_villadiego/actividades');
-                    const snapshot = await dbRef.orderByChild('cursoEscolarId').equalTo(cursoId).once('value');
-                    const actividades = [];
-                    snapshot.forEach(child => {
-                        actividades.push({ id: child.key, ...child.val() });
-                    });
-                    if (actividades.length > 0) {
-                        return actividades;
-                    }
-                } catch (e) {
-                    console.log('[IMPORT CURSO ANT] Firebase no disponible, usando localStorage');
-                }
-            }
-            
-            // Fallback: buscar en localStorage
-            const todasLasActividades = appData.actividades || [];
-            return todasLasActividades.filter(a => a.cursoEscolarId === cursoId);
-        }
-        
-        /**
-         * Renderiza la lista de actividades del curso anterior con checkboxes
-         * @param {Array} actividades - Array de actividades a mostrar
-         */
-        function renderizarListaActividadesCursoAnterior(actividades) {
-            const lista = document.getElementById('listaActividadesCursoAnterior');
-            
-            if (!actividades || actividades.length === 0) {
-                lista.innerHTML = '<p class="text-sm text-center py-4" style="color: var(--muted);">No hay actividades en este curso escolar</p>';
-                return;
-            }
-            
-            // Colores de curso para identificación visual
-            const cursoColors = {
-                '1º ESO': '#4f85a5',
-                '2º ESO': '#8ea651',
-                '3º ESO': '#ca7a30',
-                '4º ESO': '#a24c65'
-            };
-            
-            let html = '';
-            actividades.forEach((act, index) => {
-                const color = cursoColors[act.curso] || '#6b7280';
-                const estadoClase = act.noRealizada ? 'no-realizada' : (esActividadRealizada(act) ? 'realizada' : 'propuesta');
-                const estadoLabel = act.noRealizada ? 'No realizada' : (esActividadRealizada(act) ? 'Realizada' : 'Propuesta');
-                const estadoBgColor = act.noRealizada ? '#fee2e2' : (esActividadRealizada(act) ? '#d1fae5' : '#fef3c7');
-                
-                html += `
-                    <div class="flex items-start gap-3 p-3 rounded-lg transition-all hover:shadow-md cursor-pointer actividad-curso-anterior-item"
-                         data-index="${index}"
-                         style="background: ${estadoBgColor}; border: 1px solid ${color}20;"
-                         onclick="toggleSeleccionActividadCursoAnterior(${index})">
-                        <input type="checkbox" 
-                               id="act_ca_${index}" 
-                               class="mt-1 w-5 h-5 rounded border-2 flex-shrink-0"
-                               style="accent-color: ${color};"
-                               onclick="event.stopPropagation(); toggleSeleccionActividadCursoAnterior(${index})">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <span class="font-semibold text-sm">${escapeHTML(act.nombre || 'Sin nombre')}</span>
-                                <span class="text-xs px-2 py-0.5 rounded-full font-medium" 
-                                      style="background: ${color}; color: white;">
-                                    ${escapeHTML(act.curso || '')}
-                                </span>
-                                <span class="text-xs px-2 py-0.5 rounded" style="background: ${estadoBgColor}; color: inherit;">
-                                    ${estadoLabel}
-                                </span>
-                            </div>
-                            <div class="text-xs mt-1" style="color: var(--muted);">
-                                ${escapeHTML(act.trimestre || '')}
-                                ${act.departamentos && act.departamentos.length > 0 ? ' • ' + escapeHTML(act.departamentos.join(', ')) : ''}
-                                ${act.fecha ? ' • 📅 ' + escapeHTML(formatDate(act.fecha)) : ''}
-                            </div>
-                            ${act.descripcion ? `<p class="text-xs mt-1 truncate" style="color: var(--muted);">${escapeHTML(act.descripcion)}</p>` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            lista.innerHTML = html;
-        }
-        
-        /**
-         * Toggle selección de una actividad individual
-         * @param {number} index - Índice de la actividad en el array
-         */
-        function toggleSeleccionActividadCursoAnterior(index) {
-            const checkbox = document.getElementById(`act_ca_${index}`);
-            const item = checkbox.closest('.actividad-curso-anterior-item');
-            
-            if (checkbox.checked) {
-                checkbox.checked = false;
-                item.style.opacity = '0.6';
-                item.style.transform = 'scale(0.98)';
-            } else {
-                checkbox.checked = true;
-                item.style.opacity = '1';
-                item.style.transform = 'scale(1)';
-            }
-            
-            actualizarContadorSeleccionadasCursoAnterior();
-        }
-        
-        /**
-         * Selecciona todas las actividades visibles/filtradas
-         */
-        function seleccionarTodasCursoAnterior() {
-            document.querySelectorAll('#listaActividadesCursoAnterior input[type="checkbox"]').forEach(cb => {
-                cb.checked = true;
-                cb.closest('.actividad-curso-anterior-item').style.opacity = '1';
-                cb.closest('.actividad-curso-anterior-item').style.transform = 'scale(1)';
-            });
-            actualizarContadorSeleccionadasCursoAnterior();
-        }
-        
-        /**
-         * Deselecciona todas las actividades
-         */
-        function deseleccionarTodasCursoAnterior() {
-            document.querySelectorAll('#listaActividadesCursoAnterior input[type="checkbox"]').forEach(cb => {
-                cb.checked = false;
-                cb.closest('.actividad-curso-anterior-item').style.opacity = '0.6';
-                cb.closest('.actividad-curso-anterior-item').style.transform = 'scale(0.98)';
-            });
-            actualizarContadorSeleccionadasCursoAnterior();
-        }
-        
-        /**
-         * Filtra las actividades según los criterios seleccionados
-         */
-        function filtrarActividadesCursoAnterior() {
-            const filtroCurso = document.getElementById('filtroCursoAnterior').value;
-            const filtroTrimestre = document.getElementById('filtroTrimestreAnterior').value;
-            const busqueda = document.getElementById('busquedaCursoAnterior').value.toLowerCase().trim();
-            
-            let filtradas = [...actividadesCursoAnterior];
-            
-            if (filtroCurso) {
-                filtradas = filtradas.filter(a => a.curso === filtroCurso);
-            }
-            
-            if (filtroTrimestre) {
-                filtradas = filtradas.filter(a => a.trimestre === filtroTrimestre);
-            }
-            
-            if (busqueda) {
-                filtradas = filtradas.filter(a => 
-                    (a.nombre && a.nombre.toLowerCase().includes(busqueda)) ||
-                    (a.descripcion && a.descripcion.toLowerCase().includes(busqueda))
-                );
-            }
-            
-            document.getElementById('cursoAnteriorCount').textContent = filtradas.length;
-            renderizarListaActividadesCursoAnterior(filtradas);
-        }
-        
-        /**
-         * Actualiza el contador de actividades seleccionadas y estado del botón
-         */
-        function actualizarContadorSeleccionadasCursoAnterior() {
-            const seleccionadas = document.querySelectorAll('#listaActividadesCursoAnterior input[type="checkbox"]:checked').length;
-            document.getElementById('cursoAnteriorSeleccionadas').textContent = seleccionadas;
-            
-            const btn = document.getElementById('btnImportarCursoAnterior');
-            btn.disabled = seleccionadas === 0;
-            
-            if (seleccionadas > 0) {
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
-            } else {
-                btn.classList.add('opacity-50', 'cursor-not-allowed');
-            }
-        }
-        
-        /**
-         * Ejecuta la importación de las actividades seleccionadas
-         */
-        function ejecutarImportacionCursoAnterior() {
-            const cursoActivoId = appData.config.cursoEscolarActivo;
-            
-            if (!cursoActivoId) {
-                showToast('Selecciona primero un curso escolar activo', 'warning');
-                return;
-            }
-            
-            // Obtener actividades seleccionadas
-            const seleccionadas = [];
-            document.querySelectorAll('#listaActividadesCursoAnterior input[type="checkbox"]:checked').forEach(cb => {
-                const item = cb.closest('.actividad-curso-anterior-item');
-                const index = parseInt(item.dataset.index);
-                if (actividadesCursoAnterior[index]) {
-                    seleccionadas.push(actividadesCursoAnterior[index]);
-                }
-            });
-            
-            if (seleccionadas.length === 0) {
-                showToast('Selecciona al menos una actividad para importar', 'warning');
-                return;
-            }
-            
-            let importadas = 0;
-            let duplicadas = 0;
-            
-            seleccionadas.forEach(actOriginal => {
-                // Crear nueva actividad basada en la original pero con datos limpios
-                const nuevaActividad = {
-                    id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
-                    cursoEscolarId: cursoActivoId,
-                    curso: actOriginal.curso,
-                    trimestre: actOriginal.trimestre,
-                    nombre: actOriginal.nombre,
-                    descripcion: actOriginal.descripcion || '',
-                    departamentos: actOriginal.departamentos ? [...actOriginal.departamentos] : [],
-                    organizador: actOriginal.organizador || '',
-                    fecha: '', // Reiniciar fecha
-                    profesorado: [], // Reiniciar profesorado
-                    noRealizada: false, // Reiniciar estado
-                    costePorAlumno: actOriginal.costePorAlumno || '',
-                    observaciones: actOriginal.observaciones || ''
-                };
-                
-                // Verificar si ya existe una igual (mismo curso, trimestre y nombre)
-                const existe = appData.actividades.some(a => 
-                    a.cursoEscolarId === cursoActivoId &&
-                    a.curso === nuevaActividad.curso &&
-                    a.trimestre === nuevaActividad.trimestre &&
-                    a.nombre.toLowerCase() === nuevaActividad.nombre.toLowerCase()
-                );
-                
-                if (!existe) {
-                    appData.actividades.push(nuevaActividad);
-                    importadas++;
-                } else {
-                    duplicadas++;
-                }
-            });
-            
-            // Guardar cambios
-            saveToLocalStorage();
-            
-            // Actualizar UI
-            renderEditSelect();
-            updateTrimestreOptions();
-            renderCronograma();
-            
-            // Mostrar resultado
-            let mensaje = `Importación completada: ${importadas} actividades importadas del curso anterior`;
-            if (duplicadas > 0) {
-                mensaje += `, ${duplicadas} omitidas (ya existían)`;
-            }
-            showToast(mensaje, 'success');
-            
-            // Cerrar/limpiar la interfaz de importación
-            cancelarImportacionCursoAnterior();
-        }
-        
-        /**
-         * Cancela la importación y limpia la interfaz
-         */
-        function cancelarImportacionCursoAnterior() {
-            actividadesCursoAnterior = [];
-            document.getElementById('cursoAnteriorSelect').value = '';
-            document.getElementById('importCursoAnteriorContainer').classList.add('hidden');
-            document.getElementById('listaActividadesCursoAnterior').innerHTML = '<p class="text-sm text-center py-4" style="color: var(--muted);">Selecciona un curso anterior para ver sus actividades</p>';
-            document.getElementById('cursoAnteriorSeleccionadas').textContent = '0';
-            document.getElementById('btnImportarCursoAnterior').disabled = true;
-            
-            // Resetear filtros
-            document.getElementById('filtroCursoAnterior').value = '';
-            document.getElementById('filtroTrimestreAnterior').value = '';
-            document.getElementById('busquedaCursoAnterior').value = '';
         }
 
         // ==================== PDF REPORTS ====================
@@ -6306,7 +4472,7 @@
                 doc.text('Cuadrante Global de Actividades', pageWidth / 2, 15, { align: 'center' });
                 doc.setFontSize(9);
                 doc.setFont(undefined, 'normal');
-                doc.text('IES Villadiego - AAEE', pageWidth / 2, 22, { align: 'center' });
+                doc.text('IES Villadiego - AACCEE', pageWidth / 2, 22, { align: 'center' });
                 
                 // Configuración de columnas compacta
                 const cursoColWidth = 20;
@@ -6405,82 +4571,41 @@
                             doc.text('-', cx + colWidth / 2, ty + 3, { align: 'center' });
                         } else {
                             acts.forEach((act, ai) => {
-                                if (ty + 8 > maxTy) {
+                                if (ty + 6 > maxTy) {
                                     const rest = acts.length - ai;
                                     if (rest > 0) {
                                         doc.setTextColor(120, 120, 120);
                                         doc.setFontSize(6);
-                                        doc.text(`+${rest} más`, cx + padX, maxTy);
+                                        doc.text(`+${rest}`, cx + padX, maxTy);
                                     }
                                     return;
                                 }
                                 
-                                // Determinar estado de la actividad
-                                const esRealizada = esActividadRealizada(act);
-                                const esNoRealizada = act.noRealizada === true;
-                                const esPropuesta = !esRealizada && !esNoRealizada;
-                                
-                                // Colores según estado:
-                                // - Propuesta: fondo ámbar claro (#FEF3C7 = 254,243,199)
-                                // - Realizada: fondo verde claro (#D1FAE5 = 209,250,229)
-                                // - No realizada: fondo rojo claro (#FEE2E2 = 254,226,226)
-                                let estadoBgColor;
-                                let estadoTextColor;
-                                let estadoIndicador;
-                                
-                                if (esNoRealizada) {
-                                    estadoBgColor = [254, 226, 226]; // Rojo claro
-                                    estadoTextColor = [127, 29, 29];    // Rojo oscuro
-                                    estadoIndicador = '✗';
-                                } else if (esRealizada) {
-                                    estadoBgColor = [209, 250, 229]; // Verde claro
-                                    estadoTextColor = [21, 128, 61];   // Verde oscuro
-                                    estadoIndicador = '✓';
-                                } else {
-                                    estadoBgColor = [254, 243, 199]; // Ámbar claro
-                                    estadoTextColor = [146, 64, 14];   // Ámbar oscuro
-                                    estadoIndicador = '○';
-                                }
-                                
-                                // Calcular altura necesaria para esta actividad
-                                let nom = act.nombre || 'Sin nombre';
-                                const availableTextWidth = colWidth - padX * 2 - 6; // Dejar espacio para indicador
-                                const lines = doc.splitTextToSize(nom, availableTextWidth);
-                                const lineHeight = 3.2;
-                                const textBlockHeight = lines.length * lineHeight + (act.fecha ? 3 : 0) + 2;
-                                
-                                // Dibujar fondo de estado
-                                const blockStartY = ty - 1;
-                                const blockHeight = Math.min(textBlockHeight + 2, maxTy - ty + 1);
-                                doc.setFillColor(estadoBgColor[0], estadoBgColor[1], estadoBgColor[2]);
-                                doc.roundedRect(cx + padX, blockStartY, colWidth - padX * 2, blockHeight, 1, 1, 'F');
-                                
-                                // Indicador de estado (círculo/checkbox visual)
-                                doc.setTextColor(estadoTextColor[0], estadoTextColor[1], estadoTextColor[2]);
-                                doc.setFontSize(7);
-                                doc.setFont(undefined, 'bold');
-                                doc.text(estadoIndicador, cx + padX + 1.5, ty + 2);
-                                
-                                // Nombre actividad (completo, con ajuste de línea automático)
-                                doc.setTextColor(31, 41, 55); // Gris oscuro para buen contraste
+                                // Nombre actividad
+                                doc.setTextColor(25, 25, 25);
                                 doc.setFont(undefined, 'normal');
-                                doc.setFontSize(5.5);
+                                doc.setFontSize(7);
                                 
-                                doc.text(lines, cx + padX + 5, ty);
-                                ty += (lines.length * lineHeight);
+                                const maxCh = Math.floor((colWidth - padX * 2) / 1.7);
+                                let nom = act.nombre || 'Sin nombre';
+                                if (nom.length > maxCh) nom = nom.substring(0, maxCh - 1) + '…';
+                                doc.text(nom, cx + padX, ty);
+                                ty += 3.2;
                                 
-                                // Fecha si existe y cabe
+                                // Fecha en misma línea si cabe
                                 if (act.fecha && ty + 3 < maxTy) {
-                                    doc.setTextColor(estadoTextColor[0], estadoTextColor[1], estadoTextColor[2]);
-                                    doc.setFontSize(5);
-                                    doc.setFont(undefined, 'italic');
-                                    doc.text(formatDate(act.fecha), cx + padX + 5, ty);
-                                    ty += 2.5;
+                                    doc.setTextColor(13, 115, 119);
+                                    doc.setFontSize(5.5);
+                                    doc.text(formatDate(act.fecha), cx + padX, ty);
+                                    ty += 2.8;
                                 }
                                 
-                                // Separador entre actividades
-                                if (ai < acts.length - 1 && ty + 2 < maxTy) {
-                                    ty += 1.5;
+                                // Separador sutil (más compacto)
+                                if (ai < acts.length - 1 && ty + 1 < maxTy) {
+                                    doc.setDrawColor(235, 235, 235);
+                                    doc.setLineWidth(0.1);
+                                    doc.line(cx + padX, ty, cx + colWidth - padX, ty);
+                                    ty += 1;
                                 }
                             });
                         }
@@ -6491,54 +4616,15 @@
                     rowY += rowHeight + 2;
                 });
                 
-                // Footer con leyenda de estados
+                // Footer compacto
                 const totalAct = actividadesCurso.length;
                 doc.setDrawColor(13, 115, 119);
                 doc.setLineWidth(0.3);
-                doc.line(margin, pageHeight - 14, pageWidth - margin, pageHeight - 14);
-                
-                // Leyenda de estados
-                const legendY = pageHeight - 9;
-                const legendStartX = margin + 10;
-                const legendItemWidth = 45;
-                
-                // Item 1: Propuesta (ámbar)
-                doc.setFillColor(254, 243, 199);
-                doc.roundedRect(legendStartX, legendY - 3, 8, 4, 0.5, 0.5, 'F');
-                doc.setTextColor(146, 64, 14);
-                doc.setFontSize(6);
-                doc.setFont(undefined, 'bold');
-                doc.text('○', legendStartX + 4, legendY + 0.5, { align: 'center' });
-                doc.setFont(undefined, 'normal');
-                doc.text('Propuesta', legendStartX + 11, legendY);
-                
-                // Item 2: Realizada (verde)
-                const leg2X = legendStartX + legendItemWidth;
-                doc.setFillColor(209, 250, 229);
-                doc.roundedRect(leg2X, legendY - 3, 8, 4, 0.5, 0.5, 'F');
-                doc.setTextColor(21, 128, 61);
-                doc.setFontSize(6);
-                doc.setFont(undefined, 'bold');
-                doc.text('✓', leg2X + 4, legendY + 0.5, { align: 'center' });
-                doc.setFont(undefined, 'normal');
-                doc.text('Realizada', leg2X + 11, legendY);
-                
-                // Item 3: No realizada (rojo)
-                const leg3X = legendStartX + legendItemWidth * 2;
-                doc.setFillColor(254, 226, 226);
-                doc.roundedRect(leg3X, legendY - 3, 8, 4, 0.5, 0.5, 'F');
-                doc.setTextColor(127, 29, 29);
-                doc.setFontSize(6);
-                doc.setFont(undefined, 'bold');
-                doc.text('✗', leg3X + 4, legendY + 0.5, { align: 'center' });
-                doc.setFont(undefined, 'normal');
-                doc.text('No realizada', leg3X + 11, legendY);
-                
-                // Total y fecha a la derecha
+                doc.line(margin, pageHeight - 10, pageWidth - margin, pageHeight - 10);
                 doc.setTextColor(100, 100, 100);
-                doc.setFontSize(6);
+                doc.setFontSize(7);
                 doc.setFont(undefined, 'italic');
-                doc.text(`Total: ${totalAct} | ${new Date().toLocaleDateString('es-ES')}`, pageWidth - margin - 10, legendY, { align: 'right' });
+                doc.text(`Total actividades: ${totalAct} | Generado: ${new Date().toLocaleDateString('es-ES')}`, pageWidth / 2, pageHeight - 5, { align: 'center' });
                 
                 doc.save(`Cuadrante_Global_${formatDateTimeFile()}.pdf`);
                 showToast('Cuadrante global generado correctamente', 'success');
@@ -6853,12 +4939,6 @@
                 const usuarioModal = document.getElementById('usuarioModal');
                 if (usuarioModal && usuarioModal.classList.contains('active')) {
                     cerrarModalUsuario();
-                }
-                
-                // Cerrar modal de edición de cronograma si está abierto
-                const cronoEditModal = document.getElementById('cronoEditModal');
-                if (cronoEditModal && cronoEditModal.classList.contains('active')) {
-                    cerrarCronoEditModal();
                 }
             }
         });
