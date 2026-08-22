@@ -1384,12 +1384,6 @@
                 <button type="submit" id="loginBtn" class="login-btn">
                     Iniciar Sesión
                 </button>
-                
-                <div style="text-align: center; margin-top: 1rem;">
-                    <button type="button" onclick="resetLoginData()" style="background: none; border: none; color: rgba(255,255,255,0.6); font-size: 0.75rem; cursor: pointer; text-decoration: underline;">
-                        ¿Problemas para acceder? Resetear datos
-                    </button>
-                </div>
             </form>
         </div>
     </div>
@@ -2933,52 +2927,66 @@
                         usersData = [];
                     }
                 } else {
-                    console.log('[AUTH] No hay usuarios en localStorage');
+                    console.log('[AUTH] No hay usuarios en localStorage (primera vez en este dispositivo)');
                     usersData = [];
                 }
                 
                 // 2. Verificar si tenemos el usuario admin básico
-                const hasAdmin = usersData.some(u => u.id === 'admin_default');
+                let hasAdmin = usersData.some(u => u.id === 'admin_default');
                 
-                // 3. Intentar sincronizar con Firebase (no bloqueante crítico)
-                let firebaseAvailable = false;
+                // 3. Intentar sincronizar con Firebase (NO bloqueante - si falla, usamos locals)
                 try {
                     const isAdminInitialized = await checkAdminInitialized();
-                    firebaseAvailable = true;
                     console.log('[AUTH] Firebase disponible, adminInitialized:', isAdminInitialized);
                     
                     // Si no tenemos admin localmente y Firebase dice que no fue inicializado, crearlo
                     if (!hasAdmin && !isAdminInitialized) {
                         console.log('[AUTH] Creando usuario admin por defecto...');
-                        usersData.push({...DEFAULT_ADMIN});
-                        await saveUsersToStorage();
-                        await markAdminAsInitialized();
+                        const newAdmin = {...DEFAULT_ADMIN};
+                        newAdmin.password = await hashPassword(newAdmin.password);
+                        newAdmin.passwordHashed = true;
+                        usersData.push(newAdmin);
+                        hasAdmin = true;
+                        localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+                        
+                        // Marcar en Firebase (no crítico si falla)
+                        try { await markAdminAsInitialized(); } catch(e) { console.warn('[AUTH] No se pudo marcar admin en Firebase'); }
                     }
                     
-                    // Cargar usuarios actualizados desde Firebase
-                    await loadUsersFromFirebase();
+                    // Cargar usuarios actualizados desde Firebase (opcional)
+                    try {
+                        await loadUsersFromFirebase();
+                        // Re-verificar si tenemos admin después de cargar desde Firebase
+                        hasAdmin = usersData.some(u => u.id === 'admin_default');
+                    } catch (firebaseLoadError) {
+                        console.warn('[AUTH] No se pudieron cargar usuarios desde Firebase:', firebaseLoadError.message);
+                        // Continuar con los datos locales - NO es crítico
+                    }
                     
                 } catch (firebaseError) {
-                    console.warn('[AUTH] Firebase no disponible, usando datos locales:', firebaseError.message);
-                    
-                    // CRITICAL: Si no tenemos usuarios en absoluto, crear el admin por defecto
-                    if (usersData.length === 0) {
-                        console.log('[AUTH] Sin usuarios y sin Firebase - creando admin local');
-                        usersData.push({...DEFAULT_ADMIN});
-                        
-                        // Hashear la contraseña del admin inmediatamente
-                        const adminUser = usersData.find(u => u.id === 'admin_default');
-                        if (adminUser && !adminUser.passwordHashed) {
-                            adminUser.password = await hashPassword(adminUser.password);
-                            adminUser.passwordHashed = true;
-                        }
-                        
-                        // Guardar en localStorage
-                        localStorage.setItem('aaccee_users', JSON.stringify(usersData));
-                    }
+                    console.warn('[AUTH] Firebase no disponible o error:', firebaseError.message);
+                    console.log('[AUTH] Continuando modo offline/local...');
                 }
                 
-                // 4. Hashear contraseñas que aún no lo estén (migración)
+                // 4. GARANTIZAR: Si aún no tenemos admin, crearlo SIEMPRE (modo emergencia)
+                if (!hasAdmin || usersData.length === 0) {
+                    console.log('[AUTH] GARANTÍA: Creando usuario admin por defecto (modo local)');
+                    const guaranteedAdmin = {...DEFAULT_ADMIN};
+                    guaranteedAdmin.password = await hashPassword(guaranteedAdmin.password);
+                    guaranteedAdmin.passwordHashed = true;
+                    
+                    if (!hasAdmin) {
+                        usersData.push(guaranteedAdmin);
+                    } else {
+                        usersData = [guaranteedAdmin];
+                    }
+                    
+                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
+                    hasAdmin = true;
+                    console.log('[ADMIN] Admin creado/garantizado correctamente');
+                }
+                
+                // 5. Hashear contraseñas que aún no lo estén (migración)
                 let needsSave = false;
                 for (let user of usersData) {
                     if (!user.passwordHashed && user.password) {
@@ -3000,7 +3008,7 @@
                 console.error('[AUTH] Error crítico en loadUsersFromStorage:', error);
                 
                 // ULTIMO RECURSO: Crear admin si todo lo demás falló
-                if (usersData.length === 0) {
+                if (!usersData.some(u => u.id === 'admin_default')) {
                     console.log('[AUTH] ÚLTIMO RECURSO: Creando admin de emergencia');
                     const emergencyAdmin = {...DEFAULT_ADMIN};
                     emergencyAdmin.password = await hashPassword(emergencyAdmin.password);
