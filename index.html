@@ -9,6 +9,28 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <title>AAEE - IES Virgen de Villadiego</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="icons/favicon-48x48.png">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="icons/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="icons/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72x72.png">
+    
+    <!-- Android/Chrome Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="256x256" href="icons/icon-256x256.png">
+    <link rel="icon" type="image/png" sizes="384x384" href="icons/icon-384x384.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512x512.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -3233,35 +3255,6 @@
             }, 500);
         }
         
-        // Función de emergencia para resetear datos de login
-        async function resetLoginData() {
-            if (confirm('¿Estás seguro de que quieres resetear los datos de acceso?\n\nEsto eliminará todos los usuarios y creará un nuevo administrador por defecto.\n\nUsuario: admin\nContraseña: admin123')) {
-                try {
-                    console.log('[RESET] Iniciando reset de datos de usuario...');
-                    
-                    // Crear nuevo admin fresh
-                    const newAdmin = {...DEFAULT_ADMIN};
-                    newAdmin.password = await hashPassword(newAdmin.password);
-                    newAdmin.passwordHashed = true;
-                    
-                    // Resetear todo
-                    usersData = [newAdmin];
-                    localStorage.setItem('aaccee_users', JSON.stringify(usersData));
-                    localStorage.removeItem('aaccee_session');
-                    
-                    console.log('[RESET] Datos reseteados correctamente');
-                    
-                    // Mostrar mensaje y recargar
-                    alert('Datos reseteados correctamente.\n\nAhora puedes acceder con:\n• Usuario: admin\n• Contraseña: admin123');
-                    location.reload();
-                    
-                } catch (error) {
-                    console.error('[RESET] Error durante el reset:', error);
-                    alert('Error al resetear datos. Intenta borrar el caché del navegador.');
-                }
-            }
-        }
-        
         // Manejar logout
         function handleLogout() {
             if (confirm('¿Seguro que quieres cerrar la sesión?')) {
@@ -3281,10 +3274,16 @@
             const sessionUserName = document.getElementById('sessionUserName');
             const sessionUserRole = document.getElementById('sessionUserRole');
             
+            // Validar que los elementos existen antes de usarlos
+            if (!sessionInfo || !sessionUserName || !sessionUserRole) {
+                console.warn('[SESSION] Elementos de sesión no encontrados en el DOM');
+                return;
+            }
+            
             sessionInfo.classList.remove('hidden');
             sessionUserName.textContent = currentUser.nombre.split(' ')[0]; // Primer nombre
             sessionUserRole.textContent = currentUser.rol === 'admin' ? 'Admin' : (currentUser.rol === 'dace' ? 'DACE' : 'Usuario');
-            sessionUserRole.className = `session-role ${currentUser.rol === 'admin' ? 'role-admin' : (currentUser.rol === 'dace' ? 'role-dace' : 'role-user')}`;
+            sessionUserRole.className = `session-role ${currentUser.rol === 'admin' ? 'role-admin' : (currentUser.rol === 'dace' ? 'role-dace': 'role-user')}`;
             
             // Mostrar panel de gestión de usuarios si es admin
             const userPanel = document.getElementById('userManagementPanel');
@@ -3542,19 +3541,35 @@
         // ==================== THEME ====================
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+            
             if (savedTheme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'dark');
-                document.getElementById('sunIcon').classList.add('hidden');
-                document.getElementById('moonIcon').classList.remove('hidden');
+                if (sunIcon) sunIcon.classList.add('hidden');
+                if (moonIcon) moonIcon.classList.remove('hidden');
+            } else {
+                // Asegurar estado correcto para modo claro
+                if (sunIcon) sunIcon.classList.remove('hidden');
+                if (moonIcon) moonIcon.classList.add('hidden');
             }
         }
-
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            localStorage.setItem('theme', isDark ? 'light' : 'dark');
-            document.getElementById('sunIcon').classList.toggle('hidden');
-            document.getElementById('moonIcon').classList.toggle('hidden');
+        
+        // Inicializar theme cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+                    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+                    
+                    const sunIcon = document.getElementById('sunIcon');
+                    const moonIcon = document.getElementById('moonIcon');
+                    if (sunIcon) sunIcon.classList.toggle('hidden');
+                    if (moonIcon) moonIcon.classList.toggle('hidden');
+                });
+            }
         });
 
         // ==================== CURSOS ESCOLARES ====================
@@ -4177,14 +4192,15 @@
                 document.getElementById('cronoEditOrganizador').value = act.organizador;
                 document.getElementById('cronoEditOrganizadorField').classList.remove('hidden');
                 document.getElementById('cronoEditDeptFields').innerHTML = '';
-            } else if (act.departamentos.length === DEPARTAMENTOS.length) {
+            } else if (act.departamentos && act.departamentos.length === DEPARTAMENTOS.length) {
                 document.getElementById('cronoEditDeptCount').value = 'todos';
                 document.getElementById('cronoEditOrganizadorField').classList.add('hidden');
                 document.getElementById('cronoEditDeptFields').innerHTML = '';
             } else {
-                document.getElementById('cronoEditDeptCount').value = act.departamentos.length.toString();
+                const deptos = act.departamentos || [];
+                document.getElementById('cronoEditDeptCount').value = deptos.length.toString();
                 document.getElementById('cronoEditOrganizadorField').classList.add('hidden');
-                updateCronoEditDeptFields(act.departamentos);
+                updateCronoEditDeptFields(deptos);
             }
             
             // Cargar profesorado
@@ -4807,14 +4823,15 @@
                 }
             }
             
-            // Verificar duplicados solo dentro del mismo curso escolar
+            // Verificar duplicados: mismo curso, trimestre Y nombre (excluyendo la actividad actual si es edición)
             const exists = appData.actividades.some(a => 
                 a.curso === curso && 
                 a.trimestre === trimestre && 
-                a.cursoEscolarId === appData.config.cursoEscolarActivo
+                a.cursoEscolarId === appData.config.cursoEscolarActivo &&
+                a.nombre.toLowerCase() === nombre.toLowerCase()
             );
             if (exists) {
-                showToast('Ya existe una actividad para este curso y trimestre', 'warning');
+                showToast('Ya existe una actividad con este nombre en este curso y trimestre', 'warning');
                 return;
             }
             
@@ -4912,14 +4929,15 @@
                 document.getElementById('editOrganizador').value = act.organizador;
                 document.getElementById('editOrganizadorField').classList.remove('hidden');
                 document.getElementById('editDeptFields').innerHTML = '';
-            } else if (act.departamentos.length === DEPARTAMENTOS.length) {
+            } else if (act.departamentos && act.departamentos.length === DEPARTAMENTOS.length) {
                 document.getElementById('editDeptCount').value = 'todos';
                 document.getElementById('editOrganizadorField').classList.add('hidden');
                 document.getElementById('editDeptFields').innerHTML = '';
             } else {
-                document.getElementById('editDeptCount').value = act.departamentos.length.toString();
+                const deptos = act.departamentos || [];
+                document.getElementById('editDeptCount').value = deptos.length.toString();
                 document.getElementById('editOrganizadorField').classList.add('hidden');
-                updateEditDeptFields(act.departamentos);
+                updateEditDeptFields(deptos);
             }
             
             document.getElementById('editProfCount').value = (act.profesorado && act.profesorado.length) || 1;
@@ -5634,7 +5652,7 @@
             sinCursos.classList.add('hidden');
             
             // Añadir opciones al selector (ordenados por fecha, más reciente primero)
-            cursosAnteriores.sort((a, b) => new Date(b.fechaCreacion || 0) - new Date(a.fechaCreacion || 0));
+            cursosAnteriores.sort((a, b) => new Date(b.creadoEn || 0) - new Date(a.creadoEn || 0));
             
             cursosAnteriores.forEach(curso => {
                 const option = document.createElement('option');
@@ -6835,6 +6853,12 @@
                 const usuarioModal = document.getElementById('usuarioModal');
                 if (usuarioModal && usuarioModal.classList.contains('active')) {
                     cerrarModalUsuario();
+                }
+                
+                // Cerrar modal de edición de cronograma si está abierto
+                const cronoEditModal = document.getElementById('cronoEditModal');
+                if (cronoEditModal && cronoEditModal.classList.contains('active')) {
+                    cerrarCronoEditModal();
                 }
             }
         });
