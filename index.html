@@ -2058,8 +2058,11 @@
                                         </svg>
                                         Importar actividades del curso escolar anterior
                                     </h3>
-                                    <p class="text-sm mb-3" style="color: var(--muted);">
-                                        Selecciona las actividades que deseas copiar al curso actual. Las fechas y estados se reiniciarán.
+                                    <p class="text-sm mb-2" style="color: var(--muted);">
+                                        Selecciona las actividades que deseas copiar al curso actual.
+                                    </p>
+                                    <p class="text-xs p-2 rounded" style="background: rgba(245, 158, 11, 0.15); color: #b45309;">
+                                        ⚠️ <strong>Importante:</strong> Las actividades se importarán <strong>sin fecha</strong> (debes asignarla manualmente). Se conservará el trimestre asociado. El profesorado se reiniciará.
                                     </p>
                                     
                                     <!-- Selector de curso anterior -->
@@ -2478,8 +2481,11 @@
                                         </svg>
                                         Importar desde curso anterior
                                     </h3>
-                                    <p class="text-sm" style="color: #d97706;">
-                                        Selecciona el curso del que quieres importar las actividades complementarias. Las actividades se copiarán al curso actual.
+                                    <p class="text-sm mb-2" style="color: #d97706;">
+                                        Selecciona el curso del que quieres importar las actividades complementarias.
+                                    </p>
+                                    <p class="text-xs p-2 rounded" style="background: rgba(245, 158, 11, 0.15); color: #b45309;">
+                                        ⚠️ <strong>Importante:</strong> Las actividades se importarán <strong>sin fecha</strong> (debes asignarla manualmente en el nuevo curso). Se conservarán las horas asociadas.
                                     </p>
                                 </div>
 
@@ -5227,6 +5233,80 @@
             headerInfo.classList.remove('hidden');
         }
         
+        /**
+         * Obtiene la fecha mínima permitida (1 de septiembre) del curso escolar activo
+         * @returns {string|null} Fecha en formato YYYY-MM-DD o null si no hay curso activo
+         */
+        function getFechaMinimaCursoActivo() {
+            const cursoId = appData?.config?.cursoEscolarActivo;
+            if (!cursoId) return null;
+            
+            const curso = appData?.config?.cursosEscolares?.find(c => c.id === cursoId);
+            if (!curso) return null;
+            
+            // Usar fechaInicio del curso (debería ser 1 de septiembre)
+            // Si no existe, construirla desde anoInicio
+            if (curso.fechaInicio) {
+                return curso.fechaInicio;
+            }
+            
+            // Fallback: construir 1 de septiembre desde anoInicio
+            if (curso.anoInicio) {
+                return `${curso.anoInicio}-09-01`;
+            }
+            
+            return null;
+        }
+        
+        /**
+         * Valida que una fecha sea igual o posterior al 1 de septiembre del curso activo
+         * @param {string} fechaStr - Fecha en formato YYYY-MM-DD
+         * @param {string} contexto - Contexto para el mensaje de error (EE/CC)
+         * @returns {boolean} true si la fecha es válida
+         */
+        function validarFechaCursoActivo(fechaStr, contexto) {
+            if (!fechaStr) return true; // Si no hay fecha, no validar (puede ser obligatorio en otro sitio)
+            
+            const fechaMinima = getFechaMinimaCursoActivo();
+            if (!fechaMinima) {
+                console.warn('[VALIDACIÓN] No hay curso activo para validar fecha');
+                return true; // Permitir si no hay curso activo
+            }
+            
+            if (fechaStr < fechaMinima) {
+                const curso = appData?.config?.cursosEscolares?.find(c => c.id === appData.config.cursoEscolarActivo);
+                const nombreCurso = curso ? curso.nombre : 'este curso';
+                showToast(`⚠️ La fecha no puede ser anterior al 1 de septiembre del inicio de ${nombreCurso}. Debes cambiar de curso manualmente para añadir actividades de fechas anteriores.`, 'error');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        /**
+         * Desplaza una fecha un año hacia adelante
+         * @param {string} fechaStr - Fecha en formato YYYY-MM-DD
+         * @returns {string} Fecha desplazada un año o cadena vacía si no hay fecha
+         */
+        function desplazarFechaUnAno(fechaStr) {
+            if (!fechaStr || fechaStr.trim() === '') return '';
+            
+            try {
+                const fecha = new Date(fechaStr);
+                fecha.setFullYear(fecha.getFullYear() + 1);
+                
+                // Formatear como YYYY-MM-DD
+                const year = fecha.getFullYear();
+                const month = String(fecha.getMonth() + 1).padStart(2, '0');
+                const day = String(fecha.getDate()).padStart(2, '0');
+                
+                return `${year}-${month}-${day}`;
+            } catch (e) {
+                console.error('[IMPORT] Error al desplazar fecha:', e, fechaStr);
+                return fechaStr; // Devolver original si hay error
+            }
+        }
+        
         function actualizarPreviewFechas() {
             const anoInicio = document.getElementById('cursoAnoInicio').value;
             if (anoInicio) {
@@ -6514,7 +6594,19 @@
             act.trimestre = trimestre;
             act.nombre = nombre;
             act.descripcion = document.getElementById('editDescripcion').value.trim();
-            act.fecha = document.getElementById('editFecha').value;
+            
+            // Obtener y validar fecha
+            const nuevaFecha = document.getElementById('editFecha').value;
+            const noRealizada = document.getElementById('editNoRealizada').checked;
+            
+            // Validar fecha solo si hay fecha y no está marcada como "no realizada"
+            if (nuevaFecha && !noRealizada) {
+                if (!validarFechaCursoActivo(nuevaFecha, 'EE')) {
+                    return; // No continuar si la fecha no es válida
+                }
+            }
+            
+            act.fecha = nuevaFecha;
             
             // Obtener deptCount DESPUÉS de declararla (corregido)
             const deptCount = document.getElementById('editDeptCount').value;
@@ -7339,17 +7431,21 @@
             let duplicadas = 0;
             
             seleccionadas.forEach(actOriginal => {
+                // NOTA: No se importa la fecha aunque exista en el original
+                // El usuario deberá asignar nueva fecha manualmente en el nuevo curso
+                // El trimestre se conserva tal cual
+                
                 // Crear nueva actividad basada en la original pero con datos limpios
                 const nuevaActividad = {
                     id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
                     cursoEscolarId: cursoActivoId,
                     curso: actOriginal.curso,
-                    trimestre: actOriginal.trimestre,
+                    trimestre: actOriginal.trimestre, // Se conserva el trimestre
                     nombre: actOriginal.nombre,
                     descripcion: actOriginal.descripcion || '',
                     departamentos: actOriginal.departamentos ? [...actOriginal.departamentos] : [],
                     organizador: actOriginal.organizador || '',
-                    fecha: '', // Reiniciar fecha
+                    fecha: '', // NO se importa la fecha - debe asignarse manualmente
                     profesorado: [], // Reiniciar profesorado
                     noRealizada: false, // Reiniciar estado
                     costePorAlumno: actOriginal.costePorAlumno || '',
@@ -8624,6 +8720,11 @@ function guardarActividadCC() {
         showToast('Por favor, selecciona la fecha', 'error');
         return;
     }
+    
+    // Validar que la fecha sea igual o posterior al 1 de septiembre del curso activo
+    if (!validarFechaCursoActivo(fecha, 'CC')) {
+        return; // No continuar si la fecha no es válida
+    }
 
     // Crear objeto actividad (asociada al curso escolar activo)
     const cursoActivoId = (appData && appData.config) ? appData.config.cursoEscolarActivo : null;
@@ -8682,6 +8783,11 @@ function actualizarActividadCC() {
     if (!nombre || !unidad || !fecha) {
         showToast('Completa todos los campos obligatorios', 'error');
         return;
+    }
+    
+    // Validar que la fecha sea igual o posterior al 1 de septiembre del curso activo
+    if (fecha && !validarFechaCursoActivo(fecha, 'CC')) {
+        return; // No continuar si la fecha no es válida
     }
 
     // Actualizar
@@ -9389,23 +9495,72 @@ function cargarActividadesCCAnteriores() {
         return;
     }
 
-    // Simular carga (aquí iría la lógica real de Firebase/localStorage)
-    // Por ahora, mostramos un mensaje
-    showToast('Función de importación en desarrollo', 'info');
+    console.log('[IMPORT CC] Cargando actividades del curso:', cursoId);
     
-    // Ejemplo de cómo se mostrarían las actividades
+    // Filtrar actividades CC del curso seleccionado
+    const actividadesDelCurso = actividadesCC.filter(act => act.cursoEscolarId === cursoId);
+    
+    console.log('[IMPORT CC] Actividades encontradas:', actividadesDelCurso.length);
+    
     const listaContainer = document.getElementById('ccImportActividades');
     const listaWrapper = document.getElementById('ccImportLista');
+    const sinCursosMsg = document.getElementById('ccSinCursosAnteriores');
     
-    if (listaContainer && listaWrapper) {
-        listaWrapper.classList.remove('hidden');
-        listaContainer.innerHTML = `
-            <div class="text-center py-4" style="color: var(--muted);">
-                <p>No se encontraron actividades CC en el curso seleccionado.</p>
-                <p class="text-sm mt-2">La importación estará disponible pronto.</p>
+    if (!listaContainer || !listaWrapper) {
+        console.error('[IMPORT CC] No se encontraron contenedores de lista');
+        return;
+    }
+    
+    // Mostrar/ocultar elementos según haya actividades
+    if (actividadesDelCurso.length === 0) {
+        listaWrapper.classList.add('hidden');
+        if (sinCursosMsg) {
+            sinCursosMsg.classList.remove('hidden');
+            sinCursosMsg.innerHTML = `<p>No se encontraron actividades CC en el curso seleccionado.</p>`;
+        }
+        return;
+    }
+    
+    // Mostrar lista
+    sinCursosMsg.classList.add('hidden');
+    listaWrapper.classList.remove('hidden');
+    
+    // Generar HTML para cada actividad
+    let html = '';
+    actividadesDelCurso.forEach((act, index) => {
+        const fechaFormateada = act.fecha ? formatDate(act.fecha) : 'Sin fecha';
+        const horasTexto = act.horas && act.horas.length > 0 ? act.horas.join(', ') : 'Sin horas';
+        
+        html += `
+            <div class="flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-orange-300 transition-colors" 
+                 style="background: var(--bg);">
+                <input type="checkbox" 
+                       class="cc-import-checkbox mt-1 w-4 h-4 rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                       data-nombre="${escapeHTML(act.nombre)}"
+                       data-unidad="${escapeHTML(act.unidad)}"
+                       data-descripcion="${escapeHTML(act.descripcion || '')}"
+                       data-fecha="${act.fecha || ''}"
+                       data-horas='${JSON.stringify(act.horas || [])}'
+                       onchange="actualizarContadorCCImport()">
+                <div class="flex-1 min-w-0">
+                    <div class="font-medium text-sm" style="color: var(--primary);">${escapeHTML(act.nombre)}</div>
+                    <div class="text-xs mt-1" style="color: var(--muted);">
+                        <span class="inline-block mr-3">📚 ${escapeHTML(act.unidad)}</span>
+                        <span class="inline-block mr-3">📅 ${fechaFormateada}</span>
+                        <span class="inline-block">🕐 ${horasTexto}</span>
+                    </div>
+                    ${act.descripcion ? `<div class="text-xs mt-1 text-gray-500 truncate">${escapeHTML(act.descripcion)}</div>` : ''}
+                </div>
             </div>
         `;
-    }
+    });
+    
+    listaContainer.innerHTML = html;
+    
+    // Actualizar contador y estado del botón
+    actualizarContadorCCImport();
+    
+    console.log(`[IMPORT CC] Mostradas ${actividadesDelCurso.length} actividades para importar`);
 }
 
 /**
@@ -9444,14 +9599,88 @@ function actualizarContadorCCImport() {
  */
 function importarActividadesCCSeleccionadas() {
     const checkboxes = document.querySelectorAll('.cc-import-checkbox:checked');
+    const cursoActivoId = (appData && appData.config) ? appData.config.cursoEscolarActivo : null;
+    
+    if (!cursoActivoId) {
+        showToast('⚠️ No hay un curso escolar activo seleccionado', 'error');
+        return;
+    }
     
     if (checkboxes.length === 0) {
         showToast('Selecciona al menos una actividad para importar', 'error');
         return;
     }
-
-    // Aquí iría la lógica real de importación
-    showToast(`Se importarán ${checkboxes.length} actividades CC`, 'success');
+    
+    // Obtener el curso anterior seleccionado
+    const cursoOrigenId = document.getElementById('ccImportCursoOrigen').value;
+    if (!cursoOrigenId) {
+        showToast('Selecciona un curso de origen', 'error');
+        return;
+    }
+    
+    let importadas = 0;
+    let duplicadas = 0;
+    let errores = 0;
+    
+    checkboxes.forEach(checkbox => {
+        try {
+            // Obtener datos de la actividad desde los atributos data
+            const actividadData = checkbox.dataset;
+            const actOriginal = {
+                nombre: actividadData.nombre || '',
+                unidad: actividadData.unidad || '',
+                descripcion: actividadData.descripcion || '',
+                horas: actividadData.horas ? JSON.parse(actividadData.horas) : []
+            };
+            
+            // NOTA: No se importa la fecha aunque exista en el original
+            // El usuario deberá asignar nueva fecha manualmente en el nuevo curso
+            
+            // Crear nueva actividad para el curso actual
+            const nuevaActividad = {
+                id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
+                nombre: actOriginal.nombre,
+                unidad: actOriginal.unidad,
+                descripcion: actOriginal.descripcion,
+                fecha: '', // NO se importa la fecha - debe asignarse manualmente
+                horas: actOriginal.horas, // Mantener mismas horas
+                cursoEscolarId: cursoActivoId, // Asociar al curso activo
+                publicadaEnCalendar: false,
+                createdAt: new Date().toISOString(),
+                importadaDeCurso: cursoOrigenId // Marcar como importada
+            };
+            
+            // Añadir al array de actividades CC
+            actividadesCC.push(nuevaActividad);
+            importadas++;
+            
+        } catch (e) {
+            console.error('[IMPORT CC] Error al importar actividad:', e);
+            errores++;
+        }
+    });
+    
+    if (importadas > 0) {
+        // Guardar cambios
+        guardarActividadesCC();
+        
+        // Actualizar UI
+        renderizarListaCC();
+        actualizarSelectorCCEdit();
+        
+        // Mostrar resultado
+        let mensaje = `✅ Importación CC completada: ${importadas} actividad${importadas !== 1 ? 'es' : ''} importada${importadas !== 1 ? 's' : ''} (sin fecha - asigna manualmente)`;
+        if (errores > 0) {
+            mensaje += `, ${errores} error${errores !== 1 ? 'es' : ''}`;
+        }
+        showToast(mensaje, 'success');
+        
+        // Limpiar selección y recargar
+        document.getElementById('ccImportSeleccionarTodas').checked = false;
+        cargarActividadesCCAnteriores(); // Recargar para resetear
+    } else {
+        showToast('No se pudo importar ninguna actividad', 'error');
+    }
 }
 
 // ==================== CALENDARIO DE ACTIVIDADES CC ====================
