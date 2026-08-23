@@ -1767,7 +1767,7 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>
                                 </svg>
-                                Introducir nueva Actividad EE
+                                Introduce nueva actividad
                             </h2>
                             <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -1831,7 +1831,7 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                 </svg>
-                                Editar Actividad EE existente <span id="contadorEditEE" class="ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">0 actividades</span>
+                                Edita actividad existente
                             </h2>
                             <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -1934,7 +1934,7 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
                                 </svg>
-                                Importación masiva de Actividades EE
+                                Importación masiva de actividades
                             </h2>
                             <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -2042,7 +2042,7 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
-                                Importar Actividades EE desde curso anterior
+                                Importar actividades desde curso anterior
                             </h2>
                             <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -2159,75 +2159,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Eliminación Masiva de Actividades EE - Acordeón -->
-                    <div class="card overflow-hidden" style="border: 2px solid #dc2626;">
-                        <div class="accordion-header" onclick="toggleAccordion(this)" style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);">
-                            <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: #dc2626;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
-                                </svg>
-                                ⚠️ Eliminar Todas las Actividades EE
-                            </h2>
-                            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </div>
-                        <div class="accordion-content">
-                            <div class="p-6 space-y-4">
-                                <!-- Advertencia -->
-                                <div class="p-4 rounded-lg border-2 border-red-300 bg-red-50">
-                                    <div class="flex items-start gap-3">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" class="flex-shrink-0 mt-0.5">
-                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-                                        </svg>
-                                        <div>
-                                            <h3 class="font-bold text-red-800 mb-1">⚠️ PELIGRO: Esta acción es IRREVERSIBLE</h3>
-                                            <ul class="text-sm text-red-700 space-y-1 mt-2">
-                                                <li>• Se eliminarán <strong>TODAS</strong> las Actividades EE del curso escolar actual</li>
-                                                <li>• Se borrarán todos los datos asociados (profesorado, departamentos, fechas, etc.)</li>
-                                                <li>• La acción no se puede deshacer</li>
-                                                <li>• Los informes generados anteriormente no se verán afectados (son archivos PDF independientes)</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Información actual -->
-                                <div class="p-4 rounded-lg bg-gray-50 border border-gray-200">
-                                    <p class="text-sm text-gray-600">
-                                        <strong>Curso escolar activo:</strong> <span id="eeEliminarCursoActivo">-</span><br>
-                                        <strong>Número de actividades a eliminar:</strong> <span id="eeNumActividadesEliminar" class="font-bold text-red-600">0</span>
-                                    </p>
-                                </div>
-
-                                <!-- Confirmación -->
-                                <div class="space-y-3">
-                                    <label class="flex items-center gap-2 cursor-pointer">
-                                        <input type="checkbox" id="eeConfirmarLectura" class="w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-red-500">
-                                        <span class="text-sm font-medium text-gray-700">He leído y entiendo las consecuencias de esta acción</span>
-                                    </label>
-                                    
-                                    <div class="flex items-center gap-3 flex-wrap">
-                                        <label class="text-sm font-medium text-gray-700">Para confirmar, escribe:</label>
-                                        <code class="px-3 py-1 bg-red-100 text-red-800 rounded font-mono font-bold">ELIMINAR TODO</code>
-                                    </div>
-                                    
-                                    <input type="text" id="eeConfirmacionTexto" class="form-input max-w-md" placeholder="Escribe ELIMINAR TODO aquí..." disabled>
-                                </div>
-
-                                <!-- Botón de eliminación -->
-                                <button id="btnEliminarTodasEE" onclick="eliminarTodasActividadesEE()" 
-                                        class="btn px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 opacity-50 cursor-not-allowed" 
-                                        disabled>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
-                                    </svg>
-                                    ELIMINAR TODAS LAS ACTIVIDADES EE
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -2291,47 +2222,6 @@
                                     <input type="date" id="ccFecha" class="form-input">
                                 </div>
 
-                                <!-- Horas (multiselección) -->
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline mr-1">
-                                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                                        </svg>
-                                        Hora de realización
-                                    </label>
-                                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2" id="ccHorasContainer">
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="1ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">1ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="2ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">2ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="3ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">3ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-orange-50 border border-orange-200 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-100">
-                                            <input type="checkbox" name="ccHora" value="Recreo" class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500">
-                                            <span class="text-sm font-medium text-orange-700">Recreo</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="4ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">4ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="5ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">5ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="6ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">6ª</span>
-                                        </label>
-                                    </div>
-                                    <p class="text-xs mt-1" style="color: var(--muted);">Puedes seleccionar varias horas</p>
-                                </div>
-
                                 <button onclick="guardarActividadCC()" class="btn btn-primary w-full">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
@@ -2349,7 +2239,7 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                                 </svg>
-                                Editar Actividad CC <span id="contadorEditCC" class="ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">0 actividades</span>
+                                Editar Actividad CC
                             </h2>
                             <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -2394,47 +2284,6 @@
                                     <div>
                                         <label class="block text-sm font-medium mb-1">Fecha <span class="text-red-500">*</span></label>
                                         <input type="date" id="ccEditFecha" class="form-input">
-                                    </div>
-
-                                    <!-- Horas (multiselección) -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-2">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline mr-1">
-                                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                                            </svg>
-                                            Hora de realización
-                                        </label>
-                                        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2" id="ccEditHorasContainer">
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="1ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">1ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="2ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">2ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="3ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">3ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-orange-50 border border-orange-200 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-100">
-                                                <input type="checkbox" name="ccEditHora" value="Recreo" class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500">
-                                                <span class="text-sm font-medium text-orange-700">Recreo</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="4ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">4ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="5ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">5ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="6ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">6ª</span>
-                                            </label>
-                                        </div>
-                                        <p class="text-xs mt-1" style="color: var(--muted);">Puedes seleccionar varias horas</p>
                                     </div>
 
                                     <div class="flex gap-3">
@@ -2548,74 +2397,6 @@
                                 <div id="ccListaActividades" class="space-y-3 max-h-96 overflow-y-auto">
                                     <p class="text-center py-6" style="color: var(--muted);">No hay actividades CC registradas aún.</p>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Eliminación Masiva de Actividades CC - Acordeón -->
-                    <div class="card overflow-hidden" style="border: 2px solid #ea580c;">
-                        <div class="accordion-header" onclick="toggleAccordion(this)" style="background: linear-gradient(135deg, rgba(234, 88, 12, 0.1) 0%, rgba(251, 146, 60, 0.05) 100%);">
-                            <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: #ea580c;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
-                                </svg>
-                                ⚠️ Eliminar Todas las Actividades CC
-                            </h2>
-                            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </div>
-                        <div class="accordion-content">
-                            <div class="p-6 space-y-4">
-                                <!-- Advertencia -->
-                                <div class="p-4 rounded-lg border-2 border-orange-300 bg-orange-50">
-                                    <div class="flex items-start gap-3">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" class="flex-shrink-0 mt-0.5">
-                                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-                                        </svg>
-                                        <div>
-                                            <h3 class="font-bold text-orange-800 mb-1">⚠️ PELIGRO: Esta acción es IRREVERSIBLE</h3>
-                                            <ul class="text-sm text-orange-700 space-y-1 mt-2">
-                                                <li>• Se eliminarán <strong>TODAS</strong> las Actividades CC registradas</li>
-                                                <li>• Se borrarán todos los datos asociados (nombre, unidad, fecha, descripción, etc.)</li>
-                                                <li>• La acción no se puede deshacer</li>
-                                                <li>• Los informes generados anteriormente no se verán afectados (son archivos PDF independientes)</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Información actual -->
-                                <div class="p-4 rounded-lg bg-gray-50 border border-gray-200">
-                                    <p class="text-sm text-gray-600">
-                                        <strong>Número de actividades a eliminar:</strong> <span id="ccNumActividadesEliminar" class="font-bold text-orange-600">0</span>
-                                    </p>
-                                </div>
-
-                                <!-- Confirmación -->
-                                <div class="space-y-3">
-                                    <label class="flex items-center gap-2 cursor-pointer">
-                                        <input type="checkbox" id="ccConfirmarLectura" class="w-5 h-5 rounded border-gray-300 text-orange-600 focus:ring-orange-500">
-                                        <span class="text-sm font-medium text-gray-700">He leído y entiendo las consecuencias de esta acción</span>
-                                    </label>
-                                    
-                                    <div class="flex items-center gap-3 flex-wrap">
-                                        <label class="text-sm font-medium text-gray-700">Para confirmar, escribe:</label>
-                                        <code class="px-3 py-1 bg-orange-100 text-orange-800 rounded font-mono font-bold">ELIMINAR TODO</code>
-                                    </div>
-                                    
-                                    <input type="text" id="ccConfirmacionTexto" class="form-input max-w-md" placeholder="Escribe ELIMINAR TODO aquí..." disabled>
-                                </div>
-
-                                <!-- Botón de eliminación -->
-                                <button id="btnEliminarTodasCC" onclick="eliminarTodasActividadesCC()" 
-                                        class="btn px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2 opacity-50 cursor-not-allowed" 
-                                        disabled>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
-                                    </svg>
-                                    ELIMINAR TODAS LAS ACTIVIDADES CC
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -4107,41 +3888,6 @@
                         cargarCursosAnterioresCC();
                     }
                 }, 800);
-                
-                // Inicializar eliminación masiva - Event listeners
-                setTimeout(() => {
-                    // Event listeners para EE
-                    const eeCheckbox = document.getElementById('eeConfirmarLectura');
-                    const eeInputTexto = document.getElementById('eeConfirmacionTexto');
-                    
-                    if (eeCheckbox) {
-                        eeCheckbox.addEventListener('change', onEEConfirmarLecturaChange);
-                    }
-                    if (eeInputTexto) {
-                        eeInputTexto.addEventListener('input', verificarConfirmacionEE);
-                    }
-                    
-                    // Event listeners para CC
-                    const ccCheckbox = document.getElementById('ccConfirmarLectura');
-                    const ccInputTexto = document.getElementById('ccConfirmacionTexto');
-                    
-                    if (ccCheckbox) {
-                        ccCheckbox.addEventListener('change', onCCConfirmarLecturaChange);
-                    }
-                    if (ccInputTexto) {
-                        ccInputTexto.addEventListener('input', verificarConfirmacionCC);
-                    }
-                    
-                    // Inicializar contadores
-                    if (typeof inicializarEliminacionMasivaEE === 'function') {
-                        inicializarEliminacionMasivaEE();
-                    }
-                    if (typeof inicializarEliminacionMasivaCC === 'function') {
-                        inicializarEliminacionMasivaCC();
-                    }
-                    
-                    console.log('[INIT] Eliminación masiva inicializada');
-                }, 1000);
             }, 1500);
 
             // Usar { once: true } para evitar múltiples listeners, o verificar si ya existe
@@ -4693,7 +4439,7 @@
             }
             
             // Usuario normal: solo puede ver cronograma
-            const tabsToHide = ['config', 'actividades', 'actividades-cc', 'informes'];
+            const tabsToHide = ['config', 'actividades', 'informes'];
             tabsToHide.forEach(tabId => {
                 const tabBtn = document.querySelector(`[data-tab="${tabId}"]`);
                 const tabContent = document.getElementById(`tab-${tabId}`);
@@ -5353,19 +5099,6 @@
                 actividades.map(act => 
                     `<option value="${act.id}">${act.curso} - ${act.trimestre} - ${act.nombre}</option>`
                 ).join('');
-            
-            // Actualizar contador en el acordeón
-            const contador = document.getElementById('contadorEditEE');
-            if (contador) {
-                const numActividades = actividades.length;
-                contador.textContent = `${numActividades} actividad${numActividades !== 1 ? 'es' : ''}`;
-                // Cambiar color según si hay actividades
-                if (numActividades === 0) {
-                    contador.className = 'ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-gray-200 text-gray-600';
-                } else {
-                    contador.className = 'ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-green-100 text-green-700';
-                }
-            }
         }
 
         function renderInformeSelects() {
@@ -8077,87 +7810,10 @@
                     return;
                 }
                 
-                console.log('[PDF] Generando Cuadrante Global en PDF...');
-                
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF('landscape'); // Horizontal para cuadrante
-                
-                addPDFHeader(doc, 'Cuadrante Global de Actividades', true);
-                
-                // Obtener datos
-                const actividadesEE = typeof getActividadesCursoActivo === 'function' 
-                    ? getActividadesCursoActivo() : [];
-                const actividadesCCData = Array.isArray(actividadesCC) ? actividadesCC : [];
-                
-                let yPos = 45;
-                
-                // Sección EE (Verde)
-                if (actividadesEE.length > 0) {
-                    doc.setFontSize(12);
-                    doc.setFont(undefined, 'bold');
-                    doc.setTextColor(5, 150, 105); // Verde
-                    doc.text(`ACTIVIDADES EXTRAESCOLARES (EE): ${actividadesEE.length}`, 14, yPos);
-                    yPos += 8;
-                    
-                    const tableDataEE = actividadesEE.map(act => [
-                        act.curso || '-',
-                        act.trimestre || '-',
-                        act.nombre.substring(0, 35),
-                        act.fecha ? formatDate(act.fecha) : '-'
-                    ]);
-                    
-                    if (yPos < 180) { // Solo si hay espacio
-                        doc.autoTable({
-                            startY: yPos,
-                            head: [['Curso', 'Trim.', 'Actividad', 'Fecha']],
-                            body: tableDataEE,
-                            theme: 'striped',
-                            headStyles: { fillColor: [5, 150, 105] },
-                            margin: { left: 14 },
-                            styles: { fontSize: 7 },
-                            columnStyles: {
-                                0: { cellWidth: 20 },
-                                1: { cellWidth: 18 },
-                                2: { cellWidth: 80 },
-                                3: { cellWidth: 25 }
-                            }
-                        });
-                        
-                        yPos = doc.lastAutoTable.finalY + 10;
-                    }
-                }
-                
-                // Sección CC (Naranja)
-                if (actividadesCCData.length > 0 && yPos < 150) {
-                    doc.setFontSize(12);
-                    doc.setFont(undefined, 'bold');
-                    doc.setTextColor(249, 115, 22); // Naranja
-                    doc.text(`ACTIVIDADES COMPLEMENTARIAS (CC): ${actividadesCCData.length}`, 14, yPos);
-                    yPos += 8;
-                    
-                    const tableDataCC = actividadesCCData.map(act => [
-                        act.unidad || '-',
-                        act.nombre.substring(0, 40),
-                        act.fecha ? formatDate(act.fecha) : '-'
-                    ]);
-                    
-                    if (yPos < 150) {
-                        doc.autoTable({
-                            startY: yPos,
-                            head: [['Unidad', 'Actividad', 'Fecha']],
-                            body: tableDataCC,
-                            theme: 'striped',
-                            headStyles: { fillColor: [249, 115, 22] },
-                            margin: { left: 14 },
-                            styles: { fontSize: 8 }
-                        });
-                    }
-                }
-                
-                doc.save(`Cuadrante_Global_${formatDateTimeFile()}.pdf`);
-                showToast('PDF del Cuadrante Global generado correctamente', 'success');
-                console.log('[PDF] Cuadrante Global generado');
-                
+                // Por ahora, usar la función de imprimir del navegador que ya muestra el cuadrante
+                // En el futuro se puede implementar la generación PDF completa aquí
+                window.print();
+                showToast('Usando impresión del navegador. Para exportar a PDF, selecciona "Guardar como PDF" en el diálogo de impresión.', 'info');
             } catch (error) {
                 console.error('[PDF] Error:', error);
                 showToast('Error al generar PDF: ' + error.message, 'error');
@@ -8609,7 +8265,6 @@ function guardarActividadCC() {
     const unidad = document.getElementById('ccUnidad').value;
     const descripcion = document.getElementById('ccDescripcion').value.trim();
     const fecha = document.getElementById('ccFecha').value;
-    const horas = obtenerHorasSeleccionadas('ccHora');
 
     // Validaciones
     if (!nombre) {
@@ -8625,16 +8280,13 @@ function guardarActividadCC() {
         return;
     }
 
-    // Crear objeto actividad (asociada al curso escolar activo)
-    const cursoActivoId = (appData && appData.config) ? appData.config.cursoEscolarActivo : null;
+    // Crear objeto actividad
     const nuevaActividad = {
         id: Date.now().toString(),
         nombre: nombre,
         unidad: unidad,
         descripcion: descripcion,
         fecha: fecha,
-        horas: horas,  // Array de horas seleccionadas
-        cursoEscolarId: cursoActivoId,  // Asociar al curso activo
         publicadaEnCalendar: false,
         createdAt: new Date().toISOString()
     };
@@ -8676,7 +8328,6 @@ function actualizarActividadCC() {
     const unidad = document.getElementById('ccEditUnidad').value;
     const descripcion = document.getElementById('ccEditDescripcion').value.trim();
     const fecha = document.getElementById('ccEditFecha').value;
-    const horas = obtenerHorasSeleccionadas('ccEditHora');
 
     // Validaciones
     if (!nombre || !unidad || !fecha) {
@@ -8691,7 +8342,6 @@ function actualizarActividadCC() {
         unidad: unidad,
         descripcion: descripcion,
         fecha: fecha,
-        horas: horas,  // Actualizar horas
         updatedAt: new Date().toISOString()
     };
 
@@ -8769,9 +8419,6 @@ function cargarActividadCCEditar() {
     document.getElementById('ccEditUnidad').value = actividad.unidad;
     document.getElementById('ccEditDescripcion').value = actividad.descripcion || '';
     document.getElementById('ccEditFecha').value = actividad.fecha;
-    
-    // Marcar horas seleccionadas
-    marcarHorasSeleccionadas('ccEditHora', actividad.horas || []);
 
     // Mostrar formulario
     form.classList.remove('hidden');
@@ -8823,18 +8470,6 @@ function renderizarListaCC() {
         console.log(`[CC]   ${index + 1}. ${act.nombre} (${act.unidad}) - ${act.fecha}`);
         
         const fechaFormateada = formatDate(act.fecha);
-        
-        // Generar badges de horas
-        const horasBadges = act.horas && act.horas.length > 0 
-            ? act.horas.map(h => {
-                const esRecreo = h === 'Recreo';
-                const estilo = esRecreo 
-                    ? 'background: rgba(234, 88, 12, 0.1); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.3);'
-                    : 'background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3);';
-                return `<span class="px-2 py-1 rounded-full text-xs font-medium" style="${estilo}">${escapeHTML(h)}</span>`;
-            }).join('')
-            : '';
-        
         html += `
             <div class="p-4 rounded-lg transition-all hover:shadow-md" style="background: var(--bg); border: 1px solid var(--border);">
                 <div class="flex justify-between items-start gap-3">
@@ -8843,7 +8478,6 @@ function renderizarListaCC() {
                         <div class="flex flex-wrap gap-2 mt-2 text-sm">
                             <span class="px-2 py-1 rounded-full" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);">${escapeHTML(act.unidad)}</span>
                             <span class="px-2 py-1 rounded-full" style="background: rgba(107, 114, 128, 0.1); color: var(--muted);">${fechaFormateada}</span>
-                            ${horasBadges}
                         </div>
                         ${act.descripcion ? `<p class="text-sm mt-2" style="color: var(--muted);">${escapeHTML(act.descripcion)}</p>` : ''}
                     </div>
@@ -8913,394 +8547,6 @@ function actualizarSelectorCCEdit() {
             sinActividades.classList.toggle('hidden', actividadesCC.length > 0);
         }
     }
-    
-    // Actualizar contador en el acordeón
-    const contador = document.getElementById('contadorEditCC');
-    if (contador) {
-        const numActividades = actividadesCC.length;
-        contador.textContent = `${numActividades} actividad${numActividades !== 1 ? 'es' : ''}`;
-        // Cambiar color según si hay actividades
-        if (numActividades === 0) {
-            contador.className = 'ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-gray-200 text-gray-600';
-        } else {
-            contador.className = 'ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-blue-100 text-blue-700';
-        }
-    }
-}
-
-// ==================== ELIMINACIÓN MASIVA DE ACTIVIDADES ====================
-
-/**
- * Inicializa el acordeón de eliminación masiva de Actividades EE
- */
-function inicializarEliminacionMasivaEE() {
-    const cursoActivoEl = document.getElementById('eeEliminarCursoActivo');
-    const numActividadesEl = document.getElementById('eeNumActividadesEliminar');
-    
-    if (!cursoActivoEl || !numActividadesEl) return;
-    
-    // Obtener curso activo desde appData.config (la estructura correcta)
-    const cursoId = appData.config ? appData.config.cursoEscolarActivo : null;
-    const cursos = appData.config ? appData.config.cursosEscolares : [];
-    const cursoActivo = cursoId ? cursos.find(c => c.id === cursoId) : null;
-    
-    if (cursoActivo) {
-        cursoActivoEl.textContent = `${cursoActivo.nombre} (${formatDate(cursoActivo.fechaInicio)} - ${formatDate(cursoActivo.fechaFin)})`;
-    } else {
-        cursoActivoEl.textContent = 'No hay curso activo';
-    }
-    
-    // Contar actividades del curso actual
-    const actividadesCurso = getActividadesCursoActivo();
-    numActividadesEl.textContent = actividadesCurso.length;
-}
-
-/**
- * Maneja el cambio del checkbox de confirmación para EE
- */
-function onEEConfirmarLecturaChange() {
-    const checkbox = document.getElementById('eeConfirmarLectura');
-    const inputTexto = document.getElementById('eeConfirmacionTexto');
-    const btnEliminar = document.getElementById('btnEliminarTodasEE');
-    
-    if (!checkbox || !inputTexto || !btnEliminar) return;
-    
-    if (checkbox.checked) {
-        inputTexto.disabled = false;
-        inputTexto.placeholder = 'Escribe ELIMINAR TODO aquí...';
-    } else {
-        inputTexto.disabled = true;
-        inputTexto.value = '';
-        inputTexto.placeholder = 'Primero marca el checkbox arriba';
-        btnEliminar.disabled = true;
-        btnEliminar.classList.add('opacity-50', 'cursor-not-allowed');
-    }
-    verificarConfirmacionEE();
-}
-
-/**
- * Verifica si la confirmación de EE es correcta
- */
-function verificarConfirmacionEE() {
-    const inputTexto = document.getElementById('eeConfirmacionTexto');
-    const btnEliminar = document.getElementById('btnEliminarTodasEE');
-    const checkbox = document.getElementById('eeConfirmarLectura');
-    
-    if (!inputTexto || !btnEliminar || !checkbox) return;
-    
-    const esCorrecto = checkbox.checked && inputTexto.value.trim().toUpperCase() === 'ELIMINAR TODO';
-    
-    if (esCorrecto) {
-        btnEliminar.disabled = false;
-        btnEliminar.classList.remove('opacity-50', 'cursor-not-allowed');
-    } else {
-        btnEliminar.disabled = true;
-        btnEliminar.classList.add('opacity-50', 'cursor-not-allowed');
-    }
-}
-
-/**
- * Elimina TODAS las Actividades EE del curso escolar actual
- */
-function eliminarTodasActividadesEE() {
-    const checkbox = document.getElementById('eeConfirmarLectura');
-    const inputTexto = document.getElementById('eeConfirmacionTexto');
-    
-    // Verificación final
-    if (!checkbox || !checkbox.checked) {
-        showToast('Debes confirmar que has leído las consecuencias', 'error');
-        return;
-    }
-    
-    if (!inputTexto || inputTexto.value.trim().toUpperCase() !== 'ELIMINAR TODO') {
-        showToast('Debes escribir ELIMINAR TODO para confirmar', 'error');
-        return;
-    }
-    
-    // Confirmación adicional
-    const numActividades = getActividadesCursoActivo().length;
-    const mensaje = `⚠️ CONFIRMACIÓN FINAL ⚠️\n\n` +
-                    `Estás a punto de ELIMINAR ${numActividades} Actividades EE.\n\n` +
-                    `Esta acción:\n` +
-                    `• Borrará TODOS los datos permanentemente\n` +
-                    `• NO se puede deshacer\n` +
-                    `• Afectará a informes futuros\n\n` +
-                    `¿Estás ABSOLUTAMENTE seguro de continuar?`;
-    
-    if (!confirm(mensaje)) {
-        return;
-    }
-    
-    try {
-        // Obtener ID del curso activo desde appData.config (la estructura correcta)
-        const cursoId = appData && appData.config ? appData.config.cursoEscolarActivo : null;
-        
-        console.log('[ELIMINACIÓN MASIVA EE] Curso activo ID:', cursoId);
-        console.log('[ELIMINACIÓN MASIVA EE] appData.config:', appData ? 'existe' : 'NO existe');
-        console.log('[ELIMINACIÓN MASIVA EE] appData.config?.cursoEscolarActivo:', appData?.config?.cursoEscolarActivo);
-        
-        if (!cursoId) {
-            console.error('[ELIMINACIÓN MASIVA EE] ERROR: No hay curso activo');
-            showToast('No se puede eliminar: no hay un curso escolar activo definido', 'error');
-            return;
-        }
-        
-        // Contar antes de eliminar (solo las del curso activo)
-        const actividadesAntes = appData.actividades.filter(a => a.cursoEscolarId === cursoId);
-        const cantidadAntesCurso = actividadesAntes.length;
-        console.log(`[ELIMINACIÓN MASIVA EE] Actividades del curso a eliminar: ${cantidadAntesCurso}`);
-        
-        // Filtrar: mantener solo las que NO son del curso actual
-        appData.actividades = appData.actividades.filter(a => a.cursoEscolarId !== cursoId);
-        
-        const cantidadEliminadas = cantidadAntesCurso;
-        
-        // Guardar cambios
-        saveToLocalStorage();
-        
-        // Guardar en Firebase si está disponible
-        if (typeof dbRef !== 'undefined' && dbRef) {
-            dbRef.child('actividades').set(appData.actividades)
-                .then(() => console.log('[EE] Actividades eliminadas de Firebase'))
-                .catch(err => console.warn('[EE] Error en Firebase:', err));
-        }
-        
-        // Actualizar TODA la UI
-        renderEditSelect();
-        renderCronograma();
-        updateTrimestreOptions();
-        renderAll();  // Forzar actualización completa de todas las vistas
-        renderCursosEscolares();  // Actualizar contador de actividades en cursos
-        
-        // Resetear formulario de eliminación
-        resetearFormularioEliminacionEE();
-        
-        // Actualizar contador
-        inicializarEliminacionMasivaEE();
-        
-        showToast(`✅ Se han eliminado ${cantidadEliminadas} Actividades EE correctamente`, 'success');
-        console.log(`[ELIMINACIÓN MASIVA EE] Eliminadas ${cantidadEliminadas} actividades del curso ${cursoActivo.nombre}`);
-        
-    } catch (error) {
-        console.error('[ELIMINACIÓN MASIVA EE] Error:', error);
-        showToast('Error al eliminar las actividades: ' + error.message, 'error');
-    }
-}
-
-/**
- * Resetea el formulario de eliminación masiva EE
- */
-function resetearFormularioEliminacionEE() {
-    const checkbox = document.getElementById('eeConfirmarLectura');
-    const inputTexto = document.getElementById('eeConfirmacionTexto');
-    const btnEliminar = document.getElementById('btnEliminarTodasEE');
-    
-    if (checkbox) checkbox.checked = false;
-    if (inputTexto) {
-        inputTexto.value = '';
-        inputTexto.disabled = true;
-    }
-    if (btnEliminar) {
-        btnEliminar.disabled = true;
-        btnEliminar.classList.add('opacity-50', 'cursor-not-allowed');
-    }
-}
-
-/**
- * Inicializa el acordeón de eliminación masiva de Actividades CC
- */
-function inicializarEliminacionMasivaCC() {
-    const numActividadesEl = document.getElementById('ccNumActividadesEliminar');
-    
-    if (!numActividadesEl) return;
-    
-    // Contar solo las actividades CC del curso activo (si hay curso)
-    const cursoId = appData && appData.config ? appData.config.cursoEscolarActivo : null;
-    let numActividades = 0;
-    
-    if (cursoId) {
-        // Contar solo las del curso activo
-        numActividades = actividadesCC.filter(a => a.cursoEscolarId === cursoId).length;
-    } else {
-        // Si no hay curso, contar todas (para compatibilidad con datos antiguos)
-        numActividades = actividadesCC.length;
-    }
-    
-    numActividadesEl.textContent = numActividades;
-}
-
-/**
- * Maneja el cambio del checkbox de confirmación para CC
- */
-function onCCConfirmarLecturaChange() {
-    const checkbox = document.getElementById('ccConfirmarLectura');
-    const inputTexto = document.getElementById('ccConfirmacionTexto');
-    const btnEliminar = document.getElementById('btnEliminarTodasCC');
-    
-    if (!checkbox || !inputTexto || !btnEliminar) return;
-    
-    if (checkbox.checked) {
-        inputTexto.disabled = false;
-        inputTexto.placeholder = 'Escribe ELIMINAR TODO aquí...';
-    } else {
-        inputTexto.disabled = true;
-        inputTexto.value = '';
-        inputTexto.placeholder = 'Primero marca el checkbox arriba';
-        btnEliminar.disabled = true;
-        btnEliminar.classList.add('opacity-50', 'cursor-not-allowed');
-    }
-    verificarConfirmacionCC();
-}
-
-/**
- * Verifica si la confirmación de CC es correcta
- */
-function verificarConfirmacionCC() {
-    const inputTexto = document.getElementById('ccConfirmacionTexto');
-    const btnEliminar = document.getElementById('btnEliminarTodasCC');
-    const checkbox = document.getElementById('ccConfirmarLectura');
-    
-    if (!inputTexto || !btnEliminar || !checkbox) return;
-    
-    const esCorrecto = checkbox.checked && inputTexto.value.trim().toUpperCase() === 'ELIMINAR TODO';
-    
-    if (esCorrecto) {
-        btnEliminar.disabled = false;
-        btnEliminar.classList.remove('opacity-50', 'cursor-not-allowed');
-    } else {
-        btnEliminar.disabled = true;
-        btnEliminar.classList.add('opacity-50', 'cursor-not-allowed');
-    }
-}
-
-/**
- * Elimina TODAS las Actividades CC registradas
- */
-function eliminarTodasActividadesCC() {
-    const checkbox = document.getElementById('ccConfirmarLectura');
-    const inputTexto = document.getElementById('ccConfirmacionTexto');
-    
-    // Verificación final
-    if (!checkbox || !checkbox.checked) {
-        showToast('Debes confirmar que has leído las consecuencias', 'error');
-        return;
-    }
-    
-    if (!inputTexto || inputTexto.value.trim().toUpperCase() !== 'ELIMINAR TODO') {
-        showToast('Debes escribir ELIMINAR TODO para confirmar', 'error');
-        return;
-    }
-    
-    // Confirmación adicional
-    const numActividades = actividadesCC.length;
-    const mensaje = `⚠️ CONFIRMACIÓN FINAL ⚠️\n\n` +
-                    `Estás a punto de ELIMINAR ${numActividades} Actividades CC.\n\n` +
-                    `Esta acción:\n` +
-                    `• Borrará TODOS los datos permanentemente\n` +
-                    `• NO se puede deshacer\n` +
-                    `• Afectará a informes futuros\n\n` +
-                    `¿Estás ABSOLUTAMENTE seguro de continuar?`;
-    
-    if (!confirm(mensaje)) {
-        return;
-    }
-    
-    try {
-        // Obtener ID del curso activo
-        const cursoId = appData && appData.config ? appData.config.cursoEscolarActivo : null;
-        
-        let cantidadEliminadas = 0;
-        
-        if (cursoId) {
-            // Solo eliminar las actividades CC del curso activo
-            const antes = actividadesCC.length;
-            actividadesCC = actividadesCC.filter(a => a.cursoEscolarId !== cursoId);
-            cantidadEliminadas = antes - actividadesCC.length;
-            console.log(`[ELIMINACIÓN MASIVA CC] Eliminadas ${cantidadEliminadas} actividades del curso ${cursoId}`);
-        } else {
-            // Si no hay curso, eliminar todas (para compatibilidad)
-            cantidadEliminadas = actividadesCC.length;
-            actividadesCC = [];
-            console.log(`[ELIMINACIÓN MASIVA CC] Eliminadas TODAS las ${cantidadEliminadas} actividades (sin curso activo)`);
-        }
-        
-        // Guardar cambios
-        guardarActividadesCC();
-        
-        // Actualizar TODA la UI
-        renderizarListaCC();
-        actualizarSelectorCCEdit();
-        
-        // Resetear formulario de eliminación
-        resetearFormularioEliminacionCC();
-        
-        // Actualizar contador
-        inicializarEliminacionMasivaCC();
-        
-        // Actualizar calendario si existe
-        if (typeof renderizarCalendarioCC === 'function') {
-            renderizarCalendarioCC();
-        }
-        
-        showToast(`✅ Se han eliminado ${cantidadEliminadas} Actividades CC correctamente`, 'success');
-        console.log(`[ELIMINACIÓN MASIVA CC] Eliminadas ${cantidadEliminadas} actividades CC`);
-        
-    } catch (error) {
-        console.error('[ELIMINACIÓN MASIVA CC] Error:', error);
-        showToast('Error al eliminar las actividades: ' + error.message, 'error');
-    }
-}
-
-/**
- * Resetea el formulario de eliminación masiva CC
- */
-function resetearFormularioEliminacionCC() {
-    const checkbox = document.getElementById('ccConfirmarLectura');
-    const inputTexto = document.getElementById('ccConfirmacionTexto');
-    const btnEliminar = document.getElementById('btnEliminarTodasCC');
-    
-    if (checkbox) checkbox.checked = false;
-    if (inputTexto) {
-        inputTexto.value = '';
-        inputTexto.disabled = true;
-    }
-    if (btnEliminar) {
-        btnEliminar.disabled = true;
-        btnEliminar.classList.add('opacity-50', 'cursor-not-allowed');
-    }
-}
-
-// ==================== FUNCIONES AUXILIARES PARA HORAS ====================
-
-/**
- * Obtiene las horas seleccionadas de un grupo de checkboxes
- * @param {string} name - Nombre del atributo 'name' de los checkboxes
- * @returns {Array} Array con los valores seleccionados
- */
-function obtenerHorasSeleccionadas(name) {
-    const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
-    return Array.from(checkboxes).map(cb => cb.value);
-}
-
-/**
- * Marca los checkboxes de horas según un array de valores
- * @param {string} name - Nombre del atributo 'name' de los checkboxes
- * @param {Array} horasSeleccionadas - Array de valores a marcar
- */
-function marcarHorasSeleccionadas(name, horasSeleccionadas) {
-    // Primero desmarcar todos
-    const todosCheckboxes = document.querySelectorAll(`input[name="${name}"]`);
-    todosCheckboxes.forEach(cb => cb.checked = false);
-    
-    // Marcar los que corresponden
-    if (horasSeleccionadas && Array.isArray(horasSeleccionadas)) {
-        horasSeleccionadas.forEach(hora => {
-            const checkbox = document.querySelector(`input[name="${name}"][value="${hora}"]`);
-            if (checkbox) {
-                checkbox.checked = true;
-            }
-        });
-    }
 }
 
 /**
@@ -9311,9 +8557,6 @@ function limpiarFormularioCC() {
     document.getElementById('ccUnidad').value = '';
     document.getElementById('ccDescripcion').value = '';
     document.getElementById('ccFecha').value = '';
-    
-    // Limpiar horas seleccionadas
-    marcarHorasSeleccionadas('ccHora', []);
 }
 
 /**
@@ -9350,31 +8593,24 @@ function cargarCursosAnterioresCC() {
     const select = document.getElementById('ccImportCursoOrigen');
     if (!select) return;
 
-    console.log('[IMPORT] Cargando cursos anteriores para importación CC...');
-    
-    // Usar appData.config (corregido: antes usaba 'config' que no existía)
-    const cursos = appData?.config?.cursosEscolares || [];
-    const cursoActualId = appData?.config?.cursoEscolarActivo;
-    
-    console.log('[IMPORT] Cursos disponibles:', cursos.length, '| Curso activo:', cursoActualId);
-    
-    if (cursos.length > 0) {
-        // Filtrar cursos diferentes al actual
-        const cursosAnteriores = cursos.filter(c => c.id !== cursoActualId);
+    // Aquí se cargarían los cursos disponibles desde config.cursosEscolares
+    // Por ahora, usamos un ejemplo básico
+    if (typeof config !== 'undefined' && config.cursosEscolares) {
+        const cursos = Object.values(config.cursosEscolares);
+        const cursoActual = config.cursoActivo || '';
         
-        console.log('[IMPORT] Cursos anteriores encontrados:', cursosAnteriores.length);
+        // Filtrar cursos diferentes al actual
+        const cursosAnteriores = cursos.filter(c => c.id !== cursoActual && c.id);
         
         if (cursosAnteriores.length > 0) {
             select.innerHTML = '<option value="">Selecciona un curso anterior...</option>';
             cursosAnteriores.forEach(curso => {
-                select.innerHTML += `<option value="${curso.id}">${escapeHTML(curso.nombre)} (${curso.anoInicio || '?'})</option>`;
+                select.innerHTML += `<option value="${curso.id}">${escapeHTML(curso.nombre)}</option>`;
             });
         } else {
             select.innerHTML = '<option value="">No hay cursos anteriores disponibles</option>';
+            document.getElementById('ccSinCursosAnteriores')?.classList.remove('hidden');
         }
-    } else {
-        select.innerHTML = '<option value="">No hay cursos configurados</option>';
-        console.warn('[IMPORT] No hay cursos escolares configurados');
     }
 }
 
@@ -10305,109 +9541,9 @@ function setPeriodoInforme(tipo, prefijo) {
         const ultimoDiaTrim = new Date(año, mesFin + 1, 0).getDate();
         inputHasta.value = `${año}-${String(mesFin + 1).padStart(2, '0')}-${ultimoDiaTrim}`;
     } else if (tipo === 'curso') {
-        // ✅ CORREGIDO: Usar fechas del curso escolar activo
-        const fechaDesde = obtenerFechaInicioCursoActivo();
-        const fechaHasta = obtenerFechaFinCursoActivo();
-        
-        console.log('[PERÍODO] Curso escolar activo - Desde:', fechaDesde, 'Hasta:', fechaHasta);
-        
-        inputDesde.value = fechaDesde;
-        inputHasta.value = fechaHasta;
+        inputDesde.value = `${año}-09-01`;
+        inputHasta.value = `${año + 1}-08-31`;
     }
-}
-
-/**
- * Obtiene la fecha de inicio del curso escolar activo
- * @returns {string} Fecha en formato YYYY-MM-DD
- */
-function obtenerFechaInicioCursoActivo() {
-    try {
-        // Buscar el curso escolar activo
-        const cursos = appData?.config?.cursosEscolares || [];
-        const cursoActivoId = appData?.config?.cursoEscolarActivo;
-        
-        if (cursoActivoId && cursos.length > 0) {
-            const cursoActivo = cursos.find(c => c.id === cursoActivoId);
-            if (cursoActivo && cursoActivo.fechaInicio) {
-                // Asegurar formato YYYY-MM-DD
-                return formatearFechaISO(cursoActivo.fechaInicio);
-            }
-        }
-        
-        // Fallback: calcular basado en el año académico actual
-        const hoy = new Date();
-        const año = hoy.getFullYear();
-        const mes = hoy.getMonth();
-        
-        // Si estamos antes de septiembre, el curso empezó el año anterior
-        const añoInicio = mes >= 8 ? año : año - 1;
-        return `${añoInicio}-09-01`;
-        
-    } catch (e) {
-        console.error('[PERÍODO] Error al obtener fecha inicio:', e);
-        // Fallback seguro
-        const año = new Date().getFullYear();
-        return `${año}-09-01`;
-    }
-}
-
-/**
- * Obtiene la fecha de fin del curso escolar activo
- * @returns {string} Fecha en formato YYYY-MM-DD
- */
-function obtenerFechaFinCursoActivo() {
-    try {
-        // Buscar el curso escolar activo
-        const cursos = appData?.config?.cursosEscolares || [];
-        const cursoActivoId = appData?.config?.cursoEscolarActivo;
-        
-        if (cursoActivoId && cursos.length > 0) {
-            const cursoActivo = cursos.find(c => c.id === cursoActivoId);
-            if (cursoActivo && cursoActivo.fechaFin) {
-                // Asegurar formato YYYY-MM-DD
-                return formatearFechaISO(cursoActivo.fechaFin);
-            }
-        }
-        
-        // Fallback: calcular basado en el año académico actual
-        const hoy = new Date();
-        const año = hoy.getFullYear();
-        const mes = hoy.getMonth();
-        
-        // Si estamos antes de septiembre, el curso termina este año
-        const añoFin = mes >= 8 ? año + 1 : año;
-        return `${añoFin}-08-31`;
-        
-    } catch (e) {
-        console.error('[PERÍODO] Error al obtener fecha fin:', e);
-        // Fallback seguro
-        const año = new Date().getFullYear();
-        return `${año + 1}-08-31`;
-    }
-}
-
-/**
- * Formatea una fecha a ISO (YYYY-MM-DD)
- * @param {string|Date} fecha - La fecha a formatear
- * @returns {string} Fecha en formato YYYY-MM-DD
- */
-function formatearFechaISO(fecha) {
-    if (!fecha) return '';
-    
-    // Si ya es string en formato correcto
-    if (typeof fecha === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
-        return fecha;
-    }
-    
-    // Convertir a Date y formatear
-    const d = new Date(fecha);
-    if (isNaN(d.getTime())) return '';
-    
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    
-    return `${year}-${month}-${day}`;
 }
 
 // Alias para compatibilidad (se mantienen temporalmente)
@@ -10728,292 +9864,8 @@ function generateResumenCC() {
 /**
  * Imprime un informe (unificado para EE y CC)
  */
-/**
- * Exporta un informe a PDF profesional (estilo uniforme)
- * @param {string} tipo - Tipo de informe: 'informe_cc_unidad', 'informe_cc_periodo', 'resumen_cc', 
- *                         'informe_ee_curso_trim', 'informe_ee_periodo', 'resumen_ee'
- */
 function imprimirInforme(tipo) {
-    try {
-        // Verificar jsPDF
-        if (!window.jspdf) {
-            showToast('La librería PDF no está cargada', 'error');
-            return;
-        }
-        
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        
-        console.log('[PDF] Generando PDF para:', tipo);
-        
-        // Determinar tipo y generar contenido apropiado
-        if (tipo.startsWith('cc') || tipo.includes('cc')) {
-            generarPDFCC(doc, tipo);
-        } else if (tipo.startsWith('ee') || tipo.includes('ee')) {
-            generarPDFEE(doc, tipo);
-        } else {
-            // Por defecto, generar como EE
-            generarPDFEE(doc, tipo);
-        }
-        
-    } catch (error) {
-        console.error('[PDF] Error al generar:', error);
-        showToast('Error al generar PDF: ' + error.message, 'error');
-    }
-}
-
-/**
- * Genera PDF para informes CC
- */
-function generarPDFCC(doc, tipo) {
-    let titulo = '';
-    let datos = [];
-    
-    switch(tipo) {
-        case 'informe_cc_unidad':
-            titulo = 'Informe de Actividades CC por Unidad';
-            datos = obtenerDatosInformeCCUnidad();
-            break;
-        case 'informe_cc_periodo':
-            titulo = 'Informe de Actividades CC por Período';
-            datos = obtenerDatosInformeCCPeriodo();
-            break;
-        case 'resumen_cc':
-            titulo = 'Resumen de Actividades CC';
-            datos = obtenerDatosResumenCC();
-            break;
-        default:
-            titulo = 'Informe de Actividades CC';
-            datos = [];
-    }
-    
-    addPDFHeader(doc, titulo);
-    
-    if (datos.length === 0) {
-        doc.setFontSize(12);
-        doc.text('No hay datos disponibles para este informe', 14, 50);
-        doc.save(`${titulo.replace(/\s+/g, '_')}_${formatDateTimeFile()}.pdf`);
-        return;
-    }
-    
-    let yPos = 45;
-    
-    // Agrupar por unidad si es necesario
-    if (tipo === 'informe_cc_unidad') {
-        const agrupados = {};
-        datos.forEach(d => {
-            if (!agrupados[d.unidad]) agrupados[d.unidad] = [];
-            agrupados[d.unidad].push(d);
-        });
-        
-        Object.keys(agrupados).forEach(unidad => {
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.setTextColor(249, 115, 22); // Naranja para CC
-            doc.text(unidad, 14, yPos);
-            yPos += 7;
-            
-            const tableData = agrupados[unidad].map(d => [
-                d.nombre.substring(0, 45),
-                d.fecha ? formatDate(d.fecha) : '-'
-            ]);
-            
-            doc.autoTable({
-                startY: yPos,
-                head: [['Actividad', 'Fecha']],
-                body: tableData,
-                theme: 'striped',
-                headStyles: { fillColor: [249, 115, 22] },
-                margin: { left: 14 },
-                styles: { fontSize: 9 }
-            });
-            
-            yPos = doc.lastAutoTable.finalY + 10;
-            
-            // Verificar si necesitamos nueva página
-            if (yPos > 270) {
-                doc.addPage();
-                yPos = 20;
-            }
-        });
-    } else {
-        // Tabla simple para otros informes
-        const tableData = datos.map(d => [
-            d.unidad || '-',
-            d.nombre.substring(0, 45),
-            d.fecha ? formatDate(d.fecha) : '-'
-        ]);
-        
-        doc.autoTable({
-            startY: yPos,
-            head: [['Unidad', 'Actividad', 'Fecha']],
-            body: tableData,
-            theme: 'striped',
-            headStyles: { fillColor: [249, 115, 22] },
-            margin: { left: 14 },
-            styles: { fontSize: 9 }
-        });
-    }
-    
-    doc.save(`Informe_CC_${formatDateTimeFile()}.pdf`);
-    showToast('PDF generado correctamente', 'success');
-}
-
-/**
- * Genera PDF para informes EE
- */
-function generarPDFEE(doc, tipo) {
-    let titulo = '';
-    let datos = [];
-    
-    switch(tipo) {
-        case 'informe_ee_curso_trim':
-            titulo = 'Informe de Actividades EE por Curso/Trimestre';
-            datos = obtenerDatosInformeEECursoTrim();
-            break;
-        case 'informe_ee_periodo':
-            titulo = 'Informe de Actividades EE por Período';
-            datos = obtenerDatosInformeEEPeriodo();
-            break;
-        case 'resumen_ee':
-            titulo = 'Resumen de Actividades EE';
-            datos = obtenerDatosResumenEE();
-            break;
-        default:
-            titulo = 'Informe de Actividades EE';
-            datos = [];
-    }
-    
-    addPDFHeader(doc, titulo);
-    
-    if (datos.length === 0) {
-        doc.setFontSize(12);
-        doc.text('No hay datos disponibles para este informe', 14, 50);
-        doc.save(`${titulo.replace(/\s+/g, '_')}_${formatDateTimeFile()}.pdf`);
-        return;
-    }
-    
-    let yPos = 45;
-    
-    // Agrupar por curso si es necesario
-    if (tipo === 'informe_ee_curso_trim') {
-        const agrupados = {};
-        datos.forEach(d => {
-            if (!agrupados[d.curso]) agrupados[d.curso] = [];
-            agrupados[d.curso].push(d);
-        });
-        
-        Object.keys(agrupados).forEach(curso => {
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.setTextColor(5, 150, 105); // Verde para EE
-            doc.text(curso, 14, yPos);
-            yPos += 7;
-            
-            const tableData = agrupados[curso].map(d => [
-                d.trimestre || '-',
-                d.nombre.substring(0, 40),
-                (d.departamentos || []).join(', ').substring(0, 25),
-                d.fecha ? formatDate(d.fecha) : '-'
-            ]);
-            
-            doc.autoTable({
-                startY: yPos,
-                head: [['Trimestre', 'Actividad', 'Departamentos', 'Fecha']],
-                body: tableData,
-                theme: 'striped',
-                headStyles: { fillColor: [5, 150, 105] },
-                margin: { left: 14 },
-                styles: { fontSize: 9 }
-            });
-            
-            yPos = doc.lastAutoTable.finalY + 10;
-            
-            if (yPos > 270) {
-                doc.addPage();
-                yPos = 20;
-            }
-        });
-    } else {
-        const tableData = datos.map(d => [
-            d.curso || '-',
-            d.nombre.substring(0, 40),
-            d.fecha ? formatDate(d.fecha) : '-'
-        ]);
-        
-        doc.autoTable({
-            startY: yPos,
-            head: [['Curso', 'Actividad', 'Fecha']],
-            body: tableData,
-            theme: 'striped',
-            headStyles: { fillColor: [5, 150, 105] },
-            margin: { left: 14 },
-            styles: { fontSize: 9 }
-        });
-    }
-    
-    doc.save(`Informe_EE_${formatDateTimeFile()}.pdf`);
-    showToast('PDF generado correctamente', 'success');
-}
-
-/**
- * Obtiene datos del informe CC por unidad
- */
-function obtenerDatosInformeCCUnidad() {
-    if (!Array.isArray(actividadesCC)) return [];
-    return actividadesCC.map(a => ({
-        unidad: a.unidad,
-        nombre: a.nombre || 'Sin nombre',
-        fecha: a.fecha,
-        descripcion: a.descripcion
-    }));
-}
-
-/**
- * Obtiene datos del informe CC por período
- */
-function obtenerDatosInformeCCPeriodo() {
-    return obtenerDatosInformeCCUnidad(); // Mismos datos, diferente vista
-}
-
-/**
- * Obtiene datos del resumen CC
- */
-function obtenerDatosResumenCC() {
-    return obtenerDatosInformeCCUnidad();
-}
-
-/**
- * Obtiene datos del informe EE por curso/trimestre
- */
-function obtenerDatosInformeEECursoTrim() {
-    const actividadesCurso = typeof getActividadesCursoActivo === 'function' 
-        ? getActividadesCursoActivo() 
-        : [];
-    if (!Array.isArray(actividadesCurso)) return [];
-    
-    return actividadesCurso.map(a => ({
-        curso: a.curso,
-        trimestre: a.trimestre,
-        nombre: a.nombre || 'Sin nombre',
-        departamentos: a.departamentos || [],
-        fecha: a.fecha,
-        esRealizada: a.fecha && !a.noRealizada
-    }));
-}
-
-/**
- * Obtiene datos del informe EE por período
- */
-function obtenerDatosInformeEEPeriodo() {
-    return obtenerDatosInformeEECursoTrim();
-}
-
-/**
- * Obtiene datos del resumen EE
- */
-function obtenerDatosResumenEE() {
-    return obtenerDatosInformeEECursoTrim();
+    window.print();
 }
 
 // Alias para compatibilidad

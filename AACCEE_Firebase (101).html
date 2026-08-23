@@ -2291,47 +2291,6 @@
                                     <input type="date" id="ccFecha" class="form-input">
                                 </div>
 
-                                <!-- Horas (multiselección) -->
-                                <div>
-                                    <label class="block text-sm font-medium mb-2">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline mr-1">
-                                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                                        </svg>
-                                        Hora de realización
-                                    </label>
-                                    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2" id="ccHorasContainer">
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="1ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">1ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="2ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">2ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="3ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">3ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-orange-50 border border-orange-200 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-100">
-                                            <input type="checkbox" name="ccHora" value="Recreo" class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500">
-                                            <span class="text-sm font-medium text-orange-700">Recreo</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="4ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">4ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="5ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">5ª</span>
-                                        </label>
-                                        <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                            <input type="checkbox" name="ccHora" value="6ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                            <span class="text-sm font-medium">6ª</span>
-                                        </label>
-                                    </div>
-                                    <p class="text-xs mt-1" style="color: var(--muted);">Puedes seleccionar varias horas</p>
-                                </div>
-
                                 <button onclick="guardarActividadCC()" class="btn btn-primary w-full">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
@@ -2394,47 +2353,6 @@
                                     <div>
                                         <label class="block text-sm font-medium mb-1">Fecha <span class="text-red-500">*</span></label>
                                         <input type="date" id="ccEditFecha" class="form-input">
-                                    </div>
-
-                                    <!-- Horas (multiselección) -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-2">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline mr-1">
-                                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                                            </svg>
-                                            Hora de realización
-                                        </label>
-                                        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-2" id="ccEditHorasContainer">
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="1ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">1ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="2ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">2ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="3ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">3ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-orange-50 border border-orange-200 has-[:checked]:border-orange-500 has-[:checked]:bg-orange-100">
-                                                <input type="checkbox" name="ccEditHora" value="Recreo" class="w-4 h-4 text-orange-600 rounded focus:ring-orange-500">
-                                                <span class="text-sm font-medium text-orange-700">Recreo</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="4ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">4ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="5ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">5ª</span>
-                                            </label>
-                                            <label class="flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-all hover:bg-blue-50 border border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-100">
-                                                <input type="checkbox" name="ccEditHora" value="6ª" class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500">
-                                                <span class="text-sm font-medium">6ª</span>
-                                            </label>
-                                        </div>
-                                        <p class="text-xs mt-1" style="color: var(--muted);">Puedes seleccionar varias horas</p>
                                     </div>
 
                                     <div class="flex gap-3">
@@ -8609,7 +8527,6 @@ function guardarActividadCC() {
     const unidad = document.getElementById('ccUnidad').value;
     const descripcion = document.getElementById('ccDescripcion').value.trim();
     const fecha = document.getElementById('ccFecha').value;
-    const horas = obtenerHorasSeleccionadas('ccHora');
 
     // Validaciones
     if (!nombre) {
@@ -8625,16 +8542,13 @@ function guardarActividadCC() {
         return;
     }
 
-    // Crear objeto actividad (asociada al curso escolar activo)
-    const cursoActivoId = (appData && appData.config) ? appData.config.cursoEscolarActivo : null;
+    // Crear objeto actividad
     const nuevaActividad = {
         id: Date.now().toString(),
         nombre: nombre,
         unidad: unidad,
         descripcion: descripcion,
         fecha: fecha,
-        horas: horas,  // Array de horas seleccionadas
-        cursoEscolarId: cursoActivoId,  // Asociar al curso activo
         publicadaEnCalendar: false,
         createdAt: new Date().toISOString()
     };
@@ -8676,7 +8590,6 @@ function actualizarActividadCC() {
     const unidad = document.getElementById('ccEditUnidad').value;
     const descripcion = document.getElementById('ccEditDescripcion').value.trim();
     const fecha = document.getElementById('ccEditFecha').value;
-    const horas = obtenerHorasSeleccionadas('ccEditHora');
 
     // Validaciones
     if (!nombre || !unidad || !fecha) {
@@ -8691,7 +8604,6 @@ function actualizarActividadCC() {
         unidad: unidad,
         descripcion: descripcion,
         fecha: fecha,
-        horas: horas,  // Actualizar horas
         updatedAt: new Date().toISOString()
     };
 
@@ -8769,9 +8681,6 @@ function cargarActividadCCEditar() {
     document.getElementById('ccEditUnidad').value = actividad.unidad;
     document.getElementById('ccEditDescripcion').value = actividad.descripcion || '';
     document.getElementById('ccEditFecha').value = actividad.fecha;
-    
-    // Marcar horas seleccionadas
-    marcarHorasSeleccionadas('ccEditHora', actividad.horas || []);
 
     // Mostrar formulario
     form.classList.remove('hidden');
@@ -8823,18 +8732,6 @@ function renderizarListaCC() {
         console.log(`[CC]   ${index + 1}. ${act.nombre} (${act.unidad}) - ${act.fecha}`);
         
         const fechaFormateada = formatDate(act.fecha);
-        
-        // Generar badges de horas
-        const horasBadges = act.horas && act.horas.length > 0 
-            ? act.horas.map(h => {
-                const esRecreo = h === 'Recreo';
-                const estilo = esRecreo 
-                    ? 'background: rgba(234, 88, 12, 0.1); color: #ea580c; border: 1px solid rgba(234, 88, 12, 0.3);'
-                    : 'background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3);';
-                return `<span class="px-2 py-1 rounded-full text-xs font-medium" style="${estilo}">${escapeHTML(h)}</span>`;
-            }).join('')
-            : '';
-        
         html += `
             <div class="p-4 rounded-lg transition-all hover:shadow-md" style="background: var(--bg); border: 1px solid var(--border);">
                 <div class="flex justify-between items-start gap-3">
@@ -8843,7 +8740,6 @@ function renderizarListaCC() {
                         <div class="flex flex-wrap gap-2 mt-2 text-sm">
                             <span class="px-2 py-1 rounded-full" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);">${escapeHTML(act.unidad)}</span>
                             <span class="px-2 py-1 rounded-full" style="background: rgba(107, 114, 128, 0.1); color: var(--muted);">${fechaFormateada}</span>
-                            ${horasBadges}
                         </div>
                         ${act.descripcion ? `<p class="text-sm mt-2" style="color: var(--muted);">${escapeHTML(act.descripcion)}</p>` : ''}
                     </div>
@@ -8939,13 +8835,10 @@ function inicializarEliminacionMasivaEE() {
     
     if (!cursoActivoEl || !numActividadesEl) return;
     
-    // Obtener curso activo desde appData.config (la estructura correcta)
-    const cursoId = appData.config ? appData.config.cursoEscolarActivo : null;
-    const cursos = appData.config ? appData.config.cursosEscolares : [];
-    const cursoActivo = cursoId ? cursos.find(c => c.id === cursoId) : null;
-    
+    // Obtener curso activo
+    const cursoActivo = appData.cursosEscolares ? appData.cursosEscolares.find(c => c.activo) : null;
     if (cursoActivo) {
-        cursoActivoEl.textContent = `${cursoActivo.nombre} (${formatDate(cursoActivo.fechaInicio)} - ${formatDate(cursoActivo.fechaFin)})`;
+        cursoActivoEl.textContent = `${cursoActivo.nombre} (${cursoActivo.fechaInicio} - ${cursoActivo.fechaFin})`;
     } else {
         cursoActivoEl.textContent = 'No hay curso activo';
     }
@@ -9031,29 +8924,31 @@ function eliminarTodasActividadesEE() {
         return;
     }
     
+    // Segunda confirmación con texto específico
+    const confirmacionFinal = prompt(`Para ejecutar la eliminación, escribe: CONFIRMAR`);
+    if (confirmacionFinal !== 'CONFIRMAR') {
+        showToast('Eliminación cancelada', 'info');
+        return;
+    }
+    
     try {
-        // Obtener ID del curso activo desde appData.config (la estructura correcta)
-        const cursoId = appData && appData.config ? appData.config.cursoEscolarActivo : null;
+        // Obtener ID del curso activo
+        const cursoActivo = appData.cursosEscolares ? appData.cursosEscolares.find(c => c.activo) : null;
+        const cursoId = cursoActivo ? cursoActivo.id : null;
         
-        console.log('[ELIMINACIÓN MASIVA EE] Curso activo ID:', cursoId);
-        console.log('[ELIMINACIÓN MASIVA EE] appData.config:', appData ? 'existe' : 'NO existe');
-        console.log('[ELIMINACIÓN MASIVA EE] appData.config?.cursoEscolarActivo:', appData?.config?.cursoEscolarActivo);
+        // Contar antes de eliminar
+        const cantidadAntes = appData.actividades.length;
         
-        if (!cursoId) {
-            console.error('[ELIMINACIÓN MASIVA EE] ERROR: No hay curso activo');
+        // Filtrar: mantener solo las que NO son del curso actual
+        if (cursoId) {
+            appData.actividades = appData.actividades.filter(a => a.cursoEscolarId !== cursoId);
+        } else {
+            // Si no hay curso activo, no eliminamos nada por seguridad
             showToast('No se puede eliminar: no hay un curso escolar activo definido', 'error');
             return;
         }
         
-        // Contar antes de eliminar (solo las del curso activo)
-        const actividadesAntes = appData.actividades.filter(a => a.cursoEscolarId === cursoId);
-        const cantidadAntesCurso = actividadesAntes.length;
-        console.log(`[ELIMINACIÓN MASIVA EE] Actividades del curso a eliminar: ${cantidadAntesCurso}`);
-        
-        // Filtrar: mantener solo las que NO son del curso actual
-        appData.actividades = appData.actividades.filter(a => a.cursoEscolarId !== cursoId);
-        
-        const cantidadEliminadas = cantidadAntesCurso;
+        const cantidadEliminadas = cantidadAntes - appData.actividades.length;
         
         // Guardar cambios
         saveToLocalStorage();
@@ -9065,12 +8960,10 @@ function eliminarTodasActividadesEE() {
                 .catch(err => console.warn('[EE] Error en Firebase:', err));
         }
         
-        // Actualizar TODA la UI
+        // Actualizar UI
         renderEditSelect();
         renderCronograma();
         updateTrimestreOptions();
-        renderAll();  // Forzar actualización completa de todas las vistas
-        renderCursosEscolares();  // Actualizar contador de actividades en cursos
         
         // Resetear formulario de eliminación
         resetearFormularioEliminacionEE();
@@ -9114,19 +9007,7 @@ function inicializarEliminacionMasivaCC() {
     
     if (!numActividadesEl) return;
     
-    // Contar solo las actividades CC del curso activo (si hay curso)
-    const cursoId = appData && appData.config ? appData.config.cursoEscolarActivo : null;
-    let numActividades = 0;
-    
-    if (cursoId) {
-        // Contar solo las del curso activo
-        numActividades = actividadesCC.filter(a => a.cursoEscolarId === cursoId).length;
-    } else {
-        // Si no hay curso, contar todas (para compatibilidad con datos antiguos)
-        numActividades = actividadesCC.length;
-    }
-    
-    numActividadesEl.textContent = numActividades;
+    numActividadesEl.textContent = actividadesCC.length;
 }
 
 /**
@@ -9205,29 +9086,24 @@ function eliminarTodasActividadesCC() {
         return;
     }
     
+    // Segunda confirmación con texto específico
+    const confirmacionFinal = prompt(`Para ejecutar la eliminación, escribe: CONFIRMAR`);
+    if (confirmacionFinal !== 'CONFIRMAR') {
+        showToast('Eliminación cancelada', 'info');
+        return;
+    }
+    
     try {
-        // Obtener ID del curso activo
-        const cursoId = appData && appData.config ? appData.config.cursoEscolarActivo : null;
+        // Contar antes de eliminar
+        const cantidadEliminadas = actividadesCC.length;
         
-        let cantidadEliminadas = 0;
-        
-        if (cursoId) {
-            // Solo eliminar las actividades CC del curso activo
-            const antes = actividadesCC.length;
-            actividadesCC = actividadesCC.filter(a => a.cursoEscolarId !== cursoId);
-            cantidadEliminadas = antes - actividadesCC.length;
-            console.log(`[ELIMINACIÓN MASIVA CC] Eliminadas ${cantidadEliminadas} actividades del curso ${cursoId}`);
-        } else {
-            // Si no hay curso, eliminar todas (para compatibilidad)
-            cantidadEliminadas = actividadesCC.length;
-            actividadesCC = [];
-            console.log(`[ELIMINACIÓN MASIVA CC] Eliminadas TODAS las ${cantidadEliminadas} actividades (sin curso activo)`);
-        }
+        // Vaciar el array
+        actividadesCC = [];
         
         // Guardar cambios
         guardarActividadesCC();
         
-        // Actualizar TODA la UI
+        // Actualizar UI
         renderizarListaCC();
         actualizarSelectorCCEdit();
         
@@ -9270,39 +9146,6 @@ function resetearFormularioEliminacionCC() {
     }
 }
 
-// ==================== FUNCIONES AUXILIARES PARA HORAS ====================
-
-/**
- * Obtiene las horas seleccionadas de un grupo de checkboxes
- * @param {string} name - Nombre del atributo 'name' de los checkboxes
- * @returns {Array} Array con los valores seleccionados
- */
-function obtenerHorasSeleccionadas(name) {
-    const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
-    return Array.from(checkboxes).map(cb => cb.value);
-}
-
-/**
- * Marca los checkboxes de horas según un array de valores
- * @param {string} name - Nombre del atributo 'name' de los checkboxes
- * @param {Array} horasSeleccionadas - Array de valores a marcar
- */
-function marcarHorasSeleccionadas(name, horasSeleccionadas) {
-    // Primero desmarcar todos
-    const todosCheckboxes = document.querySelectorAll(`input[name="${name}"]`);
-    todosCheckboxes.forEach(cb => cb.checked = false);
-    
-    // Marcar los que corresponden
-    if (horasSeleccionadas && Array.isArray(horasSeleccionadas)) {
-        horasSeleccionadas.forEach(hora => {
-            const checkbox = document.querySelector(`input[name="${name}"][value="${hora}"]`);
-            if (checkbox) {
-                checkbox.checked = true;
-            }
-        });
-    }
-}
-
 /**
  * Limpia el formulario de nueva actividad CC
  */
@@ -9311,9 +9154,6 @@ function limpiarFormularioCC() {
     document.getElementById('ccUnidad').value = '';
     document.getElementById('ccDescripcion').value = '';
     document.getElementById('ccFecha').value = '';
-    
-    // Limpiar horas seleccionadas
-    marcarHorasSeleccionadas('ccHora', []);
 }
 
 /**
