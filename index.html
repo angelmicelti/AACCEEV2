@@ -1668,7 +1668,9 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                                 </svg>
-                                Profesorado Acompañante
+                                Profesorado
+                                <span id="profesoradoContador" class="ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">0 profesores</span>
+                                <span id="profesoradoCursoInfo" class="ml-2 text-sm font-normal px-2 py-0.5 rounded-full" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);">📚 Cargando...</span>
                             </h2>
                             <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -1685,9 +1687,84 @@
                                     <input type="file" id="excelImport" accept=".xlsx,.xls" class="form-input text-sm" onchange="importProfesoradoExcel(event)">
                                 </div>
                                 <div id="profesorList" class="max-h-48 overflow-y-auto space-y-2"></div>
+
+                                <!-- Separador -->
+                                <hr class="border-t-2 border-red-200 my-6">
+
+                                <!-- Sección de Eliminación Masiva (dentro del acordeón) -->
+                                <div class="rounded-lg border-2 border-red-300 bg-red-50 overflow-hidden">
+                                    <div class="p-4 cursor-pointer" onclick="toggleSeccionEliminacionProfesorado()">
+                                        <div class="flex items-center justify-between">
+                                            <h3 class="font-bold text-red-800 flex items-center gap-2">
+                                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+                                                </svg>
+                                                🗑️ Eliminar Todo el Profesorado del Curso
+                                            </h3>
+                                            <svg id="iconoToggleEliminacionProf" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" class="transition-transform duration-200">
+                                                <polyline points="6 9 12 15 18 9"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="seccionEliminacionProfesorado" class="hidden">
+                                        <div class="px-4 pb-4 space-y-4 pt-2 border-t-2 border-red-200 mt-2">
+                                            <!-- Advertencia -->
+                                            <div class="p-3 rounded-lg border-2 border-red-300 bg-white">
+                                                <div class="flex items-start gap-2">
+                                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" class="flex-shrink-0 mt-0.5">
+                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                                                    </svg>
+                                                    <div>
+                                                        <p class="font-bold text-red-800 text-sm">⚠️ PELIGRO: Esta acción es IRREVERSIBLE</p>
+                                                        <ul class="text-xs text-red-700 space-y-1 mt-1">
+                                                            <li>• Se eliminarán <strong>TODOS</strong> los profesores del curso activo</li>
+                                                            <li>• Esta acción <strong>solo afecta al curso seleccionado</strong></li>
+                                                            <li>• Los profesores de otros cursos NO se ven afectados</li>
+                                                            <li>• La acción no se puede deshacer</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Información del curso afectado -->
+                                            <div class="p-3 rounded-lg bg-white border border-gray-200">
+                                                <p class="text-xs text-gray-600">
+                                                    <strong>Curso afectado:</strong> <span id="profesoradoEliminarCurso" class="font-bold text-red-600">-</span>
+                                                </p>
+                                                <p class="text-xs text-gray-600 mt-1">
+                                                    <strong>Número de profesores a eliminar:</strong> <span id="profesoradoNumEliminar" class="font-bold text-red-600">0</span>
+                                                </p>
+                                            </div>
+
+                                            <!-- Confirmación -->
+                                            <div class="space-y-2">
+                                                <label class="flex items-center gap-2 cursor-pointer">
+                                                    <input type="checkbox" id="profesoradoConfirmarLectura" class="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                                    <span class="text-xs font-medium text-gray-700">He leído y entiendo las consecuencias</span>
+                                                </label>
+                                                
+                                                <label class="flex items-center gap-2 cursor-pointer p-2 rounded-lg border-2 border-dashed border-red-300 hover:border-red-500 transition-colors">
+                                                    <input type="checkbox" id="profesoradoConfirmarEliminar" class="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                                    <span class="text-xs font-bold text-red-700 uppercase tracking-wide">CONFIRMO ELIMINAR TODO EL PROFESORADO</span>
+                                                </label>
+                                            </div>
+
+                                            <!-- Botón de eliminación -->
+                                            <button onclick="eliminarTodoProfesoradoCurso()" id="btnEliminarTodoProfesorado" 
+                                                    class="w-full btn py-2.5 text-white font-bold uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                                    style="background: var(--danger); border-color: var(--danger);"
+                                                    disabled>
+                                                🗑️ Eliminar Todo el Profesorado
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+
 
                     <!-- Import/Export - Acordeón -->
                     <div class="card overflow-hidden">
@@ -1901,7 +1978,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium mb-1">Profesorado acompañante</label>
+                                        <label class="block text-sm font-medium mb-1">Profesorado</label>
                                         <select id="editProfCount" class="form-input form-select mb-3" onchange="updateEditProfFields()">
                                             <option value="1">1 profesor/a</option>
                                             <option value="2">2 profesores/as</option>
@@ -3611,7 +3688,7 @@
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium mb-1 force-visible-label">Profesorado acompañante</label>
+                    <label class="block text-sm font-medium mb-1 force-visible-label">Profesorado</label>
                     <select id="cronoEditProfCount" class="form-input form-select mb-3" onclick="updateCronoEditProfFields()">
                         <option value="1">1 profesor/a</option>
                         <option value="2">2 profesores/as</option>
@@ -3919,7 +3996,8 @@
                     t2: { start: '', end: '' },
                     t3: { start: '', end: '' }
                 },
-                profesorado: [],
+                profesorado: [], // Legacy - se mantiene por compatibilidad
+                profesoradoPorCurso: {}, // Nuevo: {cursoId: [profesores]}
                 cursosEscolares: [], // Array de cursos escolares
                 cursoEscolarActivo: null // ID del curso activo
             },
@@ -5399,14 +5477,100 @@
             document.getElementById('t3End').value = appData.config.trimestres.t3.end || '';
         }
 
+        // ==================== PROFESORADO POR CURSO ====================
+        
+        /**
+         * Obtiene el ID del curso escolar activo
+         * @returns {string|null} ID del curso o null
+         */
+        function getCursoActivoId() {
+            return appData?.config?.cursoEscolarActivo || null;
+        }
+        
+        /**
+         * Obtiene el array de profesorado del curso activo
+         * Si no existe, lo inicializa y migra datos legacy si procede
+         * @returns {Array} Array de profesores del curso activo
+         */
+        function getProfesoradoCursoActivo() {
+            const cursoId = getCursoActivoId();
+            
+            if (!cursoId) {
+                console.warn('[PROFESORADO] No hay curso activo');
+                return [];
+            }
+            
+            // Inicializar objeto si no existe
+            if (!appData.config.profesoradoPorCurso) {
+                appData.config.profesoradoPorCurso = {};
+            }
+            
+            // Si el curso no tiene profesorado, inicializarlo
+            if (!appData.config.profesoradoPorCurso[cursoId]) {
+                appData.config.profesoradoPorCurso[cursoId] = [];
+                
+                // Migrar datos del array legacy solo para el PRIMER curso que los use
+                if (appData.config.profesorado && appData.config.profesorado.length > 0) {
+                    console.log(`[PROFESORADO] Migrando ${appData.config.profesorado.length} profesores del array legacy al curso ${cursoId}`);
+                    appData.config.profesoradoPorCurso[cursoId] = [...appData.config.profesorado];
+                    appData.config.profesorado = []; // Limpiar legacy después de migrar
+                    saveToLocalStorage();
+                }
+            }
+            
+            return appData.config.profesoradoPorCurso[cursoId];
+        }
+        
+        /**
+         * Guarda el profesorado del curso activo
+         * @param {Array} profesorado - Array de profesores a guardar
+         */
+        function saveProfesoradoCursoActivo(profesorado) {
+            const cursoId = getCursoActivoId();
+            if (!cursoId) return;
+            
+            if (!appData.config.profesoradoPorCurso) {
+                appData.config.profesoradoPorCurso = {};
+            }
+            
+            appData.config.profesoradoPorCurso[cursoId] = profesorado;
+            saveToLocalStorage();
+        }
+        
+        /**
+         * Obtiene información del curso activo para mostrar en la UI
+         * @returns {string} Nombre del curso o 'Sin curso seleccionado'
+         */
+        function getNombreCursoActivo() {
+            const cursoId = getCursoActivoId();
+            if (!cursoId) return 'Sin curso seleccionado';
+            
+            const curso = appData?.config?.cursosEscolares?.find(c => c.id === cursoId);
+            return curso ? curso.nombre : 'Curso desconocido';
+        }
+
         function renderProfesorado() {
             const container = document.getElementById('profesorList');
-            if (appData.config.profesorado.length === 0) {
-                container.innerHTML = '<p class="text-sm" style="color: var(--muted);">No hay profesorado registrado</p>';
+            const profesorado = getProfesoradoCursoActivo();
+            
+            // Mostrar info del curso actual
+            const cursoInfoEl = document.getElementById('profesoradoCursoInfo');
+            if (cursoInfoEl) {
+                cursoInfoEl.textContent = `📚 ${getNombreCursoActivo()}`;
+            }
+            
+            // Actualizar contador
+            const contadorEl = document.getElementById('profesoradoContador');
+            if (contadorEl) {
+                contadorEl.textContent = `${profesorado.length} profesor${profesorado.length !== 1 ? 'es' : ''}`;
+            }
+            
+            if (profesorado.length === 0) {
+                container.innerHTML = '<p class="text-sm" style="color: var(--muted);">No hay profesorado registrado para este curso</p>';
                 return;
             }
             
-            container.innerHTML = appData.config.profesorado.map((prof, idx) => `
+            container.innerHTML = profesorado.map((prof, idx) => `
                 <div class="flex items-center justify-between p-2 rounded-lg" style="background: var(--bg);">
                     <span class="text-sm">${escapeHTML(prof)}</span>
                     <div class="flex gap-1">
@@ -5424,6 +5588,9 @@
                     </div>
                 </div>
             `).join('');
+            
+            // Actualizar información del acordeón de eliminación masiva
+            actualizarInfoEliminacionProfesorado();
         }
 
         function renderEditSelect() {
@@ -6023,6 +6190,12 @@
         }
 
         function addProfesor() {
+            const cursoId = getCursoActivoId();
+            if (!cursoId) {
+                showToast('⚠️ Debes seleccionar un curso escolar primero', 'warning');
+                return;
+            }
+            
             const input = document.getElementById('newProfesor');
             const nombreRaw = input.value.trim();
             if (!nombreRaw) return;
@@ -6030,35 +6203,41 @@
             // Normalizar el nombre al formato correcto
             const nombreNormalizado = normalizarNombreProfesor(nombreRaw);
             
+            // Obtener profesorado del curso activo
+            const profesorado = getProfesoradoCursoActivo();
+            
             // Verificar si ya existe (comparando versión normalizada)
-            if (appData.config.profesorado.some(p => p.toLowerCase() === nombreNormalizado.toLowerCase())) {
-                showToast(`El profesor "${nombreNormalizado}" ya existe`, 'warning');
+            if (profesorado.some(p => p.toLowerCase() === nombreNormalizado.toLowerCase())) {
+                showToast(`El profesor "${nombreNormalizado}" ya existe en este curso`, 'warning');
                 return;
             }
             
-            appData.config.profesorado.push(nombreNormalizado);
+            // Añadir al profesorado del curso
+            profesorado.push(nombreNormalizado);
+            saveProfesoradoCursoActivo(profesorado);
+            
             input.value = '';
-            saveToLocalStorage();
             renderProfesorado();
             renderInformeSelects();
-            showToast(`Profesor añadido: ${nombreNormalizado}`, 'success');
+            showToast(`Profesor añadido a ${getNombreCursoActivo()}: ${nombreNormalizado}`, 'success');
         }
 
         function editProfesor(idx) {
-            const currentName = appData.config.profesorado[idx];
+            const profesorado = getProfesoradoCursoActivo();
+            const currentName = profesorado[idx];
             const newNameRaw = prompt('Editar nombre del profesor:\n(Formato: "Apellido1 Apellido2, Nombre")', currentName);
             if (newNameRaw && newNameRaw.trim() && newNameRaw !== currentName) {
                 // Normalizar el nombre introducido
                 const nombreNormalizado = normalizarNombreProfesor(newNameRaw);
                 
                 // Verificar duplicados
-                if (appData.config.profesorado.some((p, i) => i !== idx && p.toLowerCase() === nombreNormalizado.toLowerCase())) {
-                    showToast(`El profesor "${nombreNormalizado}" ya existe`, 'warning');
+                if (profesorado.some((p, i) => i !== idx && p.toLowerCase() === nombreNormalizado.toLowerCase())) {
+                    showToast(`El profesor "${nombreNormalizado}" ya existe en este curso`, 'warning');
                     return;
                 }
                 
-                appData.config.profesorado[idx] = nombreNormalizado;
-                saveToLocalStorage();
+                profesorado[idx] = nombreNormalizado;
+                saveProfesoradoCursoActivo(profesorado);
                 renderProfesorado();
                 renderInformeSelects();
                 showToast(`Profesor actualizado: ${nombreNormalizado}`, 'success');
@@ -6066,16 +6245,26 @@
         }
 
         function deleteProfesor(idx) {
-            if (confirm('Eliminar este profesor?')) {
-                appData.config.profesorado.splice(idx, 1);
-                saveToLocalStorage();
+            const profesorado = getProfesoradoCursoActivo();
+            const nombreProfesor = profesorado[idx];
+            
+            if (confirm(`Eliminar al profesor "${nombreProfesor}" de ${getNombreCursoActivo()}?`)) {
+                profesorado.splice(idx, 1);
+                saveProfesoradoCursoActivo(profesorado);
                 renderProfesorado();
                 renderInformeSelects();
-                showToast('Profesor eliminado', 'success');
+                showToast('Profesor eliminado del curso', 'success');
             }
         }
 
         function importProfesoradoExcel(event) {
+            const cursoId = getCursoActivoId();
+            if (!cursoId) {
+                showToast('⚠️ Debes seleccionar un curso escolar primero', 'warning');
+                event.target.value = '';
+                return;
+            }
+            
             const file = event.target.files[0];
             if (!file) return;
             
@@ -6087,8 +6276,12 @@
                     const sheet = workbook.Sheets[workbook.SheetNames[0]];
                     const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                     
+                    // Obtener profesorado del curso activo
+                    const profesorado = getProfesoradoCursoActivo();
+                    
                     let imported = 0;
                     let normalized = 0;
+                    let duplicados = 0;
                     
                     json.forEach(row => {
                         if (row[0] && typeof row[0] === 'string') {
@@ -6097,29 +6290,42 @@
                                 // Normalizar el nombre importado
                                 const nombreNormalizado = normalizarNombreProfesor(nombreRaw);
 
-                                // Verificar si ya existe
-                                const existe = appData.config.profesorado.some(
+                                // Verificar si ya existe en ESTE curso
+                                const existe = profesorado.some(
                                     p => p.toLowerCase() === nombreNormalizado.toLowerCase()
                                 );
 
                                 if (!existe && nombreNormalizado) {
-                                    appData.config.profesorado.push(nombreNormalizado);
+                                    profesorado.push(nombreNormalizado);
                                     imported++;
 
                                     // Contar cuántos fueron normalizados
                                     if (nombreRaw !== nombreNormalizado) {
                                         normalized++;
                                     }
+                                } else if (existe) {
+                                    duplicados++;
                                 }
                             }
                         }
                     });
-
-                    let mensaje = `${imported} profesores importados`;
+                    
+                    // Guardar cambios en el curso activo
+                    saveProfesoradoCursoActivo(profesorado);
+                    
+                    let mensaje = `${imported} profesores importados en ${getNombreCursoActivo()}`;
                     if (normalized > 0) {
-                        mensaje += ` (${normalized} nombres normalizados al formato "Apellido, Nombre")`;
+                        mensaje += ` (${normalized} nombres normalizados)`;
+                    }
+                    if (duplicados > 0) {
+                        mensaje += `, ${duplicados} ya existían`;
                     }
                     showToast(mensaje, 'success');
+                    
+                    // Actualizar UI
+                    renderProfesorado();
+                    renderInformeSelects();
+                    
                 } catch (error) {
                     showToast('Error al leer el archivo Excel', 'error');
                     console.error(error);
@@ -6128,6 +6334,121 @@
             reader.readAsArrayBuffer(file);
             event.target.value = '';
         }
+
+        // ==================== ELIMINACIÓN MASIVA DE PROFESORADO ====================
+        
+        /**
+         * Toggle para mostrar/ocultar la sección de eliminación masiva dentro del acordeón
+         */
+        function toggleSeccionEliminacionProfesorado() {
+            const seccion = document.getElementById('seccionEliminacionProfesorado');
+            const icono = document.getElementById('iconoToggleEliminacionProf');
+            
+            if (seccion && icono) {
+                const estaOculta = seccion.classList.contains('hidden');
+                if (estaOculta) {
+                    seccion.classList.remove('hidden');
+                    icono.style.transform = 'rotate(180deg)';
+                    // Actualizar info al abrir
+                    actualizarInfoEliminacionProfesorado();
+                } else {
+                    seccion.classList.add('hidden');
+                    icono.style.transform = 'rotate(0deg)';
+                }
+            }
+        }
+        
+        /**
+         * Actualiza la información del curso en el acordeón de eliminación masiva
+         */
+        function actualizarInfoEliminacionProfesorado() {
+            const cursoEl = document.getElementById('profesoradoEliminarCurso');
+            const numEl = document.getElementById('profesoradoNumEliminar');
+            
+            if (cursoEl) {
+                cursoEl.textContent = getNombreCursoActivo();
+            }
+            
+            if (numEl) {
+                const profesorado = getProfesoradoCursoActivo();
+                numEl.textContent = profesorado.length.toString();
+            }
+        }
+        
+        /**
+         * Elimina TODO el profesorado del curso activo
+         */
+        function eliminarTodoProfesoradoCurso() {
+            const cursoId = getCursoActivoId();
+            
+            if (!cursoId) {
+                showToast('⚠️ No hay un curso escolar activo seleccionado', 'error');
+                return;
+            }
+            
+            // Verificar confirmaciones
+            const confirmarLectura = document.getElementById('profesoradoConfirmarLectura');
+            const confirmarEliminar = document.getElementById('profesoradoConfirmarEliminar');
+            
+            if (!confirmarLectura || !confirmarLectura.checked) {
+                showToast('Debes confirmar que has leído las consecuencias', 'warning');
+                return;
+            }
+            
+            if (!confirmarEliminar || !confirmarEliminar.checked) {
+                showToast('Debes confirmar explícitamente que quieres eliminar todo el profesorado', 'warning');
+                return;
+            }
+            
+            const nombreCurso = getNombreCursoActivo();
+            const profesorado = getProfesoradoCursoActivo();
+            const numProfesores = profesorado.length;
+            
+            if (numProfesores === 0) {
+                showToast('No hay profesorado que eliminar en este curso', 'info');
+                return;
+            }
+            
+            // Confirmación final
+            if (!confirm(`⚠️ ÚLTIMA ADVERTENCIA:\n\n¿Estás ABSOLUTAMENTE seguro de eliminar ${numProfesores} profesor${numProfesores !== 1 ? 'es' : ''} del curso "${nombreCurso}"?\n\nEsta acción NO se puede deshacer.`)) {
+                return;
+            }
+            
+            console.log(`[PROFESORADO] Eliminando ${numProfesores} profesores del curso ${cursoId} (${nombreCurso})`);
+            
+            // Eliminar todo el profesorado del curso
+            saveProfesoradoCursoActivo([]);
+            
+            // Resetear checkboxes
+            confirmarLectura.checked = false;
+            confirmarEliminar.checked = false;
+            document.getElementById('btnEliminarTodoProfesorado').disabled = true;
+            
+            // Actualizar UI
+            renderProfesorado();
+            renderInformeSelects();
+            actualizarInfoEliminacionProfesorado();
+            
+            showToast(`✅ Se han eliminado ${numProfesores} profesor${numProfesores !== 1 ? 'es' : ''} del curso "${nombreCurso}"`, 'success');
+        }
+        
+        // Event listeners para los checkboxes de eliminación de profesorado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Checkbox de lectura
+            const chkLectura = document.getElementById('profesoradoConfirmarLectura');
+            const chkEliminar = document.getElementById('profesoradoConfirmarEliminar');
+            const btnEliminar = document.getElementById('btnEliminarTodoProfesorado');
+            
+            if (chkLectura && chkEliminar && btnEliminar) {
+                chkLectura.addEventListener('change', function() {
+                    btnEliminar.disabled = !(chkLectura.checked && chkEliminar.checked);
+                });
+                
+                chkEliminar.addEventListener('change', function() {
+                    btnEliminar.disabled = !(chkLectura.checked && chkEliminar.checked);
+                });
+            }
+        });
 
         // ==================== ACCORDION ====================
         function toggleAccordion(header) {
@@ -6271,12 +6592,15 @@
             
             container.innerHTML = '';
             
+            // Obtener profesorado del curso activo
+            const profesoradoDisponible = getProfesoradoCursoActivo();
+            
             for (let i = 0; i < count; i++) {
                 // Obtener valores ya seleccionados en otros campos (excluyendo el actual)
                 const otherSelectedValues = selectedValues.filter((_, idx) => idx !== i);
                 
                 // Filtrar profesores: mostrar todos EXCEPTO los ya seleccionados en otros campos
-                const availableProfs = appData.config.profesorado.filter(p => !otherSelectedValues.includes(p));
+                const availableProfs = profesoradoDisponible.filter(p => !otherSelectedValues.includes(p));
                 
                 // Valor actual para este campo (si existe)
                 const currentValue = selectedValues[i] || '';
@@ -6535,13 +6859,16 @@
             
             container.innerHTML = '';
             
+            // Obtener profesorado del curso activo
+            const profesoradoDisponible = getProfesoradoCursoActivo();
+            
             for (let i = 0; i < count; i++) {
                 // Obtener valores ya seleccionados en otros campos (excluyendo el actual)
                 const otherSelectedValues = selectedValues.filter((_, idx) => idx !== i);
                 
                 // Filtrar profesores: mostrar todos EXCEPTO los ya seleccionados en otros campos
                 // Pero SIEMPRE incluir el valor original de este campo
-                const availableProfs = appData.config.profesorado.filter(p => 
+                const availableProfs = profesoradoDisponible.filter(p => 
                     !otherSelectedValues.includes(p) || p === (selectedValues[i] || '')
                 );
                 
@@ -6666,7 +6993,7 @@
             if (tieneFecha || tieneProfesorado || tieneObservaciones) {
                 let motivos = [];
                 if (tieneFecha) motivos.push('Fecha de realización');
-                if (tieneProfesorado) motivos.push('Profesorado acompañante');
+                if (tieneProfesorado) motivos.push('Profesorado');
                 if (tieneObservaciones) motivos.push('Observaciones');
                 
                 showToast(`[X] No se puede eliminar: la actividad ya tiene datos de ejecucion (${motivos.join(', ')})`, 'error');
