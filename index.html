@@ -1782,7 +1782,7 @@
                         <div class="accordion-content">
                             <div class="p-6">
                                 <div class="grid grid-cols-2 gap-3">
-                                    <button onclick="exportData()" class="btn btn-secondary">
+                                    <button onclick="abrirModalExportar()" class="btn btn-secondary">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
                                         </svg>
@@ -3591,6 +3591,102 @@
                     <button type="submit" class="btn btn-primary flex-1">Guardar Usuario</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal: Exportar Datos -->
+    <div id="exportarModal" class="modal-overlay">
+        <div class="modal p-6" style="max-width: 520px;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-display text-xl font-bold flex items-center gap-2" style="color: var(--accent);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    Exportar Datos
+                </h2>
+                <button onclick="cerrarModalExportar()" class="p-2 rounded-lg hover:bg-opacity-10" style="background: rgba(0,0,0,0.05);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <p class="text-sm mb-4" style="color: var(--muted);">Selecciona los datos que deseas incluir en la exportación:</p>
+            
+            <!-- Opciones de exportación -->
+            <div class="space-y-3 mb-5">
+                <!-- Actividades EE -->
+                <label class="flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all hover:border-[var(--accent)] hover:bg-[rgba(13,115,119,0.03)]" style="border-color: var(--border);" id="labelExportEE">
+                    <input type="checkbox" id="exportEE" checked class="w-5 h-5 rounded mt-0.5" style="accent-color: #059669;">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full" style="background: #059669;"></span>
+                            <span class="font-semibold text-sm" style="color: var(--fg);">Actividades Extraescolares (EE)</span>
+                        </div>
+                        <p class="text-xs mt-1" style="color: var(--muted);"><span id="countEE">0</span> actividades</p>
+                    </div>
+                </label>
+                
+                <!-- Actividades CC -->
+                <label class="flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all hover:border-[var(--accent)] hover:bg-[rgba(13,115,119,0.03)]" style="border-color: var(--border);" id="labelExportCC">
+                    <input type="checkbox" id="exportCC" checked class="w-5 h-5 rounded mt-0.5" style="accent-color: #3b82f6;">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full" style="background: #3b82f6;"></span>
+                            <span class="font-semibold text-sm" style="color: var(--fg);">Actividades Complementarias (CC)</span>
+                        </div>
+                        <p class="text-xs mt-1" style="color: var(--muted);"><span id="countCC">0</span> actividades</p>
+                    </div>
+                </label>
+                
+                <!-- Profesorado -->
+                <label class="flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all hover:border-[var(--accent)] hover:bg-[rgba(13,115,119,0.03)]" style="border-color: var(--border);" id="labelExportProf">
+                    <input type="checkbox" id="exportProfesorado" checked class="w-5 h-5 rounded mt-0.5" style="accent-color: #f97316;">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <span class="font-semibold text-sm" style="color: var(--fg);">Profesorado</span>
+                        </div>
+                        <p class="text-xs mt-1" style="color: var(--muted);"><span id="countProf">0</span> profesores en el curso activo</p>
+                    </div>
+                </label>
+                
+                <!-- Configuración -->
+                <label class="flex items-start gap-3 p-3 rounded-lg border-2 cursor-pointer transition-all hover:border-[var(--accent)] hover:bg-[rgba(13,115,119,0.03)]" style="border-color: var(--border);" id="labelExportConfig">
+                    <input type="checkbox" id="exportConfig" checked class="w-5 h-5 rounded mt-0.5" style="accent-color: var(--accent);">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            <span class="font-semibold text-sm" style="color: var(--fg);">Configuración</span>
+                        </div>
+                        <p class="text-xs mt-1" style="color: var(--muted);">Cursos escolares, trimestres, curso activo</p>
+                    </div>
+                </label>
+            </div>
+            
+            <!-- Opciones adicionales -->
+            <div class="p-3 rounded-lg mb-5" style="background: rgba(13, 115, 119, 0.05); border: 1px solid rgba(13, 115, 119, 0.15);">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="exportSoloCursoActivo" checked class="w-4 h-4 rounded" style="accent-color: var(--accent);">
+                    <span class="text-sm font-medium" style="color: var(--fg);">Solo datos del curso activo</span>
+                </label>
+                <p class="text-xs mt-1 ml-6" style="color: var(--muted);">Si se desmarca, se exportarán todos los cursos</p>
+            </div>
+            
+            <!-- Botones de acción -->
+            <div class="flex gap-3 pt-2">
+                <button type="button" onclick="cerrarModalExportar()" class="btn btn-secondary flex-1">Cancelar</button>
+                <button type="button" onclick="ejecutarExportacion()" class="btn btn-primary flex-1 flex items-center justify-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    Exportar
+                </button>
+            </div>
         </div>
     </div>
 
@@ -7017,18 +7113,163 @@
         }
 
         // ==================== IMPORT/EXPORT ====================
-        function exportData() {
-            const dataStr = JSON.stringify(appData, null, 2);
+        
+        /**
+         * Abre el modal de exportación con los contadores actualizados
+         */
+        function abrirModalExportar() {
+            const modal = document.getElementById('exportarModal');
+            if (modal) {
+                // Actualizar contadores
+                actualizarContadoresExportar();
+                // Mostrar modal
+                modal.classList.add('active');
+            }
+        }
+        
+        /**
+         * Cierra el modal de exportación
+         */
+        function cerrarModalExportar() {
+            const modal = document.getElementById('exportarModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+        
+        /**
+         * Actualiza los contadores de elementos en el modal de exportación
+         */
+        function actualizarContadoresExportar() {
+            // Contador EE
+            const countEE = document.getElementById('countEE');
+            if (countEE) {
+                const ee = appData?.actividades || [];
+                countEE.textContent = ee.length;
+            }
+            
+            // Contador CC
+            const countCC = document.getElementById('countCC');
+            if (countCC) {
+                const cc = typeof actividadesCC !== 'undefined' ? actividadesCC : [];
+                countCC.textContent = cc.length;
+            }
+            
+            // Contador Profesorado
+            const countProf = document.getElementById('countProf');
+            if (countProf) {
+                const prof = getProfesoradoCursoActivo();
+                countProf.textContent = prof.length;
+            }
+        }
+        
+        /**
+         * Ejecuta la exportación según las selecciones del usuario
+         */
+        function ejecutarExportacion() {
+            const exportEE = document.getElementById('exportEE')?.checked ?? false;
+            const exportCC = document.getElementById('exportCC')?.checked ?? false;
+            const exportProfesorado = document.getElementById('exportProfesorado')?.checked ?? false;
+            const exportConfig = document.getElementById('exportConfig')?.checked ?? false;
+            const soloCursoActivo = document.getElementById('exportSoloCursoActivo')?.checked ?? true;
+            
+            // Verificar que al menos una opción está seleccionada
+            if (!exportEE && !exportCC && !exportProfesorado && !exportConfig) {
+                showToast('⚠️ Debes seleccionar al menos un tipo de datos para exportar', 'warning');
+                return;
+            }
+            
+            // Construir objeto de exportación
+            const dataToExport = {};
+            const cursoActivoId = appData?.config?.cursoEscolarActivo;
+            
+            // Actividades EE
+            if (exportEE) {
+                let actividades = appData?.actividades || [];
+                if (soloCursoActivo && cursoActivoId) {
+                    actividades = actividades.filter(a => a.cursoEscolarId === cursoActivoId);
+                }
+                dataToExport.actividades = actividades;
+                console.log(`[EXPORT] Incluyendo ${actividades.length} actividades EE`);
+            }
+            
+            // Actividades CC
+            if (exportCC) {
+                let cc = typeof actividadesCC !== 'undefined' ? actividadesCC : [];
+                if (soloCursoActivo && cursoActivoId) {
+                    cc = cc.filter(a => a.cursoEscolarId === cursoActivoId);
+                }
+                dataToExport.actividadesCC = cc;
+                console.log(`[EXPORT] Incluyendo ${cc.length} actividades CC`);
+            }
+            
+            // Profesorado
+            if (exportProfesorado) {
+                if (soloCursoActivo && cursoActivoId) {
+                    // Solo profesorado del curso activo
+                    const profCurso = getProfesoradoCursoActivo();
+                    dataToExport.profesorado = {
+                        tipo: 'curso_especifico',
+                        cursoId: cursoActivoId,
+                        cursoNombre: getNombreCursoActivo(),
+                        profesores: profCurso
+                    };
+                    console.log(`[EXPORT] Incluyendo ${profCurso.length} profesores del curso activo`);
+                } else {
+                    // Todo el profesorado de todos los cursos
+                    dataToExport.profesorado = {
+                        tipo: 'todos_los_cursos',
+                        profesoradoPorCurso: appData?.config?.profesoradoPorCurso || {},
+                        profesoradoLegacy: appData?.config?.profesorado || []
+                    };
+                    console.log('[EXPORT] Incluyendo profesorado de todos los cursos');
+                }
+            }
+            
+            // Configuración
+            if (exportConfig) {
+                dataToExport.config = {
+                    cursosEscolares: appData?.config?.cursosEscolares || [],
+                    cursoEscolarActivo: soloCursoActivo ? (cursoActivoId || null) : appData?.config?.cursoEscolarActivo,
+                    trimestres: appData?.config?.trimestres || {}
+                };
+                console.log('[EXPORT] Incluyendo configuración');
+            }
+            
+            // Añadir metadatos de la exportación
+            dataToExport._metadata = {
+                fechaExportacion: new Date().toISOString(),
+                version: 'AACCEE Manager',
+                cursoActivoAlExportar: soloCursoActivo ? getNombreCursoActivo() : '(todos los cursos)',
+                opcionesSeleccionadas: { exportEE, exportCC, exportProfesorado, exportConfig, soloCursoActivo }
+            };
+            
+            // Generar y descargar archivo
+            const dataStr = JSON.stringify(dataToExport, null, 2);
             const blob = new Blob([dataStr], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             
             const a = document.createElement('a');
             a.href = url;
-            a.download = `ACE_Villadiego_${formatDateTimeFile()}.json`;
+            const sufijo = soloCursoActivo ? `_${getNombreCursoActivo().replace(/[/\\?%*:|"<>]/g, '-')}` : '';
+            a.download = `ACE_Villadiego${sufijo}_${formatDateTimeFile()}.json`;
             a.click();
             
             URL.revokeObjectURL(url);
-            showToast('Datos exportados', 'success');
+            
+            // Cerrar modal y mostrar confirmación
+            cerrarModalExportar();
+            
+            const numItems = Object.keys(dataToExport).filter(k => k !== '_metadata').length;
+            showToast(`✅ Datos exportados correctamente (${numItems} secciones)`, 'success');
+            console.log('[EXPORT] Exportación completada:', Object.keys(dataToExport));
+        }
+        
+        /**
+        * Función legacy de exportación (se mantiene por compatibilidad, llama al modal)
+        */
+        function exportData() {
+            abrirModalExportar();
         }
 
         function importData(event) {
