@@ -1644,21 +1644,26 @@
                                     <p class="text-xs mt-1" style="color: var(--muted);">Configura los <strong>Cursos</strong> para EE y las <strong>Unidades</strong> para CC</p>
                                 </div>
 
-                                <!-- CURSOS para Actividades Extraescolares (EE) - FIJOS -->
+                                <!-- CURSOS para Actividades Extraescolares (EE) -->
                                 <div>
                                     <div class="flex items-center justify-between mb-2">
                                         <label class="block text-sm font-bold" style="color: var(--fg);">
                                             <span class="inline-flex items-center gap-1">
                                                 <span class="w-3 h-3 rounded-full" style="background: #059669;"></span>
                                                 📚 CURSOS (Actividades Extraescolares - EE)
-                                                <span class="text-xs font-normal text-gray-400">(Fijos)</span>
                                             </span>
                                         </label>
+                                        <button onclick="restaurarNivelesDefecto()" class="text-xs px-2 py-1 rounded hover:bg-gray-100 transition-colors" style="color: var(--muted);">
+                                            🔄 Restaurar defecto
+                                        </button>
                                     </div>
                                     <p class="text-xs mb-2 p-2 rounded" style="background: rgba(5, 150, 105, 0.05); color: var(--muted);">
-                                        Los cursos definen el <strong>nivel educativo completo</strong> (ej: 1º ESO). Son <strong>fijos y no se pueden modificar</strong>. Las actividades EE van dirigidas a todas las clases del mismo nivel.
+                                        Los cursos definen el <strong>nivel educativo completo</strong> (ej: 1º ESO). Las actividades EE van dirigidas a <strong>todas las clases del mismo nivel</strong>.
                                     </p>
                                     <div id="nivelesESOContainer" class="space-y-2"></div>
+                                    <button onclick="añadirNivelESO()" class="mt-2 btn btn-sm btn-secondary w-full" style="border-style: dashed;">
+                                        + Añadir curso
+                                    </button>
                                 </div>
 
                                 <!-- UNIDADES/GRUPOS para Actividades Complementarias (CC) -->
@@ -5762,30 +5767,21 @@
             newContainer.innerHTML = items.map((item, idx) => `
                 <div class="flex items-center gap-2 p-2 rounded-lg unidad-item" style="background: var(--bg);" data-index="${idx}" data-tipo="${tipo}">
                     <span class="text-xs font-mono text-gray-400 w-6">${idx + 1}.</span>
-                    ${tipo === 'curso' ? 
-                        // Para CURSOS (EE): Solo lectura, no editable
-                        `<div class="flex-1 text-sm py-1.5 px-3 rounded-lg bg-gray-100 text-gray-700 font-medium cursor-not-allowed" 
-                             style="border: 1px solid #e5e7eb;"
-                             title="Los cursos (EE) son fijos y no se pueden modificar">
-                            📚 ${escapeHTML(item)}
-                        </div>` :
-                        // Para UNIDADES (CC): Editable con botón de eliminar
-                        `<input type="text" value="${escapeHTML(item)}" 
-                               data-index="${idx}" 
-                               data-tipo="${tipo}"
-                               class="form-input flex-1 text-sm py-1.5 input-unidad-nombre"
-                               placeholder="Nombre de unidad">
-                        <button type="button"
-                                class="p-1.5 rounded-lg hover:bg-red-100 transition-colors btn-eliminar-unidad"
-                                style="color: var(--danger); cursor: pointer;"
-                                title="Eliminar unidad"
-                                data-tipo="${tipo}"
-                                data-index="${idx}">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>`
-                    }
+                    <input type="text" value="${escapeHTML(item)}" 
+                           data-index="${idx}" 
+                           data-tipo="${tipo}"
+                           class="form-input flex-1 text-sm py-1.5 input-unidad-nombre"
+                           placeholder="Nombre de la unidad">
+                    <button type="button"
+                            class="p-1.5 rounded-lg hover:bg-red-100 transition-colors btn-eliminar-unidad"
+                            style="color: var(--danger); cursor: pointer;"
+                            title="Eliminar ${tipo === 'curso' ? 'curso' : 'unidad'}"
+                            data-tipo="${tipo}"
+                            data-index="${idx}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
                 </div>
             `).join('');
             
@@ -5841,15 +5837,6 @@
                 return;
             }
             
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[añadirNivelESO] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
             // Asegurar que trabajamos con los datos ORIGINALES
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
@@ -5882,15 +5869,6 @@
                 return;
             }
             
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[añadirGrupo] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
             // Asegurar que trabajamos con los datos ORIGINALES
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
@@ -5908,7 +5886,7 @@
             saveToLocalStorage();
             renderGestionUnidades();
             actualizarTodosLosSelectsDeUnidades();
-            showToast(`Unidad "${nuevaNombre}" añadida`, 'success');
+            showToast(`Unidad "${nuevoNombre}" añadida`, 'success');
         }
         
         /**
@@ -5931,19 +5909,10 @@
             const cursoId = getCursoActivoId();
             if (!cursoId) return;
             
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[actualizarUnidad] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
             // Inicializar si no existe (trabajar con datos ORIGINALES)
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || [])],
+                    courses: [...(appData.config.unidadesDefecto?.cursos || [])],
                     unidades: [...(appData.config.unidadesDefecto?.unidades || [])]
                 };
             }
@@ -5961,19 +5930,12 @@
         }
         
         /**
-         * Elimina una unidad (solo unidades/grupos, NO cursos)
-         * @param {string} tipo - Tipo de unidad: 'curso' para EE (NO permitido), 'unidad' para CC (permitido)
+         * Elimina una unidad (curso o grupo)
+         * @param {string} tipo - Tipo de unidad: 'curso' para EE, 'unidad' para CC
          * @param {number} idx - Índice de la unidad a eliminar
          */
         function eliminarUnidad(tipo, idx) {
             console.log('[eliminarUnidad] Iniciando eliminación:', { tipo, idx });
-            
-            // SEGURIDAD: No permitir eliminar CURSOS (EE), solo UNIDADES (CC)
-            if (tipo === 'curso') {
-                showToast('⛔ Los cursos (EE) no se pueden eliminar. Solo se pueden editar o añadir nuevos.', 'warning');
-                console.warn('[eliminarUnidad] INTENTO BLOQUEADO: Se intentó eliminar un curso (EE)');
-                return;
-            }
             
             const cursoId = getCursoActivoId();
             console.log('[eliminarUnidad] cursoId:', cursoId);
@@ -5982,21 +5944,6 @@
                 showToast('⚠️ No hay un curso activo seleccionado', 'error');
                 console.error('[eliminarUnidad] ERROR: No hay curso activo');
                 return;
-            }
-            
-            // CRÍTICO: Asegurar que unidadesPorCurso existe como objeto
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[eliminarUnidad] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            
-            // CRÍTICO: Asegurar que unidadesDefecto existe
-            if (!appData.config.unidadesDefecto) {
-                console.warn('[eliminarUnidad] ⚠️ unidadesDefecto no existía, inicializando...');
-                appData.config.unidadesDefecto = {
-                    cursos: ['1º ESO', '2º ESO', '3º ESO', '4º ESO'],
-                    unidades: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
-                };
             }
             
             // Asegurar que la entrada existe en unidadesPorCurso (CRÍTICO: trabajar con datos originales)
@@ -8028,21 +7975,6 @@
                     }
                     if (data.actividades) {
                         appData.actividades = data.actividades;
-                    }
-                    
-                    // CRÍTICO: Asegurar que unidadesPorCurso siempre exista después de cargar de Firebase
-                    if (!appData.config.unidadesPorCurso) {
-                        console.log('[FIREBASE] Inicializando unidadesPorCurso (no existía en Firebase)');
-                        appData.config.unidadesPorCurso = {};
-                    }
-                    
-                    // CRÍTICO: Asegurar que unidadesDefecto siempre exista
-                    if (!appData.config.unidadesDefecto) {
-                        console.log('[FIREBASE] Inicializando unidadesDefecto (no existía en Firebase)');
-                        appData.config.unidadesDefecto = {
-                            cursos: ['1º ESO', '2º ESO', '3º ESO', '4º ESO'],
-                            unidades: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
-                        };
                     }
                     
                     // Ejecutar migración de datos antiguos (ej: "1 ESO" -> "1º ESO")

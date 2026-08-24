@@ -1641,45 +1641,44 @@
                                 <!-- Info del curso activo -->
                                 <div class="p-3 rounded-lg" style="background: rgba(13, 115, 119, 0.05); border: 1px solid rgba(13, 115, 119, 0.15);">
                                     <p class="text-sm"><strong>Curso activo:</strong> <span id="unidadesNombreCurso">-</span></p>
-                                    <p class="text-xs mt-1" style="color: var(--muted);">Configura los <strong>Cursos</strong> para EE y las <strong>Unidades</strong> para CC</p>
+                                    <p class="text-xs mt-1" style="color: var(--muted);">Configura las unidades (niveles ESO y grupos) para este curso</p>
                                 </div>
 
-                                <!-- CURSOS para Actividades Extraescolares (EE) - FIJOS -->
+                                <!-- Niveles ESO (para actividades EE) -->
                                 <div>
                                     <div class="flex items-center justify-between mb-2">
                                         <label class="block text-sm font-bold" style="color: var(--fg);">
                                             <span class="inline-flex items-center gap-1">
                                                 <span class="w-3 h-3 rounded-full" style="background: #059669;"></span>
-                                                📚 CURSOS (Actividades Extraescolares - EE)
-                                                <span class="text-xs font-normal text-gray-400">(Fijos)</span>
+                                                Niveles ESO (Actividades Extraescolares)
                                             </span>
                                         </label>
+                                        <button onclick="restaurarNivelesDefecto()" class="text-xs px-2 py-1 rounded hover:bg-gray-100 transition-colors" style="color: var(--muted);">
+                                            🔄 Restaurar defecto
+                                        </button>
                                     </div>
-                                    <p class="text-xs mb-2 p-2 rounded" style="background: rgba(5, 150, 105, 0.05); color: var(--muted);">
-                                        Los cursos definen el <strong>nivel educativo completo</strong> (ej: 1º ESO). Son <strong>fijos y no se pueden modificar</strong>. Las actividades EE van dirigidas a todas las clases del mismo nivel.
-                                    </p>
                                     <div id="nivelesESOContainer" class="space-y-2"></div>
+                                    <button onclick="añadirNivelESO()" class="mt-2 btn btn-sm btn-secondary w-full" style="border-style: dashed;">
+                                        + Añadir nivel
+                                    </button>
                                 </div>
 
-                                <!-- UNIDADES/GRUPOS para Actividades Complementarias (CC) -->
+                                <!-- Grupos/Aulas (para actividades CC) -->
                                 <div>
                                     <div class="flex items-center justify-between mb-2">
                                         <label class="block text-sm font-bold" style="color: var(--fg);">
                                             <span class="inline-flex items-center gap-1">
                                                 <span class="w-3 h-3 rounded-full" style="background: #3b82f6;"></span>
-                                                👥 UNIDADES (Actividades Complementarias - CC)
+                                                Grupos/Aulas (Actividades Complementarias)
                                             </span>
                                         </label>
                                         <button onclick="restaurarGruposDefecto()" class="text-xs px-2 py-1 rounded hover:bg-gray-100 transition-colors" style="color: var(--muted);">
                                             🔄 Restaurar defecto
                                         </button>
                                     </div>
-                                    <p class="text-xs mb-2 p-2 rounded" style="background: rgba(59, 130, 246, 0.05); color: var(--muted);">
-                                        Las unidades definen <strong>grupos o aulas específicos</strong> (ej: 1ºA, 2ºB). Las actividades CC pueden dirigirse a <strong>una unidad concreta</strong>.
-                                    </p>
                                     <div id="gruposContainer" class="space-y-2"></div>
                                     <button onclick="añadirGrupo()" class="mt-2 btn btn-sm btn-secondary w-full" style="border-style: dashed;">
-                                        + Añadir unidad
+                                        + Añadir grupo
                                     </button>
                                 </div>
 
@@ -4123,12 +4122,12 @@
                 profesoradoPorCurso: {}, // Nuevo: {cursoId: [profesores]}
                 cursosEscolares: [], // Array de cursos escolares
                 cursoEscolarActivo: null, // ID del curso activo
-                // Unidades configurables por curso: {cursoId: {cursos: ['1º ESO', ...], unidades: ['1º A', '1º B', ...]}}
+                // Unidades configurables por curso: {cursoId: {nivelesESO: ['1º ESO', ...], grupos: ['1º A', '1º B', ...]}}
                 unidadesPorCurso: {},
-                // Valores por defecto (para compatibilidad y nuevos cursos)
+                // Unidades por defecto (para compatibilidad y nuevos cursos)
                 unidadesDefecto: {
-                    cursos: ['1º ESO', '2º ESO', '3º ESO', '4º ESO'],
-                    unidades: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
+                    nivelesESO: ['1º ESO', '2º ESO', '3º ESO', '4º ESO'],
+                    grupos: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
                 }
             },
             actividades: []
@@ -5690,34 +5689,34 @@
         
         /**
          * Obtiene la configuración de unidades del curso activo
-         * @returns {Object} {cursos: string[], unidades: string[]}
+         * @returns {Object} {nivelesESO: string[], grupos: string[]}
          */
         function getUnidadesCursoActivo() {
             const cursoId = getCursoActivoId();
             if (!cursoId || !appData?.config?.unidadesPorCurso?.[cursoId]) {
                 // Retornar valores por defecto
                 return {
-                    cursos: [...(appData?.config?.unidadesDefecto?.cursos || ['1º ESO', '2º ESO', '3º ESO', '4º ESO'])],
-                    unidades: [...(appData?.config?.unidadesDefecto?.unidades || ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B'])]
+                    nivelesESO: [...(appData?.config?.unidadesDefecto?.nivelesESO || ['1º ESO', '2º ESO', '3º ESO', '4º ESO'])],
+                    grupos: [...(appData?.config?.unidadesDefecto?.grupos || ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B'])]
                 };
             }
             return appData.config.unidadesPorCurso[cursoId];
         }
         
         /**
-         * Obtiene los CURSOS del curso activo (para actividades EE)
-         * @returns {string[]} Array de cursos (niveles ESO)
+         * Obtiene los niveles ESO del curso activo (para actividades EE)
+         * @returns {string[]} Array de niveles ESO
          */
-        function getCursosEECursoActivo() {
-            return getUnidadesCursoActivo().cursos;
+        function getNivelesESOCursoActivo() {
+            return getUnidadesCursoActivo().nivelesESO;
         }
         
         /**
-         * Obtiene las UNIDADES/GRUPOS del curso activo (para actividades CC)
-         * @returns {string[]} Array de unidades
+         * Obtiene los grupos/aulas del curso activo (para actividades CC)
+         * @returns {string[]} Array de grupos
          */
-        function getUnidadesCCCursoActivo() {
-            return getUnidadesCursoActivo().unidades;
+        function getGruposCursoActivo() {
+            return getUnidadesCursoActivo().grupos;
         }
         
         /**
@@ -5732,183 +5731,62 @@
             if (nombreEl) nombreEl.textContent = getNombreCursoActivo();
             if (infoEl) infoEl.textContent = `📚 ${getNombreCursoActivo()}`;
             
-            // Renderizar cursos (EE)
-            renderListaUnidades('nivelesESOContainer', unidades.cursos, 'curso');
+            // Renderizar niveles ESO
+            renderListaUnidades('nivelesESOContainer', unidades.nivelesESO, 'nivel');
             
-            // Renderizar unidades (CC)
-            renderListaUnidades('gruposContainer', unidades.unidades, 'unidad');
+            // Renderizar grupos
+            renderListaUnidades('gruposContainer', unidades.grupos, 'grupo');
         }
         
         /**
          * Renderiza una lista de unidades editables
-         * Usa event delegation para mayor robustez
          */
         function renderListaUnidades(containerId, items, tipo) {
             const container = document.getElementById(containerId);
-            if (!container) {
-                console.error(`[renderListaUnidades] Container no encontrado: ${containerId}`);
-                return;
-            }
-            
-            // Limpiar event listeners anteriores removiendo y re-agregando
-            const newContainer = container.cloneNode(false);
-            container.parentNode.replaceChild(newContainer, container);
+            if (!container) return;
             
             if (items.length === 0) {
-                newContainer.innerHTML = '<p class="text-sm p-2 rounded" style="background: var(--bg); color: var(--muted);">No hay unidades configuradas. Añade algunas o restaura los valores por defecto.</p>';
+                container.innerHTML = '<p class="text-sm p-2 rounded" style="background: var(--bg); color: var(--muted);">No hay unidades configuradas. Añade algunas o restaura los valores por defecto.</p>';
                 return;
             }
             
-            newContainer.innerHTML = items.map((item, idx) => `
-                <div class="flex items-center gap-2 p-2 rounded-lg unidad-item" style="background: var(--bg);" data-index="${idx}" data-tipo="${tipo}">
+            container.innerHTML = items.map((item, idx) => `
+                <div class="flex items-center gap-2 p-2 rounded-lg" style="background: var(--bg);">
                     <span class="text-xs font-mono text-gray-400 w-6">${idx + 1}.</span>
-                    ${tipo === 'curso' ? 
-                        // Para CURSOS (EE): Solo lectura, no editable
-                        `<div class="flex-1 text-sm py-1.5 px-3 rounded-lg bg-gray-100 text-gray-700 font-medium cursor-not-allowed" 
-                             style="border: 1px solid #e5e7eb;"
-                             title="Los cursos (EE) son fijos y no se pueden modificar">
-                            📚 ${escapeHTML(item)}
-                        </div>` :
-                        // Para UNIDADES (CC): Editable con botón de eliminar
-                        `<input type="text" value="${escapeHTML(item)}" 
-                               data-index="${idx}" 
-                               data-tipo="${tipo}"
-                               class="form-input flex-1 text-sm py-1.5 input-unidad-nombre"
-                               placeholder="Nombre de unidad">
-                        <button type="button"
-                                class="p-1.5 rounded-lg hover:bg-red-100 transition-colors btn-eliminar-unidad"
-                                style="color: var(--danger); cursor: pointer;"
-                                title="Eliminar unidad"
-                                data-tipo="${tipo}"
-                                data-index="${idx}">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>`
-                    }
+                    <input type="text" value="${escapeHTML(item)}" 
+                           data-index="${idx}" 
+                           data-tipo="${tipo}"
+                           onchange="actualizarUnidad(this)"
+                           class="form-input flex-1 text-sm py-1.5"
+                           placeholder="Nombre de la unidad">
+                    <button onclick="eliminarUnidad('${tipo}', ${idx})" 
+                            class="p-1.5 rounded-lg hover:bg-red-100 transition-colors"
+                            style="color: var(--danger);"
+                            title="Eliminar unidad">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
                 </div>
             `).join('');
-            
-            // Agregar EVENT DELEGATION para los clics en botones de eliminar
-            newContainer.addEventListener('click', handleUnidadContainerClick);
-            
-            // Agregar event listeners para cambios en inputs
-            newContainer.querySelectorAll('.input-unidad-nombre').forEach(input => {
-                input.addEventListener('change', function() {
-                    actualizarUnidad(this);
-                });
-            });
         }
         
         /**
-         * Maneja clics en el contenedor de unidades (Event Delegation)
-         * Este método es más robusto que inline onclick
-         */
-        function handleUnidadContainerClick(event) {
-            // Buscar el botón de eliminar más cercano (el elemento clickeado o un padre)
-            const btnEliminar = event.target.closest('.btn-eliminar-unidad');
-            
-            if (btnEliminar) {
-                // Prevenir cualquier comportamiento por defecto
-                event.preventDefault();
-                event.stopPropagation();
-                
-                const tipo = btnEliminar.getAttribute('data-tipo');
-                const idx = parseInt(btnEliminar.getAttribute('data-index'));
-                
-                console.log('[handleUnidadContainerClick] Click detectado en botón eliminar:', { tipo, idx, boton: btnEliminar });
-                
-                if (tipo !== undefined && tipo !== null && !isNaN(idx)) {
-                    console.log('[handleUnidadContainerClick] Llamando a eliminarUnidad...');
-                    eliminarUnidad(tipo, idx);
-                } else {
-                    console.error('[handleUnidadContainerClick] Datos inválidos:', { tipo, idx });
-                    showToast('Error al identificar el elemento a eliminar', 'error');
-                }
-                return false;
-            }
-        }
-        
-        /**
-         * Añade un nuevo curso EE vacío
+         * Añade un nuevo nivel ESO vacío
          */
         function añadirNivelESO() {
-            console.log('[añadirNivelESO] Añadiendo nuevo curso...');
-            
-            const cursoId = getCursoActivoId();
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                return;
-            }
-            
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[añadirNivelESO] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
-            // Asegurar que trabajamos con los datos ORIGINALES
-            if (!appData.config.unidadesPorCurso[cursoId]) {
-                appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || ['1º ESO', '2º ESO', '3º ESO', '4º ESO'])],
-                    unidades: [...(appData.config.unidadesDefecto?.unidades || ['1º A', '1º B', '2º A', '2º B'])]
-                };
-            }
-            
-            const nuevoNombre = `Nuevo Curso ${appData.config.unidadesPorCurso[cursoId].cursos.length + 1}`;
-            appData.config.unidadesPorCurso[cursoId].cursos.push(nuevoNombre);
-            
-            console.log('[añadirNivelESO] Curso añadido:', nuevoNombre);
-            
-            // Guardar cambios
-            saveToLocalStorage();
+            const unidades = getUnidadesCursoActivo();
+            unidades.nivelesESO.push(`Nuevo Nivel ${unidades.nivelesESO.length + 1}`);
             renderGestionUnidades();
-            actualizarTodosLosSelectsDeUnidades();
-            showToast(`Curso "${nuevoNombre}" añadido`, 'success');
         }
         
         /**
-         * Añade una nueva unidad CC vacía
+         * Añade un nuevo grupo vacío
          */
         function añadirGrupo() {
-            console.log('[añadirGrupo] Añadiendo nueva unidad...');
-            
-            const cursoId = getCursoActivoId();
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                return;
-            }
-            
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[añadirGrupo] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
-            // Asegurar que trabajamos con los datos ORIGINALES
-            if (!appData.config.unidadesPorCurso[cursoId]) {
-                appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || ['1º ESO', '2º ESO', '3º ESO', '4º ESO'])],
-                    unidades: [...(appData.config.unidadesDefecto?.unidades || ['1º A', '1º B', '2º A', '2º B'])]
-                };
-            }
-            
-            const nuevoNombre = `Nueva Unidad ${appData.config.unidadesPorCurso[cursoId].unidades.length + 1}`;
-            appData.config.unidadesPorCurso[cursoId].unidades.push(nuevoNombre);
-            
-            console.log('[añadirGrupo] Unidad añadida:', nuevoNombre);
-            
-            // Guardar cambios
-            saveToLocalStorage();
+            const unidades = getUnidadesCursoActivo();
+            unidades.grupos.push(`Nuevo Grupo ${unidades.grupos.length + 1}`);
             renderGestionUnidades();
-            actualizarTodosLosSelectsDeUnidades();
-            showToast(`Unidad "${nuevaNombre}" añadida`, 'success');
         }
         
         /**
@@ -5919,204 +5797,89 @@
             const tipo = input.dataset.tipo;
             const valor = input.value.trim();
             
-            console.log('[actualizarUnidad] Actualizando:', { idx, tipo, valor });
-            
             if (!valor) {
-                showToast('El nombre no puede estar vacío', 'warning');
-                const unidades = getUnidadesCursoActivo();
-                input.value = unidades[tipo === 'curso' ? 'cursos' : 'unidades'][idx];
+                showToast('El nombre de la unidad no puede estar vacío', 'warning');
+                input.value = getUnidadesCursoActivo()[tipo === 'nivel' ? 'nivelesESO' : 'grupos'][idx];
                 return;
             }
             
             const cursoId = getCursoActivoId();
             if (!cursoId) return;
             
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[actualizarUnidad] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
-            // Inicializar si no existe (trabajar con datos ORIGINALES)
+            // Inicializar si no existe
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || [])],
-                    unidades: [...(appData.config.unidadesDefecto?.unidades || [])]
+                    nivelesESO: [...appData.config.unidadesDefecto.nivelesESO],
+                    grupos: [...appData.config.unidadesDefecto.grupos]
                 };
             }
             
-            if (tipo === 'curso') {
-                appData.config.unidadesPorCurso[cursoId].cursos[idx] = valor;
+            if (tipo === 'nivel') {
+                appData.config.unidadesPorCurso[cursoId].nivelesESO[idx] = valor;
             } else {
-                appData.config.unidadesPorCurso[cursoId].unidades[idx] = valor;
+                appData.config.unidadesPorCurso[cursoId].grupos[idx] = valor;
             }
-            
-            // Guardar cambios inmediatamente
-            saveToLocalStorage();
-            actualizarTodosLosSelectsDeUnidades();
-            console.log('[actualizarUnidad] Actualización guardada');
         }
         
         /**
-         * Elimina una unidad (solo unidades/grupos, NO cursos)
-         * @param {string} tipo - Tipo de unidad: 'curso' para EE (NO permitido), 'unidad' para CC (permitido)
-         * @param {number} idx - Índice de la unidad a eliminar
+         * Elimina una unidad
          */
         function eliminarUnidad(tipo, idx) {
-            console.log('[eliminarUnidad] Iniciando eliminación:', { tipo, idx });
-            
-            // SEGURIDAD: No permitir eliminar CURSOS (EE), solo UNIDADES (CC)
-            if (tipo === 'curso') {
-                showToast('⛔ Los cursos (EE) no se pueden eliminar. Solo se pueden editar o añadir nuevos.', 'warning');
-                console.warn('[eliminarUnidad] INTENTO BLOQUEADO: Se intentó eliminar un curso (EE)');
-                return;
-            }
-            
             const cursoId = getCursoActivoId();
-            console.log('[eliminarUnidad] cursoId:', cursoId);
+            if (!cursoId) return;
             
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                console.error('[eliminarUnidad] ERROR: No hay curso activo');
-                return;
-            }
-            
-            // CRÍTICO: Asegurar que unidadesPorCurso existe como objeto
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[eliminarUnidad] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            
-            // CRÍTICO: Asegurar que unidadesDefecto existe
-            if (!appData.config.unidadesDefecto) {
-                console.warn('[eliminarUnidad] ⚠️ unidadesDefecto no existía, inicializando...');
-                appData.config.unidadesDefecto = {
-                    cursos: ['1º ESO', '2º ESO', '3º ESO', '4º ESO'],
-                    unidades: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
-                };
-            }
-            
-            // Asegurar que la entrada existe en unidadesPorCurso (CRÍTICO: trabajar con datos originales)
+            // Inicializar si no existe
             if (!appData.config.unidadesPorCurso[cursoId]) {
-                console.log('[eliminarUnidad] Inicializando unidadesPorCurso para:', cursoId);
                 appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || ['1º ESO', '2º ESO', '3º ESO', '4º ESO'])],
-                    unidades: [...(appData.config.unidadesDefecto?.unidades || ['1º A', '1º B', '2º A', '2º B'])]
+                    nivelesESO: [...appData.config.unidadesDefecto.nivelesESO],
+                    grupos: [...appData.config.unidadesDefecto.grupos]
                 };
             }
             
-            const key = tipo === 'curso' ? 'cursos' : 'unidades';
-            const arrayUnidades = appData.config.unidadesPorCurso[cursoId][key];
+            const key = tipo === 'nivel' ? 'nivelesESO' : 'grupos';
+            const nombreEliminado = appData.config.unidadesPorCurso[cursoId][key][idx];
+            appData.config.unidadesPorCurso[cursoId][key].splice(idx, 1);
             
-            console.log('[eliminarUnidad] key:', key, '- Array:', arrayUnidades, '- Longitud:', arrayUnidades.length);
-            
-            // Validar índice
-            if (idx < 0 || idx >= arrayUnidades.length) {
-                showToast('⚠️ Error: índice de unidad no válido', 'error');
-                console.error('[eliminarUnidad] ERROR: Índice fuera de rango', {tipo, idx, longitud: arrayUnidades.length, array: arrayUnidades});
-                return;
-            }
-            
-            const nombreEliminado = arrayUnidades[idx];
-            const tipoNombre = tipo === 'curso' ? 'Curso' : 'Unidad';
-            
-            console.log(`[eliminarUnidad] Se eliminará ${tipoNombre}: "${nombreEliminado}"`);
-            
-            // Confirmar eliminación
-            if (!confirm(`¿Eliminar ${tipoNombre.toLowerCase()} "${nombreEliminado}"?`)) {
-                console.log('[eliminarUnidad] Eliminación cancelada por usuario');
-                return;
-            }
-            
-            // Eliminar del array ORIGINAL (no una copia)
-            arrayUnidades.splice(idx, 1);
-            
-            console.log('[eliminarUnidad] Elemento eliminado. Nuevo estado:', arrayUnidades);
-            console.log('[eliminarUnidad] Guardando en localStorage...');
-            
-            // GUARDAR EN LOCALSTORAGE Y FIREBASE - CRÍTICO para persistir cambios
-            saveToLocalStorage().then(() => {
-                console.log('[eliminarUnidad] ✅ Guardado completado');
-                
-                // Re-renderizar la UI
-                renderGestionUnidades();
-                
-                // Actualizar los selects dinámicos en toda la app
-                actualizarTodosLosSelectsDeUnidades();
-                
-                showToast(`${tipoNombre} "${nombreEliminado}" eliminada correctamente`, 'success');
-                console.log('[eliminarUnidad] ✅ Proceso completado con éxito');
-            }).catch(err => {
-                console.error('[eliminarUnidad] ERROR al guardar:', err);
-                showToast('Error al guardar los cambios', 'error');
-            });
+            showToast(`Unidad "${nombreEliminado}" eliminada`, 'info');
+            renderGestionUnidades();
         }
         
         /**
-         * Restaura los cursos EE por defecto
+         * Restaura los niveles ESO por defecto
          */
         function restaurarNivelesDefecto() {
             const cursoId = getCursoActivoId();
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                return;
-            }
+            if (!cursoId) return;
             
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [],
-                    unidades: []
+                    nivelesESO: [],
+                    grupos: []
                 };
             }
             
-            // Confirmar restauración
-            if (!confirm('¿Restaurar los cursos (EE) a los valores por defecto?\n\nEsto reemplazará la configuración actual de cursos.')) {
-                return;
-            }
-            
-            appData.config.unidadesPorCurso[cursoId].cursos = [...appData.config.unidadesDefecto.cursos];
-            
-            // GUARDAR EN LOCALSTORAGE
-            saveToLocalStorage();
-            
+            appData.config.unidadesPorCurso[cursoId].nivelesESO = [...appData.config.unidadesDefecto.nivelesESO];
             renderGestionUnidades();
-            actualizarTodosLosSelectsDeUnidades();
-            showToast('✅ Cursos (EE) restaurados a valores por defecto', 'success');
+            showToast('Niveles ESO restaurados a valores por defecto', 'success');
         }
         
         /**
-         * Restaura las unidades CC por defecto
+         * Restaura los grupos por defecto
          */
         function restaurarGruposDefecto() {
             const cursoId = getCursoActivoId();
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                return;
-            }
+            if (!cursoId) return;
             
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [],
-                    unidades: []
+                    nivelesESO: [],
+                    grupos: []
                 };
             }
             
-            // Confirmar restauración
-            if (!confirm('¿Restorar las unidades (CC) a los valores por defecto?\n\nEsto reemplazará la configuración actual de unidades.')) {
-                return;
-            }
-            
-            appData.config.unidadesPorCurso[cursoId].unidades = [...appData.config.unidadesDefecto.unidades];
-            
-            // GUARDAR EN LOCALSTORAGE
-            saveToLocalStorage();
-            
+            appData.config.unidadesPorCurso[cursoId].grupos = [...appData.config.unidadesDefecto.grupos];
             renderGestionUnidades();
-            actualizarTodosLosSelectsDeUnidades();
-            showToast('✅ Unidades (CC) restauradas a valores por defecto', 'success');
+            showToast('Grupos restaurados a valores por defecto', 'success');
         }
         
         /**
@@ -6131,21 +5894,21 @@
             
             const unidades = getUnidadesCursoActivo();
             
-            // Validar que hay al menos un curso y una unidad
-            if (unidades.cursos.length === 0) {
-                showToast('⚠️ Debes tener al menos un curso configurado', 'warning');
+            // Validar que hay al menos un nivel y un grupo
+            if (unidades.nivelesESO.length === 0) {
+                showToast('⚠️ Debes tener al menos un nivel ESO configurado', 'warning');
                 return;
             }
             
-            if (unidades.unidades.length === 0) {
-                showToast('⚠️ Debes tener al menos una unidad configurada', 'warning');
+            if (unidades.grupos.length === 0) {
+                showToast('⚠️ Debes tener al menos un grupo configurado', 'warning');
                 return;
             }
             
             // Guardar en la configuración del curso
             appData.config.unidadesPorCurso[cursoId] = {
-                cursos: [...unidades.cursos],
-                unidades: [...unidades.unidades]
+                nivelesESO: [...unidades.nivelesESO],
+                grupos: [...unidades.grupos]
             };
             
             // Guardar en Firebase/localStorage
@@ -6154,7 +5917,7 @@
             // Actualizar todos los selects que usan unidades
             actualizarTodosLosSelectsDeUnidades();
             
-            showToast(`✅ Configuración guardada para ${getNombreCursoActivo()} (${unidades.cursos.length} cursos, ${unidades.unidades.length} unidades)`, 'success');
+            showToast(`✅ Unidades guardadas para ${getNombreCursoActivo()} (${unidades.nivelesESO.length} niveles, ${unidades.grupos.length} grupos)`, 'success');
             console.log('[UNIDADES] Configuración guardada:', appData.config.unidadesPorCurso[cursoId]);
         }
         
@@ -6183,75 +5946,75 @@
         }
         
         /**
-         * Actualiza todos los selects que muestran cursos/unidades (EE y CC)
+         * Actualiza todos los selects que muestran unidades (EE y CC)
          */
         function actualizarTodosLosSelectsDeUnidades() {
-            // Actualizar selects de EE (cursos/niveles ESO)
-            actualizarSelectCursosEE('newCurso');
-            actualizarSelectCursosEE('editCurso');
-            actualizarSelectCursosEE('cronoEditCurso');
+            // Actualizar selects de EE (niveles ESO)
+            actualizarSelectNivelesESO('newCurso');
+            actualizarSelectNivelesESO('editCurso');
+            actualizarSelectNivelesESO('cronoEditCurso');
             
             // Actualizar filtro de curso anterior (para importación)
             actualizarFiltroCursoAnterior();
             
-            // Actualizar selects de CC (unidades/grupos)
-            actualizarSelectUnidadesCC('ccUnidad', true);
-            actualizarSelectUnidadesCC('ccEditUnidad', false);
-            actualizarSelectUnidadesCC('ccModalUnidad', true);
+            // Actualizar selects de CC (grupos)
+            actualizarSelectGrupos('ccUnidad', true);
+            actualizarSelectGrupos('ccEditUnidad', false);
+            actualizarSelectGrupos('ccModalUnidad', true);
             
             console.log('[UNIDADES] Todos los selects actualizados');
         }
         
         /**
-         * Actualiza el filtro de curso anterior (muestra todos los cursos configurados)
+         * Actualiza el filtro de curso anterior (muestra todos los niveles ESO configurados)
          */
         function actualizarFiltroCursoAnterior() {
             const select = document.getElementById('filtroCursoAnterior');
             if (!select) return;
             
-            const cursos = getCursosEECursoActivo();
+            const niveles = getNivelesESOCursoActivo();
             const valorActual = select.value;
             
             let html = '<option value="Todos">Todos los cursos</option>';
-            cursos.forEach(curso => {
-                html += `<option value="${escapeHTML(curso)}">${escapeHTML(curso)}</option>`;
+            niveles.forEach(nivel => {
+                html += `<option value="${escapeHTML(nivel)}">${escapeHTML(nivel)}</option>`;
             });
             
             select.innerHTML = html;
             
             // Restaurar selección si aún es válida
-            if (valorActual && (valorActual === 'Todos' || cursos.includes(valorActual))) {
+            if (valorActual && (valorActual === 'Todos' || niveles.includes(valorActual))) {
                 select.value = valorActual;
             }
         }
         
         /**
-         * Genera options para un select de CURSOS (para actividades EE)
+         * Genera options para un select de niveles ESO
          */
-        function actualizarSelectCursosEE(selectId) {
+        function actualizarSelectNivelesESO(selectId) {
             const select = document.getElementById(selectId);
             if (!select) return;
             
-            const cursos = getCursosEECursoActivo();
+            const niveles = getNivelesESOCursoActivo();
             const valorActual = select.value;
             
             select.innerHTML = '<option value="">Selecciona curso</option>' +
-                cursos.map(curso => `<option value="${escapeHTML(curso)}">${escapeHTML(curso)}</option>`).join('');
+                niveles.map(nivel => `<option value="${escapeHTML(nivel)}">${escapeHTML(nivel)}</option>`).join('');
             
             // Restaurar selección si aún es válida
-            if (cursos.includes(valorActual)) {
+            if (niveles.includes(valorActual)) {
                 select.value = valorActual;
             }
         }
         
         /**
-         * Genera options para un select de UNIDADES/GRUPOS (para actividades CC)
+         * Genera options para un select de grupos (con optgroups por nivel)
          */
-        function actualizarSelectUnidadesCC(selectId, conPlaceholder) {
+        function actualizarSelectGrupos(selectId, conPlaceholder) {
             const select = document.getElementById(selectId);
             if (!select) return;
             
-            const unidades = getUnidadesCCCursoActivo();
+            const grupos = getGruposCursoActivo();
             const valorActual = select.value;
             
             let html = '';
@@ -6259,36 +6022,36 @@
                 html += '<option value="">Selecciona unidad</option>';
             }
             
-            // Agrupar por nivel (1º, 2º, 3º, 4º) si es posible
-            const unidadesPorNivel = {};
-            unidades.forEach(unidad => {
-                const match = unidad.match(/^(\d+)º?\s*/i);
+            // Agrupar por nivel (1º, 2º, 3º, 4º)
+            const gruposPorNivel = {};
+            grupos.forEach(grupo => {
+                const match = grupo.match(/^(\d+)º?\s*/i);
                 const nivel = match ? `${match[1]}º` : 'Otros';
-                if (!unidadesPorNivel[nivel]) unidadesPorNivel[nivel] = [];
-                unidadesPorNivel[nivel].push(unidad);
+                if (!gruposPorNivel[nivel]) gruposPorNivel[nivel] = [];
+                gruposPorNivel[nivel].push(grupo);
             });
             
             // Generar optgroups
-            Object.keys(unidadesPorNivel).sort().forEach(nivel => {
+            Object.keys(gruposPorNivel).sort().forEach(nivel => {
                 html += `<optgroup label="${nivel} ESO">`;
-                unidadesPorNivel[nivel].forEach(unidad => {
-                    html += `<option value="${escapeHTML(unidad)}">${escapeHTML(unidad)}</option>`;
+                gruposPorNivel[nivel].forEach(grupo => {
+                    html += `<option value="${escapeHTML(grupo)}">${escapeHTML(grupo)}</option>`;
                 });
                 html += `</optgroup>`;
             });
             
             // Si no se pudieron agrupar, mostrar lista plana
-            if (Object.keys(unidadesPorNivel).length === 0) {
+            if (Object.keys(gruposPorNivel).length === 0) {
                 html = conPlaceholder ? '<option value="">Selecciona unidad</option>' : '';
-                unidades.forEach(unidad => {
-                    html += `<option value="${escapeHTML(unidad)}">${escapeHTML(unidad)}</option>`;
+                grupos.forEach(grupo => {
+                    html += `<option value="${escapeHTML(grupo)}">${escapeHTML(grupo)}</option>`;
                 });
             }
             
             select.innerHTML = html;
             
             // Restaurar selección si aún es válida
-            if (valorActual && unidades.includes(valorActual)) {
+            if (valorActual && grupos.includes(valorActual)) {
                 select.value = valorActual;
             }
         }
@@ -8028,21 +7791,6 @@
                     }
                     if (data.actividades) {
                         appData.actividades = data.actividades;
-                    }
-                    
-                    // CRÍTICO: Asegurar que unidadesPorCurso siempre exista después de cargar de Firebase
-                    if (!appData.config.unidadesPorCurso) {
-                        console.log('[FIREBASE] Inicializando unidadesPorCurso (no existía en Firebase)');
-                        appData.config.unidadesPorCurso = {};
-                    }
-                    
-                    // CRÍTICO: Asegurar que unidadesDefecto siempre exista
-                    if (!appData.config.unidadesDefecto) {
-                        console.log('[FIREBASE] Inicializando unidadesDefecto (no existía en Firebase)');
-                        appData.config.unidadesDefecto = {
-                            cursos: ['1º ESO', '2º ESO', '3º ESO', '4º ESO'],
-                            unidades: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
-                        };
                     }
                     
                     // Ejecutar migración de datos antiguos (ej: "1 ESO" -> "1º ESO")

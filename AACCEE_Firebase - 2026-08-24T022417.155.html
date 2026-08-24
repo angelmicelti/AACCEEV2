@@ -1644,21 +1644,26 @@
                                     <p class="text-xs mt-1" style="color: var(--muted);">Configura los <strong>Cursos</strong> para EE y las <strong>Unidades</strong> para CC</p>
                                 </div>
 
-                                <!-- CURSOS para Actividades Extraescolares (EE) - FIJOS -->
+                                <!-- CURSOS para Actividades Extraescolares (EE) -->
                                 <div>
                                     <div class="flex items-center justify-between mb-2">
                                         <label class="block text-sm font-bold" style="color: var(--fg);">
                                             <span class="inline-flex items-center gap-1">
                                                 <span class="w-3 h-3 rounded-full" style="background: #059669;"></span>
                                                 📚 CURSOS (Actividades Extraescolares - EE)
-                                                <span class="text-xs font-normal text-gray-400">(Fijos)</span>
                                             </span>
                                         </label>
+                                        <button onclick="restaurarNivelesDefecto()" class="text-xs px-2 py-1 rounded hover:bg-gray-100 transition-colors" style="color: var(--muted);">
+                                            🔄 Restaurar defecto
+                                        </button>
                                     </div>
                                     <p class="text-xs mb-2 p-2 rounded" style="background: rgba(5, 150, 105, 0.05); color: var(--muted);">
-                                        Los cursos definen el <strong>nivel educativo completo</strong> (ej: 1º ESO). Son <strong>fijos y no se pueden modificar</strong>. Las actividades EE van dirigidas a todas las clases del mismo nivel.
+                                        Los cursos definen el <strong>nivel educativo completo</strong> (ej: 1º ESO). Las actividades EE van dirigidas a <strong>todas las clases del mismo nivel</strong>.
                                     </p>
                                     <div id="nivelesESOContainer" class="space-y-2"></div>
+                                    <button onclick="añadirNivelESO()" class="mt-2 btn btn-sm btn-secondary w-full" style="border-style: dashed;">
+                                        + Añadir curso
+                                    </button>
                                 </div>
 
                                 <!-- UNIDADES/GRUPOS para Actividades Complementarias (CC) -->
@@ -5741,174 +5746,53 @@
         
         /**
          * Renderiza una lista de unidades editables
-         * Usa event delegation para mayor robustez
          */
         function renderListaUnidades(containerId, items, tipo) {
             const container = document.getElementById(containerId);
-            if (!container) {
-                console.error(`[renderListaUnidades] Container no encontrado: ${containerId}`);
-                return;
-            }
-            
-            // Limpiar event listeners anteriores removiendo y re-agregando
-            const newContainer = container.cloneNode(false);
-            container.parentNode.replaceChild(newContainer, container);
+            if (!container) return;
             
             if (items.length === 0) {
-                newContainer.innerHTML = '<p class="text-sm p-2 rounded" style="background: var(--bg); color: var(--muted);">No hay unidades configuradas. Añade algunas o restaura los valores por defecto.</p>';
+                container.innerHTML = '<p class="text-sm p-2 rounded" style="background: var(--bg); color: var(--muted);">No hay unidades configuradas. Añade algunas o restaura los valores por defecto.</p>';
                 return;
             }
             
-            newContainer.innerHTML = items.map((item, idx) => `
-                <div class="flex items-center gap-2 p-2 rounded-lg unidad-item" style="background: var(--bg);" data-index="${idx}" data-tipo="${tipo}">
+            container.innerHTML = items.map((item, idx) => `
+                <div class="flex items-center gap-2 p-2 rounded-lg" style="background: var(--bg);">
                     <span class="text-xs font-mono text-gray-400 w-6">${idx + 1}.</span>
-                    ${tipo === 'curso' ? 
-                        // Para CURSOS (EE): Solo lectura, no editable
-                        `<div class="flex-1 text-sm py-1.5 px-3 rounded-lg bg-gray-100 text-gray-700 font-medium cursor-not-allowed" 
-                             style="border: 1px solid #e5e7eb;"
-                             title="Los cursos (EE) son fijos y no se pueden modificar">
-                            📚 ${escapeHTML(item)}
-                        </div>` :
-                        // Para UNIDADES (CC): Editable con botón de eliminar
-                        `<input type="text" value="${escapeHTML(item)}" 
-                               data-index="${idx}" 
-                               data-tipo="${tipo}"
-                               class="form-input flex-1 text-sm py-1.5 input-unidad-nombre"
-                               placeholder="Nombre de unidad">
-                        <button type="button"
-                                class="p-1.5 rounded-lg hover:bg-red-100 transition-colors btn-eliminar-unidad"
-                                style="color: var(--danger); cursor: pointer;"
-                                title="Eliminar unidad"
-                                data-tipo="${tipo}"
-                                data-index="${idx}">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                            </svg>
-                        </button>`
-                    }
+                    <input type="text" value="${escapeHTML(item)}" 
+                           data-index="${idx}" 
+                           data-tipo="${tipo}"
+                           onchange="actualizarUnidad(this)"
+                           class="form-input flex-1 text-sm py-1.5"
+                           placeholder="Nombre de la unidad">
+                    <button onclick="eliminarUnidad('${tipo}', ${idx})" 
+                            class="p-1.5 rounded-lg hover:bg-red-100 transition-colors"
+                            style="color: var(--danger);"
+                            title="Eliminar unidad">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
                 </div>
             `).join('');
-            
-            // Agregar EVENT DELEGATION para los clics en botones de eliminar
-            newContainer.addEventListener('click', handleUnidadContainerClick);
-            
-            // Agregar event listeners para cambios en inputs
-            newContainer.querySelectorAll('.input-unidad-nombre').forEach(input => {
-                input.addEventListener('change', function() {
-                    actualizarUnidad(this);
-                });
-            });
-        }
-        
-        /**
-         * Maneja clics en el contenedor de unidades (Event Delegation)
-         * Este método es más robusto que inline onclick
-         */
-        function handleUnidadContainerClick(event) {
-            // Buscar el botón de eliminar más cercano (el elemento clickeado o un padre)
-            const btnEliminar = event.target.closest('.btn-eliminar-unidad');
-            
-            if (btnEliminar) {
-                // Prevenir cualquier comportamiento por defecto
-                event.preventDefault();
-                event.stopPropagation();
-                
-                const tipo = btnEliminar.getAttribute('data-tipo');
-                const idx = parseInt(btnEliminar.getAttribute('data-index'));
-                
-                console.log('[handleUnidadContainerClick] Click detectado en botón eliminar:', { tipo, idx, boton: btnEliminar });
-                
-                if (tipo !== undefined && tipo !== null && !isNaN(idx)) {
-                    console.log('[handleUnidadContainerClick] Llamando a eliminarUnidad...');
-                    eliminarUnidad(tipo, idx);
-                } else {
-                    console.error('[handleUnidadContainerClick] Datos inválidos:', { tipo, idx });
-                    showToast('Error al identificar el elemento a eliminar', 'error');
-                }
-                return false;
-            }
         }
         
         /**
          * Añade un nuevo curso EE vacío
          */
         function añadirNivelESO() {
-            console.log('[añadirNivelESO] Añadiendo nuevo curso...');
-            
-            const cursoId = getCursoActivoId();
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                return;
-            }
-            
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[añadirNivelESO] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
-            // Asegurar que trabajamos con los datos ORIGINALES
-            if (!appData.config.unidadesPorCurso[cursoId]) {
-                appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || ['1º ESO', '2º ESO', '3º ESO', '4º ESO'])],
-                    unidades: [...(appData.config.unidadesDefecto?.unidades || ['1º A', '1º B', '2º A', '2º B'])]
-                };
-            }
-            
-            const nuevoNombre = `Nuevo Curso ${appData.config.unidadesPorCurso[cursoId].cursos.length + 1}`;
-            appData.config.unidadesPorCurso[cursoId].cursos.push(nuevoNombre);
-            
-            console.log('[añadirNivelESO] Curso añadido:', nuevoNombre);
-            
-            // Guardar cambios
-            saveToLocalStorage();
+            const unidades = getUnidadesCursoActivo();
+            unidades.cursos.push(`Nuevo Curso ${unidades.cursos.length + 1}`);
             renderGestionUnidades();
-            actualizarTodosLosSelectsDeUnidades();
-            showToast(`Curso "${nuevoNombre}" añadido`, 'success');
         }
         
         /**
          * Añade una nueva unidad CC vacía
          */
         function añadirGrupo() {
-            console.log('[añadirGrupo] Añadiendo nueva unidad...');
-            
-            const cursoId = getCursoActivoId();
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                return;
-            }
-            
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[añadirGrupo] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
-            // Asegurar que trabajamos con los datos ORIGINALES
-            if (!appData.config.unidadesPorCurso[cursoId]) {
-                appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || ['1º ESO', '2º ESO', '3º ESO', '4º ESO'])],
-                    unidades: [...(appData.config.unidadesDefecto?.unidades || ['1º A', '1º B', '2º A', '2º B'])]
-                };
-            }
-            
-            const nuevoNombre = `Nueva Unidad ${appData.config.unidadesPorCurso[cursoId].unidades.length + 1}`;
-            appData.config.unidadesPorCurso[cursoId].unidades.push(nuevoNombre);
-            
-            console.log('[añadirGrupo] Unidad añadida:', nuevoNombre);
-            
-            // Guardar cambios
-            saveToLocalStorage();
+            const unidades = getUnidadesCursoActivo();
+            unidades.unidades.push(`Nueva Unidad ${unidades.unidades.length + 1}`);
             renderGestionUnidades();
-            actualizarTodosLosSelectsDeUnidades();
-            showToast(`Unidad "${nuevaNombre}" añadida`, 'success');
         }
         
         /**
@@ -5919,32 +5803,20 @@
             const tipo = input.dataset.tipo;
             const valor = input.value.trim();
             
-            console.log('[actualizarUnidad] Actualizando:', { idx, tipo, valor });
-            
             if (!valor) {
                 showToast('El nombre no puede estar vacío', 'warning');
-                const unidades = getUnidadesCursoActivo();
-                input.value = unidades[tipo === 'curso' ? 'cursos' : 'unidades'][idx];
+                input.value = getUnidadesCursoActivo()[tipo === 'curso' ? 'cursos' : 'unidades'][idx];
                 return;
             }
             
             const cursoId = getCursoActivoId();
             if (!cursoId) return;
             
-            // CRÍTICO: Asegurar que unidadesPorCurso existe
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[actualizarUnidad] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            if (!appData.config.unidadesDefecto) {
-                appData.config.unidadesDefecto = { cursos: [], unidades: [] };
-            }
-            
-            // Inicializar si no existe (trabajar con datos ORIGINALES)
+            // Inicializar si no existe
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || [])],
-                    unidades: [...(appData.config.unidadesDefecto?.unidades || [])]
+                    cursos: [...appData.config.unidadesDefecto.cursos],
+                    unidades: [...appData.config.unidadesDefecto.unidades]
                 };
             }
             
@@ -5953,106 +5825,30 @@
             } else {
                 appData.config.unidadesPorCurso[cursoId].unidades[idx] = valor;
             }
-            
-            // Guardar cambios inmediatamente
-            saveToLocalStorage();
-            actualizarTodosLosSelectsDeUnidades();
-            console.log('[actualizarUnidad] Actualización guardada');
         }
         
         /**
-         * Elimina una unidad (solo unidades/grupos, NO cursos)
-         * @param {string} tipo - Tipo de unidad: 'curso' para EE (NO permitido), 'unidad' para CC (permitido)
-         * @param {number} idx - Índice de la unidad a eliminar
+         * Elimina una unidad
          */
         function eliminarUnidad(tipo, idx) {
-            console.log('[eliminarUnidad] Iniciando eliminación:', { tipo, idx });
-            
-            // SEGURIDAD: No permitir eliminar CURSOS (EE), solo UNIDADES (CC)
-            if (tipo === 'curso') {
-                showToast('⛔ Los cursos (EE) no se pueden eliminar. Solo se pueden editar o añadir nuevos.', 'warning');
-                console.warn('[eliminarUnidad] INTENTO BLOQUEADO: Se intentó eliminar un curso (EE)');
-                return;
-            }
-            
             const cursoId = getCursoActivoId();
-            console.log('[eliminarUnidad] cursoId:', cursoId);
+            if (!cursoId) return;
             
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                console.error('[eliminarUnidad] ERROR: No hay curso activo');
-                return;
-            }
-            
-            // CRÍTICO: Asegurar que unidadesPorCurso existe como objeto
-            if (!appData.config.unidadesPorCurso) {
-                console.warn('[eliminarUnidad] ⚠️ unidadesPorCurso no existía, inicializando...');
-                appData.config.unidadesPorCurso = {};
-            }
-            
-            // CRÍTICO: Asegurar que unidadesDefecto existe
-            if (!appData.config.unidadesDefecto) {
-                console.warn('[eliminarUnidad] ⚠️ unidadesDefecto no existía, inicializando...');
-                appData.config.unidadesDefecto = {
-                    cursos: ['1º ESO', '2º ESO', '3º ESO', '4º ESO'],
-                    unidades: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
-                };
-            }
-            
-            // Asegurar que la entrada existe en unidadesPorCurso (CRÍTICO: trabajar con datos originales)
+            // Inicializar si no existe
             if (!appData.config.unidadesPorCurso[cursoId]) {
-                console.log('[eliminarUnidad] Inicializando unidadesPorCurso para:', cursoId);
                 appData.config.unidadesPorCurso[cursoId] = {
-                    cursos: [...(appData.config.unidadesDefecto?.cursos || ['1º ESO', '2º ESO', '3º ESO', '4º ESO'])],
-                    unidades: [...(appData.config.unidadesDefecto?.unidades || ['1º A', '1º B', '2º A', '2º B'])]
+                    cursos: [...appData.config.unidadesDefecto.cursos],
+                    unidades: [...appData.config.unidadesDefecto.unidades]
                 };
             }
             
             const key = tipo === 'curso' ? 'cursos' : 'unidades';
-            const arrayUnidades = appData.config.unidadesPorCurso[cursoId][key];
-            
-            console.log('[eliminarUnidad] key:', key, '- Array:', arrayUnidades, '- Longitud:', arrayUnidades.length);
-            
-            // Validar índice
-            if (idx < 0 || idx >= arrayUnidades.length) {
-                showToast('⚠️ Error: índice de unidad no válido', 'error');
-                console.error('[eliminarUnidad] ERROR: Índice fuera de rango', {tipo, idx, longitud: arrayUnidades.length, array: arrayUnidades});
-                return;
-            }
-            
-            const nombreEliminado = arrayUnidades[idx];
+            const nombreEliminado = appData.config.unidadesPorCurso[cursoId][key][idx];
             const tipoNombre = tipo === 'curso' ? 'Curso' : 'Unidad';
+            appData.config.unidadesPorCurso[cursoId][key].splice(idx, 1);
             
-            console.log(`[eliminarUnidad] Se eliminará ${tipoNombre}: "${nombreEliminado}"`);
-            
-            // Confirmar eliminación
-            if (!confirm(`¿Eliminar ${tipoNombre.toLowerCase()} "${nombreEliminado}"?`)) {
-                console.log('[eliminarUnidad] Eliminación cancelada por usuario');
-                return;
-            }
-            
-            // Eliminar del array ORIGINAL (no una copia)
-            arrayUnidades.splice(idx, 1);
-            
-            console.log('[eliminarUnidad] Elemento eliminado. Nuevo estado:', arrayUnidades);
-            console.log('[eliminarUnidad] Guardando en localStorage...');
-            
-            // GUARDAR EN LOCALSTORAGE Y FIREBASE - CRÍTICO para persistir cambios
-            saveToLocalStorage().then(() => {
-                console.log('[eliminarUnidad] ✅ Guardado completado');
-                
-                // Re-renderizar la UI
-                renderGestionUnidades();
-                
-                // Actualizar los selects dinámicos en toda la app
-                actualizarTodosLosSelectsDeUnidades();
-                
-                showToast(`${tipoNombre} "${nombreEliminado}" eliminada correctamente`, 'success');
-                console.log('[eliminarUnidad] ✅ Proceso completado con éxito');
-            }).catch(err => {
-                console.error('[eliminarUnidad] ERROR al guardar:', err);
-                showToast('Error al guardar los cambios', 'error');
-            });
+            showToast(`${tipoNombre} "${nombreEliminado}" eliminada`, 'info');
+            renderGestionUnidades();
         }
         
         /**
@@ -6060,10 +5856,7 @@
          */
         function restaurarNivelesDefecto() {
             const cursoId = getCursoActivoId();
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                return;
-            }
+            if (!cursoId) return;
             
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
@@ -6072,19 +5865,9 @@
                 };
             }
             
-            // Confirmar restauración
-            if (!confirm('¿Restaurar los cursos (EE) a los valores por defecto?\n\nEsto reemplazará la configuración actual de cursos.')) {
-                return;
-            }
-            
             appData.config.unidadesPorCurso[cursoId].cursos = [...appData.config.unidadesDefecto.cursos];
-            
-            // GUARDAR EN LOCALSTORAGE
-            saveToLocalStorage();
-            
             renderGestionUnidades();
-            actualizarTodosLosSelectsDeUnidades();
-            showToast('✅ Cursos (EE) restaurados a valores por defecto', 'success');
+            showToast('Cursos restaurados a valores por defecto', 'success');
         }
         
         /**
@@ -6092,10 +5875,7 @@
          */
         function restaurarGruposDefecto() {
             const cursoId = getCursoActivoId();
-            if (!cursoId) {
-                showToast('⚠️ No hay un curso activo seleccionado', 'error');
-                return;
-            }
+            if (!cursoId) return;
             
             if (!appData.config.unidadesPorCurso[cursoId]) {
                 appData.config.unidadesPorCurso[cursoId] = {
@@ -6104,19 +5884,9 @@
                 };
             }
             
-            // Confirmar restauración
-            if (!confirm('¿Restorar las unidades (CC) a los valores por defecto?\n\nEsto reemplazará la configuración actual de unidades.')) {
-                return;
-            }
-            
             appData.config.unidadesPorCurso[cursoId].unidades = [...appData.config.unidadesDefecto.unidades];
-            
-            // GUARDAR EN LOCALSTORAGE
-            saveToLocalStorage();
-            
             renderGestionUnidades();
-            actualizarTodosLosSelectsDeUnidades();
-            showToast('✅ Unidades (CC) restauradas a valores por defecto', 'success');
+            showToast('Unidades restauradas a valores por defecto', 'success');
         }
         
         /**
@@ -8028,21 +7798,6 @@
                     }
                     if (data.actividades) {
                         appData.actividades = data.actividades;
-                    }
-                    
-                    // CRÍTICO: Asegurar que unidadesPorCurso siempre exista después de cargar de Firebase
-                    if (!appData.config.unidadesPorCurso) {
-                        console.log('[FIREBASE] Inicializando unidadesPorCurso (no existía en Firebase)');
-                        appData.config.unidadesPorCurso = {};
-                    }
-                    
-                    // CRÍTICO: Asegurar que unidadesDefecto siempre exista
-                    if (!appData.config.unidadesDefecto) {
-                        console.log('[FIREBASE] Inicializando unidadesDefecto (no existía en Firebase)');
-                        appData.config.unidadesDefecto = {
-                            cursos: ['1º ESO', '2º ESO', '3º ESO', '4º ESO'],
-                            unidades: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
-                        };
                     }
                     
                     // Ejecutar migración de datos antiguos (ej: "1 ESO" -> "1º ESO")
