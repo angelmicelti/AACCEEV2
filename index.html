@@ -301,6 +301,18 @@
             transform: rotate(180deg);
         }
 
+        /* Cabecera estática de tarjeta (sin acordeón): la tarjetas de los
+           cuadrantes del cronograma muestran su contenido directamente,
+           sin necesidad de desplegarlas */
+        .section-header {
+            padding: 1.25rem;
+            background: linear-gradient(135deg, rgba(13, 115, 119, 0.08) 0%, rgba(13, 115, 119, 0.03) 100%);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         /* Cronograma */
         .crono-cell {
             min-height: 100px;
@@ -678,36 +690,197 @@
             color: #b45309;
         }
 
-        /* Estilos AGRESIVOS para labels del modal de edición - Máxima prioridad */
-        #cronoEditModal label,
-        #cronoEditModal label *,
-        #cronoEditModal span[class*="font"],
-        #cronoEditModal .block,
-        #cronoEditModal [class*="text-sm"] {
-            color: #111827 !important;
-            font-weight: 600 !important;
+        /* ===== MODALES DE ACTIVIDAD: tema coherente con la app ===== */
+        /* Se usan variables CSS (que responden a data-theme) en lugar de las
+           clases dark: de Tailwind (que responden al tema del sistema operativo).
+           Esto garantiza contraste correcto en tema claro y oscuro. */
+        .activity-modal {
+            background: var(--card);
+            border: 1px solid var(--border);
         }
-        
-        /* Clase especial para forzar labels visibles */
+
+        .activity-modal .modal-header {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-modal .modal-footer {
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .activity-modal label,
+        .activity-modal label * {
+            color: var(--fg);
+        }
+
+        .activity-modal .modal-close-btn {
+            color: var(--muted);
+            background: transparent;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-modal .modal-close-btn:hover {
+            background: rgba(13, 115, 119, 0.12);
+            color: var(--accent);
+        }
+
+        /* Labels de formularios en modales: color según tema de la app */
         .force-visible-label {
-            color: #111827 !important;
-            font-weight: 700 !important;
-            text-shadow: none !important;
-            opacity: 1 !important;
+            color: var(--fg);
+            font-weight: 600;
         }
-        
-        /* Modo oscuro - labels blancos */
-        .dark #cronoEditModal label,
-        .dark #cronoEditModal label *,
-        .dark #cronoEditModal span[class*="font"],
-        [data-theme="dark"] #cronoEditModal label,
-        [data-theme="dark"] #cronoEditModal label * {
-            color: #f9fafb !important;
+
+        /* Campos deshabilitados dentro de modales (contraste correcto en ambos temas) */
+        .form-input-disabled {
+            background: var(--bg) !important;
+            opacity: 0.55;
+            cursor: not-allowed;
         }
-        
-        .dark .force-visible-label,
-        [data-theme="dark"] .force-visible-label {
-            color: #f9fafb !important;
+
+        /* ===== BOTONES TOGGLE DE CUADRANTES (vista usuario) ===== */
+        .btn-toggle {
+            background: var(--card);
+            border: 1.5px solid var(--border);
+            color: var(--muted);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: none;
+        }
+
+        .btn-toggle.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+
+        .btn-toggle.active:hover {
+            background: var(--accent-hover);
+            color: white;
+        }
+
+        /* ===== BOTÓN ELIMINAR EN ETIQUETAS DEL CRONOGRAMA ===== */
+        .activity-tag {
+            position: relative;
+            padding-right: 2.25rem;
+        }
+
+        .activity-tag-delete {
+            position: absolute;
+            top: 0.375rem;
+            right: 0.375rem;
+            width: 26px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .activity-tag:hover .activity-tag-delete,
+        .activity-tag-delete:focus-visible {
+            opacity: 1;
+        }
+
+        .activity-tag-delete:hover {
+            background: rgba(255, 255, 255, 0.95);
+            color: #dc2626;
+        }
+
+        /* En pantallas táctiles (sin hover) el botón siempre es visible */
+        @media (hover: none) and (pointer: coarse) {
+            .activity-tag-delete {
+                opacity: 0.9;
+            }
+        }
+
+        /* ===== ENLACES DE NORMATIVA ===== */
+        .enlace-item {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .enlace-item:hover {
+            border-color: var(--accent);
+        }
+
+        .enlace-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 0.625rem;
+            background: linear-gradient(135deg, rgba(13, 115, 119, 0.15) 0%, rgba(13, 115, 119, 0.05) 100%);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .enlace-titulo {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration: none;
+            word-break: break-word;
+        }
+
+        .enlace-titulo:hover {
+            text-decoration: underline;
+        }
+
+        .enlace-url {
+            color: var(--muted);
+            font-size: 0.75rem;
+            word-break: break-all;
+        }
+
+        .enlace-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(13, 115, 119, 0.1);
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .enlace-acciones {
+            display: flex;
+            gap: 0.375rem;
+            flex-shrink: 0;
         }
 
         .user-actions {
@@ -1053,6 +1226,13 @@
                 flex-wrap: wrap;
                 gap: 0.5rem;
             }
+
+            /* Cabecera estática móvil (mismo criterio que los acordeones) */
+            .section-header {
+                padding: 1rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
             
             /* Cronograma MÓVIL - Scroll horizontal */
             .crono-wrapper {
@@ -1077,6 +1257,7 @@
             .activity-tag {
                 font-size: 0.7rem;
                 padding: 0.4rem 0.6rem;
+                padding-right: 2rem; /* espacio para el botón de eliminar */
                 margin-bottom: 0.375rem;
                 word-break: break-word;
             }
@@ -1085,6 +1266,13 @@
                 font-size: 0.6rem;
             }
             
+            .activity-tag-delete {
+                width: 22px;
+                height: 22px;
+                top: 0.25rem;
+                right: 0.25rem;
+            }
+
             /* Tabla del cronograma */
             #cronogramaTable {
                 display: block;
@@ -1262,6 +1450,7 @@
             .activity-tag {
                 font-size: 0.65rem;
                 padding: 0.375rem 0.5rem;
+                padding-right: 1.75rem; /* espacio para el botón de eliminar */
             }
             
             .crono-cell {
@@ -1479,7 +1668,7 @@
                     </svg>
                     Actividades CC
                 </button>
-                <button class="mobile-nav-link" data-mobile-tab="cronograma" onclick="switchTabMobile('cronograma)">
+                <button id="mobileNavCronograma" class="mobile-nav-link" data-mobile-tab="cronograma" onclick="switchTabMobile('cronograma')">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
                     </svg>
@@ -1903,6 +2092,41 @@
                         <div class="accordion-content">
                             <div class="p-6">
                                 <div id="usersList" class="space-y-3 max-h-96 overflow-y-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enlaces de Interés - Normativa (Solo Admin) - Acordeón -->
+                    <div id="enlacesNormativaPanel" class="card overflow-hidden">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: var(--accent);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                </svg>
+                                Enlaces de Interés - Normativa
+                                <span id="enlacesNormativaCount" class="ml-2 text-sm font-normal px-2 py-0.5 rounded-full" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);">0 enlaces</span>
+                            </h2>
+                            <div class="flex items-center gap-3">
+                                <button onclick="event.stopPropagation(); abrirModalEnlace()" class="btn btn-primary btn-sm">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                    </svg>
+                                    Añadir Enlace
+                                </button>
+                                <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="p-6 space-y-4">
+                                <p class="text-sm" style="color: var(--muted);">
+                                    Gestiona los enlaces de interés sobre la normativa de cada curso escolar.
+                                    Los usuarios podrán consultarlos desde el botón «Normativa y enlaces» de su pantalla principal,
+                                    siempre referidos al curso escolar vigente.
+                                </p>
+                                <div id="enlacesNormativaList" class="space-y-2 max-h-96 overflow-y-auto"></div>
                             </div>
                         </div>
                     </div>
@@ -2754,54 +2978,110 @@
             <!-- Tab: Cronograma -->
             <section id="tab-cronograma" class="tab-content hidden">
                 <div class="space-y-4">
-                    <!-- Cronograma de Actividades EE - Acordeón -->
-                    <div class="card overflow-hidden">
-                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <!-- Barra de control de cuadrantes (visible/ocultar con botones toggle) -->
+                    <div class="card p-4">
+                        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                            <span class="text-sm font-semibold mr-1 hidden sm:inline" style="color: var(--muted);">Cuadrantes:</span>
+                            <button id="btnToggleCC" class="btn-toggle active" onclick="toggleCuadrante('CC')" aria-pressed="true" title="Ver el cronograma de actividades complementarias (AACC)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                Cronograma AACC
+                            </button>
+                            <button id="btnToggleEE" class="btn-toggle" onclick="toggleCuadrante('EE')" aria-pressed="false" title="Ver el cronograma de actividades extraescolares (AAEE)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                Cronograma AAEE
+                            </button>
+                            <button id="btnToggleNormativa" class="btn-toggle" onclick="toggleCuadrante('Normativa')" aria-pressed="false" title="Ver la normativa y los enlaces de interés">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                </svg>
+                                Normativa y enlaces
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Normativa y enlaces de interés (solo se muestra con el botón «Normativa y enlaces»;
+                         contenido siempre visible, sin acordeón) -->
+                    <div id="normativaCard" class="card overflow-hidden hidden">
+                        <div class="section-header">
+                            <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: var(--accent);">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                </svg>
+                                Normativa y Enlaces de Interés
+                            </h2>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <p class="text-sm" style="color: var(--muted);">Enlaces de interés sobre la normativa de cada curso escolar. Haz clic en un enlace para abrirlo en una nueva pestaña.</p>
+                            
+                            <!-- Filtro por curso escolar (solo admin/dace; el perfil usuario trabaja siempre con el curso vigente) -->
+                            <div id="normativaFiltroCursoRow" class="flex items-center gap-3 flex-wrap">
+                                <label for="normativaCursoFilter" class="text-sm font-medium" style="color: var(--fg);">Curso escolar:</label>
+                                <select id="normativaCursoFilter" class="form-input form-select" style="max-width: 280px;" onchange="renderNormativaUsuario()">
+                                    <option value="">Todos los cursos</option>
+                                </select>
+                            </div>
+                            <!-- Información del curso vigente (perfil usuario: no puede cambiar el año) -->
+                            <p id="normativaCursoInfo" class="text-sm hidden" style="color: var(--muted);"></p>
+                            
+                            <!-- Contenedor de botones de gestión (solo admin/dace) -->
+                            <div id="normativaGestionBtns" class="hidden">
+                                <button onclick="abrirModalEnlace()" class="btn btn-primary btn-sm">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                                    </svg>
+                                    Añadir Enlace
+                                </button>
+                            </div>
+                            
+                            <!-- Lista de enlaces -->
+                            <div id="normativaListUsuario" class="space-y-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- Cronograma de Actividades EE (solo visible con el botón «Cronograma AAEE»;
+                         contenido siempre visible, sin acordeón) -->
+                    <div id="cronoCardEE" class="card overflow-hidden hidden">
+                        <div class="section-header">
                             <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: var(--accent);">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
                                 </svg>
                                 Cronograma de Actividades EE
                             </h2>
-                            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
                         </div>
-                        <div class="accordion-content">
-                            <div class="p-6 space-y-4">
-                                <p class="text-sm" style="color: var(--muted);">Arrastra las etiquetas entre celdas para reorganizar las actividades</p>
-                                <div class="crono-wrapper overflow-x-auto">
-                                    <table id="cronogramaTable" class="w-full border-collapse cronograma-table">
-                                        <thead>
-                                            <tr>
-                                                <th class="p-3 text-left font-semibold" style="background: rgba(13, 115, 119, 0.1);">Curso</th>
-                                                <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Primer Trimestre</th>
-                                                <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Segundo Trimestre</th>
-                                                <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Tercer Trimestre</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="cronogramaBody"></tbody>
-                                    </table>
-                                </div>
+                        <div class="p-6 space-y-4">
+                            <p class="text-sm" style="color: var(--muted);">Arrastra las etiquetas entre celdas para reorganizar las actividades</p>
+                            <div class="crono-wrapper overflow-x-auto">
+                                <table id="cronogramaTable" class="w-full border-collapse cronograma-table">
+                                    <thead>
+                                        <tr>
+                                            <th class="p-3 text-left font-semibold" style="background: rgba(13, 115, 119, 0.1);">Curso</th>
+                                            <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Primer Trimestre</th>
+                                            <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Segundo Trimestre</th>
+                                            <th class="p-3 text-center font-semibold" style="background: rgba(13, 115, 119, 0.1);">Tercer Trimestre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cronogramaBody"></tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Cronograma de Actividades CC - Acordeón -->
-                    <div class="card overflow-hidden">
-                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <!-- Cronograma de Actividades CC (contenido siempre visible, sin acordeón) -->
+                    <div id="cronoCardCC" class="card overflow-hidden">
+                        <div class="section-header">
                             <h2 class="font-display text-lg font-bold flex items-center gap-2" style="color: var(--accent);">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
                                 </svg>
                                 Cronograma de Actividades CC
                             </h2>
-                            <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
                         </div>
-                        <div class="accordion-content">
-                            <div class="p-6">
+                        <div class="p-6">
                                 <!-- Controles de navegación del calendario -->
                                 <div class="flex items-center justify-between mb-6">
                                     <button onclick="cambiarSemanaCC(-1)" class="btn btn-secondary px-4 py-2 flex items-center gap-2" title="Semana anterior">
@@ -2898,7 +3178,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -3639,6 +3918,63 @@
         </div>
     </div>
 
+    <!-- Modal: Enlace de Interés / Normativa -->
+    <div id="enlaceModal" class="modal-overlay">
+        <div class="modal p-6" style="max-width: 520px;">
+            <div class="flex items-center justify-between mb-4">
+                <h2 id="enlaceModalTitle" class="font-display text-xl font-bold flex items-center gap-2" style="color: var(--accent);">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                    </svg>
+                    <span id="enlaceModalTitleText">Nuevo Enlace de Interés</span>
+                </h2>
+                <button onclick="cerrarModalEnlace()" class="p-2 rounded-lg hover:bg-opacity-10" style="background: rgba(0,0,0,0.05);" title="Cerrar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="enlaceForm" onsubmit="guardarEnlace(event)" class="space-y-4">
+                <input type="hidden" id="enlaceId">
+
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="enlaceTitulo">Título <span class="text-red-500">*</span></label>
+                    <input type="text" id="enlaceTitulo" class="form-input" placeholder="Ej: Resolución de 15 de julio - actividades extraescolares" required>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="enlaceUrl">URL <span class="text-red-500">*</span></label>
+                    <input type="text" id="enlaceUrl" class="form-input" placeholder="https://www.juntadeandalucia.es/..." required inputmode="url">
+                    <p class="text-xs mt-1" style="color: var(--muted);">Si no incluye el protocolo, se añadirá «https://» automáticamente.</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="enlaceDescripcion">Descripción</label>
+                    <textarea id="enlaceDescripcion" class="form-input" rows="2" placeholder="Breve descripción del contenido del enlace (opcional)"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1" for="enlaceCurso">Curso escolar <span class="text-red-500">*</span></label>
+                    <select id="enlaceCurso" class="form-input form-select" required>
+                        <!-- Las opciones se generan dinámicamente -->
+                    </select>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button type="button" onclick="cerrarModalEnlace()" class="btn btn-secondary flex-1">Cancelar</button>
+                    <button type="submit" class="btn btn-primary flex-1">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+                        </svg>
+                        Guardar Enlace
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Modal: Exportar Datos -->
     <div id="exportarModal" class="modal-overlay">
         <div class="modal p-6" style="max-width: 520px;">
@@ -3741,9 +4077,9 @@
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="cerrarModalCronoEdit()"></div>
         
         <!-- Modal Content -->
-        <div class="absolute inset-4 md:inset-10 lg:inset-16 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <div class="absolute inset-4 md:inset-10 lg:inset-16 rounded-2xl shadow-2xl overflow-hidden flex flex-col activity-modal">
             <!-- Header -->
-            <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-200 dark:border-gray-700" style="background: linear-gradient(135deg, rgba(13, 115, 119, 0.05) 0%, transparent 100%);">
+            <div class="modal-header flex items-center justify-between p-4 md:p-6" style="background: linear-gradient(135deg, rgba(13, 115, 119, 0.08) 0%, rgba(13, 115, 119, 0.02) 100%);">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: var(--accent);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
@@ -3756,7 +4092,7 @@
                         <p id="cronoEditActivityName" class="text-sm" style="color: var(--muted);">Nombre de la actividad</p>
                     </div>
                 </div>
-                <button onclick="cerrarModalCronoEdit()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <button onclick="cerrarModalCronoEdit()" class="modal-close-btn" title="Cerrar">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                     </svg>
@@ -3848,7 +4184,13 @@
             </div>
             
             <!-- Footer -->
-            <div class="flex gap-3 p-4 md:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+            <div class="modal-footer flex gap-3 p-4 md:p-6">
+                <button onclick="eliminarActividadDesdeCrono(document.getElementById('cronoEditId').value)" class="btn btn-danger flex-shrink-0" title="Eliminar esta actividad">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    Eliminar
+                </button>
                 <button onclick="cerrarModalCronoEdit()" class="btn btn-secondary flex-1">Cancelar</button>
                 <button onclick="guardarCronoEdit()" class="btn btn-primary flex-1">Guardar Cambios</button>
             </div>
@@ -3861,9 +4203,9 @@
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="cerrarModalCCCalendario()"></div>
         
         <!-- Modal Content -->
-        <div class="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div class="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-full md:max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] activity-modal">
             <!-- Header -->
-            <div class="flex items-center justify-between p-4 md:p-6 border-b border-gray-200 dark:border-gray-700" style="background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(13, 115, 119, 0.05) 100%);">
+            <div class="modal-header flex items-center justify-between p-4 md:p-6" style="background: linear-gradient(135deg, rgba(217, 119, 6, 0.08) 0%, rgba(13, 115, 119, 0.05) 100%);">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #d97706 0%, #0d7377 100%);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
@@ -3876,7 +4218,7 @@
                         <p id="ccModalSubtitulo" class="text-sm" style="color: var(--muted);">Fecha seleccionada</p>
                     </div>
                 </div>
-                <button onclick="cerrarModalCCCalendario()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <button onclick="cerrarModalCCCalendario()" class="modal-close-btn" title="Cerrar">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                     </svg>
@@ -3935,7 +4277,7 @@
             </div>
             
             <!-- Footer con botón eliminar (solo en modo edición) -->
-            <div class="flex gap-3 p-4 md:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+            <div class="modal-footer flex gap-3 p-4 md:p-6">
                 <button id="ccModalBtnEliminar" onclick="eliminarDesdeModalCC()" class="btn bg-red-500 hover:bg-red-600 text-white px-4 hidden transition-colors">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline mr-1">
                         <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
@@ -4131,7 +4473,10 @@
                     unidades: ['1º A', '1º B', '2º A', '2º B', '3º A', '3º B', '4º A', '4º B']
                 }
             },
-            actividades: []
+            actividades: [],
+            // Enlaces de interés / normativa por curso escolar
+            // [{id, titulo, url, descripcion, cursoEscolarId, createdAt, updatedAt}]
+            enlacesNormativa: []
         };
 
         // ==================== USER AUTHENTICATION SYSTEM ====================
@@ -4289,6 +4634,14 @@
             splash.classList.add('visible');
             app.classList.add('hidden');
             
+            // Inicializar tabs ANTES de aplicar restricciones de rol,
+            // para que los clicks programáticos (p.ej. activar la pestaña
+            // Cronogramas para usuarios normales) funcionen correctamente
+            if (!tabsInitialized) {
+                initTabs();
+                tabsInitialized = true;
+            }
+            
             updateSessionUI();
             applyRoleRestrictions();
             
@@ -4440,6 +4793,11 @@
                     showToast('Error al cargar datos locales. Se usarán valores por defecto.', 'warning');
                     // Mantener los valores por defecto ya inicializados
                 }
+            }
+            
+            // Normalizar enlacesNormativa (compatibilidad con datos antiguos)
+            if (!Array.isArray(appData.enlacesNormativa)) {
+                appData.enlacesNormativa = [];
             }
             
             // Ejecutar migración de datos si es necesario
@@ -4872,13 +5230,11 @@
                 return;
             }
             
-            // Usuario normal: solo ve Cronograma
-            Object.keys(mobileNavItems).forEach(key => {
-                if (key === 'cronograma') {
-                    if (mobileNavItems[key]) mobileNavItems[key].style.display = '';
-                } else {
-                    if (mobileNavItems[key]) mobileNavItems[key].style.display = 'none';
-                }
+            // Usuario normal: sin pestañas de navegación (ve directamente el
+            // cronograma y navega con los botones de cuadrantes). El menú
+            // móvil solo conserva la información de usuario y el cierre de sesión.
+            Object.values(mobileNavItems).forEach(item => {
+                if (item) item.style.display = 'none';
             });
         }
 
@@ -4906,7 +5262,9 @@
                 return;
             }
             
-            // Usuario normal: solo puede ver cronograma
+            // Usuario normal: sin pestañas de navegación. Ve directamente la
+            // pantalla de cronogramas y navega con los botones de cuadrantes
+            // («Cronograma AACC», «Cronograma AAEE» y «Normativa y enlaces»)
             const tabsToHide = ['config', 'actividades', 'actividades-cc', 'informes'];
             tabsToHide.forEach(tabId => {
                 const tabBtn = document.querySelector(`[data-tab="${tabId}"]`);
@@ -4920,11 +5278,22 @@
                 }
             });
             
-            // Forzar mostrar solo cronograma
+            // El botón «Cronogramas» ya no tiene sentido en este perfil (es la
+            // única pantalla): se elimina junto con la barra de navegación
             const cronoTab = document.querySelector('[data-tab="cronograma"]');
+            if (cronoTab) {
+                cronoTab.style.display = 'none';
+            }
+            const navTabsContainer = document.querySelector('nav.nav-tabs');
+            if (navTabsContainer) {
+                navTabsContainer.style.display = 'none';
+            }
             
             // Filtrar también el menú móvil
             filterMobileNavByRole();
+            
+            // Activar la pestaña de cronogramas (el click programático
+            // funciona aunque el botón esté oculto)
             if (cronoTab) {
                 cronoTab.click();
             }
@@ -5603,6 +5972,9 @@
             // Actualizar unidades configurables
             renderGestionUnidades();
             actualizarTodosLosSelectsDeUnidades();
+            // Renderizar enlaces de normativa (sección admin y pantalla de usuario)
+            renderEnlacesNormativa();
+            renderNormativaUsuario();
         }
 
         function renderTrimestres() {
@@ -6516,11 +6888,89 @@
                 editActivityFromCrono(actividad.id);
             });
             
+            // Botón de eliminar actividad (papelera) sobre la etiqueta
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'activity-tag-delete';
+            deleteBtn.title = 'Eliminar actividad';
+            deleteBtn.setAttribute('aria-label', 'Eliminar actividad ' + actividad.nombre);
+            deleteBtn.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                </svg>
+            `;
+            // Evitar que el botón dispare el arrastre o la edición (doble clic) de la etiqueta
+            deleteBtn.addEventListener('mousedown', (e) => e.stopPropagation());
+            deleteBtn.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+            });
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                eliminarActividadDesdeCrono(actividad.id);
+            });
+            tag.appendChild(deleteBtn);
+            
             // Indicador visual de que es editable
             tag.style.cursor = 'pointer';
-            tag.title = 'Doble clic para editar';
+            tag.title = 'Doble clic para editar · Papelera para eliminar';
             
             return tag;
+        }
+
+        // ==================== ELIMINACIÓN DESDE CRONOGRAMA ====================
+        /**
+         * Elimina una actividad EE directamente desde el cronograma.
+         * Si la actividad ya tiene datos de ejecución (fecha, profesorado u
+         * observaciones) se muestra un aviso adicional antes de borrarla.
+         * @param {string} activityId - ID de la actividad a eliminar
+         */
+        function eliminarActividadDesdeCrono(activityId) {
+            if (!activityId) return;
+            
+            const act = appData.actividades.find(a => a.id === activityId);
+            if (!act) {
+                console.error('[CRONO] Actividad no encontrada:', activityId);
+                showToast('Actividad no encontrada', 'error');
+                return;
+            }
+            
+            // Comprobar si la actividad tiene datos de ejecución
+            const tieneFecha = act.fecha && String(act.fecha).trim() !== '';
+            const tieneProfesorado = act.profesorado && Array.isArray(act.profesorado) && act.profesorado.length > 0;
+            const tieneObservaciones = act.observaciones && String(act.observaciones).trim() !== '';
+            const tieneDatosEjecucion = tieneFecha || tieneProfesorado || tieneObservaciones;
+            
+            // Construir mensaje de confirmación
+            let mensaje = `¿Eliminar la actividad "${act.nombre}"?`;
+            if (tieneDatosEjecucion) {
+                const detalles = [];
+                if (tieneFecha) detalles.push('fecha de realización');
+                if (tieneProfesorado) detalles.push('profesorado');
+                if (tieneObservaciones) detalles.push('observaciones');
+                mensaje = `ATENCIÓN: "${act.nombre}" tiene datos de ejecución (${detalles.join(', ')}).\n\n¿Seguro que quieres eliminarla permanentemente?`;
+            }
+            
+            if (!confirm(mensaje)) return;
+            
+            // Eliminar la actividad
+            appData.actividades = appData.actividades.filter(a => a.id !== activityId);
+            saveToLocalStorage();
+            
+            // Actualizar vistas afectadas
+            renderCronograma();
+            renderEditSelect();
+            updateTrimestreOptions();
+            
+            // Si el modal de edición estaba abierto con esta actividad, cerrarlo
+            const cronoEditModal = document.getElementById('cronoEditModal');
+            if (cronoEditModal && !cronoEditModal.classList.contains('hidden')) {
+                cerrarModalCronoEdit();
+            }
+            
+            showToast('Actividad eliminada correctamente', 'success');
+            console.log('[CRONO] Actividad eliminada desde cronograma:', act.nombre);
         }
 
         // ==================== EDICIÓN DESDE CRONOGRAMA ====================
@@ -6578,44 +7028,20 @@
             if (act.noRealizada) {
                 noRealizadaCheckbox.checked = true;
                 fechaInput.disabled = true;
-                fechaInput.classList.add('opacity-50', 'bg-gray-100');
+                fechaInput.classList.add('form-input-disabled');
             } else {
                 noRealizadaCheckbox.checked = false;
                 fechaInput.disabled = false;
-                fechaInput.classList.remove('opacity-50', 'bg-gray-100');
+                fechaInput.classList.remove('form-input-disabled');
             }
             
             // Mostrar el modal
             document.getElementById('cronoEditModal').classList.remove('hidden');
             document.body.style.overflow = 'hidden'; // Prevenir scroll del fondo
             
-            // FORZAR colores de labels via JavaScript (solución definitiva)
-            setTimeout(() => {
-                const modal = document.getElementById('cronoEditModal');
-                if (!modal) return;
-                
-                // Detectar si estamos en modo oscuro
-                const isDark = document.documentElement.classList.contains('dark') || 
-                               document.documentElement.getAttribute('data-theme') === 'dark' ||
-                               window.matchMedia('(prefers-color-scheme: dark)').matches;
-                
-                const labelColor = isDark ? '#f9fafb' : '#111827';
-                
-                // Aplicar a todos los labels del modal
-                modal.querySelectorAll('label').forEach(label => {
-                    label.style.setProperty('color', labelColor, 'important');
-                    label.style.setProperty('font-weight', '700', 'important');
-                    label.style.setProperty('opacity', '1', 'important');
-                });
-                
-                // Aplicar a los spans con clase font-medium dentro del modal
-                modal.querySelectorAll('span.font-medium, span[class*="font"]').forEach(span => {
-                    if (!span.classList.contains('text-red-500') && 
-                        !span.classList.contains('text-red-600')) {
-                        span.style.setProperty('color', labelColor, 'important');
-                    }
-                });
-            }, 10);
+            // Nota: los colores del modal se gestionan ahora con variables CSS
+            // (var(--fg), var(--card), etc.), por lo que ya no es necesario
+            // forzar los colores de los labels desde JavaScript.
         }
         
         function cerrarModalCronoEdit() {
@@ -6630,10 +7056,10 @@
             if (checkbox.checked) {
                 fechaInput.value = '';
                 fechaInput.disabled = true;
-                fechaInput.classList.add('opacity-50', 'bg-gray-100');
+                fechaInput.classList.add('form-input-disabled');
             } else {
                 fechaInput.disabled = false;
-                fechaInput.classList.remove('opacity-50', 'bg-gray-100');
+                fechaInput.classList.remove('form-input-disabled');
             }
         }
         
@@ -6657,7 +7083,7 @@
             
             container.innerHTML = DEPARTAMENTOS.slice(0, parseInt(count)).map((dept, i) => `
                 <div>
-                    <label class="block text-sm font-medium mb-1" style="color: #1f2937; font-weight: 600;">Departamento ${i + 1}</label>
+                    <label class="block text-sm font-medium mb-1" style="color: var(--fg); font-weight: 600;">Departamento ${i + 1}</label>
                     <select id="cronoEditDept${i}" class="form-input form-select">
                         ${DEPARTAMENTOS.map(d => `<option value="${d}" ${selectedDepts[i] === d ? 'selected' : ''}>${d}</option>`).join('')}
                     </select>
@@ -6671,7 +7097,7 @@
             
             container.innerHTML = Array.from({length: parseInt(count)}, (_, i) => `
                 <div>
-                    <label class="block text-sm font-medium mb-1" style="color: #1f2937; font-weight: 600;">Profesor/a ${i + 1}</label>
+                    <label class="block text-sm font-medium mb-1" style="color: var(--fg); font-weight: 600;">Profesor/a ${i + 1}</label>
                     <input type="text" id="cronoEditProf${i}" class="form-input" placeholder="Nombre completo" value="${profesores[i] || ''}">
                 </div>
             `).join('');
@@ -7474,10 +7900,10 @@
             if (checkbox.checked) {
                 fechaInput.value = ''; // Limpiar fecha
                 fechaInput.disabled = true; // Bloquear campo
-                fechaInput.classList.add('opacity-50', 'bg-gray-100');
+                fechaInput.classList.add('form-input-disabled');
             } else {
                 fechaInput.disabled = false; // Desbloquear campo
-                fechaInput.classList.remove('opacity-50', 'bg-gray-100');
+                fechaInput.classList.remove('form-input-disabled');
             }
         }
         // ==================== EDIT ACTIVIDAD ====================
@@ -7525,11 +7951,11 @@
             if (act.noRealizada) {
                 noRealizadaCheckbox.checked = true;
                 fechaInput.disabled = true;
-                fechaInput.classList.add('opacity-50', 'bg-gray-100');
+                fechaInput.classList.add('form-input-disabled');
             } else {
                 noRealizadaCheckbox.checked = false;
                 fechaInput.disabled = false;
-                fechaInput.classList.remove('opacity-50', 'bg-gray-100');
+                fechaInput.classList.remove('form-input-disabled');
             }
             
             // Cargar coste por alumno
@@ -8007,6 +8433,7 @@
                 await dbRef.update({
                     config: appData.config,
                     actividades: appData.actividades,
+                    enlacesNormativa: appData.enlacesNormativa || [],
                     lastUpdated: new Date().toISOString()
                 });
                 console.log('Datos guardados en Firebase (usuarios preservados)');
@@ -8028,6 +8455,15 @@
                     }
                     if (data.actividades) {
                         appData.actividades = data.actividades;
+                    }
+                    // Cargar enlaces de normativa (si existen)
+                    if (Array.isArray(data.enlacesNormativa)) {
+                        appData.enlacesNormativa = data.enlacesNormativa;
+                    }
+                    
+                    // Normalizar enlacesNormativa
+                    if (!Array.isArray(appData.enlacesNormativa)) {
+                        appData.enlacesNormativa = [];
                     }
                     
                     // CRÍTICO: Asegurar que unidadesPorCurso siempre exista después de cargar de Firebase
@@ -9846,10 +10282,22 @@
                     cerrarModalUsuario();
                 }
                 
+                // Cerrar modal de enlace de normativa si está abierto
+                const enlaceModal = document.getElementById('enlaceModal');
+                if (enlaceModal && enlaceModal.classList.contains('active')) {
+                    cerrarModalEnlace();
+                }
+                
                 // Cerrar modal de edición de cronograma si está abierto
                 const cronoEditModal = document.getElementById('cronoEditModal');
-                if (cronoEditModal && cronoEditModal.classList.contains('active')) {
-                    cerrarCronoEditModal();
+                if (cronoEditModal && !cronoEditModal.classList.contains('hidden')) {
+                    cerrarModalCronoEdit();
+                }
+                
+                // Cerrar modal de actividad CC desde calendario si está abierto
+                const ccCalendarioModal = document.getElementById('ccCalendarioModal');
+                if (ccCalendarioModal && !ccCalendarioModal.classList.contains('hidden')) {
+                    cerrarModalCCCalendario();
                 }
             }
         });
@@ -10692,6 +11140,443 @@ function guardarActividadesCC() {
         renderizarCalendarioCC();
     }
 }
+
+// ==================== CUADRANTES: BOTONES EXCLUSIVOS (SOLO UNO ACTIVO) ====================
+/**
+ * Mapa de botones -> tarjetas del cronograma.
+ * Cada botón muestra el cronograma de actividades complementarias (AACC),
+ * el de extraescolares (AAEE) o la pantalla de normativa y enlaces.
+ * Solo puede mantenerse activo UNO de los tres a la vez.
+ */
+const CRONO_TOGGLES = {
+    'EE': { btn: 'btnToggleEE', card: 'cronoCardEE' },
+    'CC': { btn: 'btnToggleCC', card: 'cronoCardCC' },
+    'Normativa': { btn: 'btnToggleNormativa', card: 'normativaCard' }
+};
+
+/**
+ * Muestra el cuadrante correspondiente al botón pulsado y oculta los demás.
+ * Comportamiento exclusivo: solo uno de los tres botones permanece activo,
+ * mostrándose únicamente la información del cuadrante pulsado.
+ * @param {string} tipo - 'EE' | 'CC' | 'Normativa'
+ */
+function toggleCuadrante(tipo) {
+    const config = CRONO_TOGGLES[tipo];
+    if (!config) return;
+    
+    const card = document.getElementById(config.card);
+    const btn = document.getElementById(config.btn);
+    if (!card || !btn) return;
+    
+    // Activar exclusivamente el cuadrante pulsado (los demás se ocultan)
+    Object.values(CRONO_TOGGLES).forEach(cfg => {
+        const c = document.getElementById(cfg.card);
+        const b = document.getElementById(cfg.btn);
+        if (!c || !b) return;
+        const esPulsado = cfg === config;
+        c.classList.toggle('hidden', !esPulsado);
+        b.classList.toggle('active', esPulsado);
+        b.setAttribute('aria-pressed', esPulsado ? 'true' : 'false');
+    });
+    
+    // Actualizar el contenido del cuadrante que se muestra
+    if (tipo === 'Normativa') {
+        renderNormativaUsuario();
+    } else if (tipo === 'EE') {
+        renderCronograma();
+    } else if (tipo === 'CC') {
+        renderizarCalendarioCC();
+    }
+}
+
+// ==================== ENLACES DE INTERÉS / NORMATIVA ====================
+
+let editingEnlaceId = null; // ID del enlace siendo editado
+
+/**
+ * Obtiene el array de enlacesNormativa garantizando que existe
+ */
+function getEnlacesNormativa() {
+    if (!Array.isArray(appData.enlacesNormativa)) {
+        appData.enlacesNormativa = [];
+    }
+    return appData.enlacesNormativa;
+}
+
+/**
+ * Guarda los enlaces de normativa (localStorage + Firebase) y actualiza vistas
+ */
+function guardarEnlacesNormativa() {
+    if (typeof saveToLocalStorage === 'function') {
+        saveToLocalStorage();
+    }
+    renderEnlacesNormativa();
+    renderNormativaUsuario();
+}
+
+/**
+ * Obtiene el nombre de un curso escolar a partir de su ID
+ */
+function getNombreCursoEscolar(cursoId) {
+    if (!cursoId) return 'Sin curso';
+    const curso = (appData?.config?.cursosEscolares || []).find(c => c.id === cursoId);
+    return curso ? curso.nombre : 'Curso desconocido';
+}
+
+/**
+ * Normaliza una URL: añade https:// si falta el protocolo
+ */
+function normalizarUrl(url) {
+    let urlLimpia = url.trim();
+    if (urlLimpia && !/^https?:\/\//i.test(urlLimpia)) {
+        urlLimpia = 'https://' + urlLimpia;
+    }
+    // Validar formato final
+    try {
+        new URL(urlLimpia);
+        return urlLimpia;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Rellena el selector de cursos escolares del modal de enlace
+ */
+function populateEnlaceCursoSelect(selectedCursoId = null) {
+    const select = document.getElementById('enlaceCurso');
+    if (!select) return;
+    
+    const cursos = appData?.config?.cursosEscolares || [];
+    const cursoActivo = appData?.config?.cursoEscolarActivo || null;
+    
+    select.innerHTML = '';
+    
+    if (cursos.length === 0) {
+        // Sin cursos configurados: opción única genérica
+        select.innerHTML = '<option value="sin_curso">Curso actual (sin configurar)</option>';
+        return;
+    }
+    
+    cursos.forEach(curso => {
+        const option = document.createElement('option');
+        option.value = curso.id;
+        option.textContent = curso.nombre;
+        select.appendChild(option);
+    });
+    
+    // Seleccionar: el curso del enlace (edición) o el activo (nuevo)
+    const valorSeleccionado = selectedCursoId || cursoActivo || (cursos.length > 0 ? cursos[0].id : '');
+    select.value = valorSeleccionado;
+}
+
+/**
+ * Abre el modal para crear o editar un enlace de normativa
+ * @param {string} enlaceId - ID del enlace a editar (opcional)
+ */
+function abrirModalEnlace(enlaceId = null) {
+    // Solo administradores (o DACE) pueden gestionar enlaces
+    if (!currentUser || (currentUser.rol !== 'admin' && currentUser.rol !== 'dace')) {
+        showToast('No tienes permisos para gestionar los enlaces de normativa', 'error');
+        return;
+    }
+    
+    editingEnlaceId = enlaceId;
+    
+    const tituloText = document.getElementById('enlaceModalTitleText');
+    const form = document.getElementById('enlaceForm');
+    
+    if (enlaceId) {
+        // Modo edición
+        const enlace = getEnlacesNormativa().find(e => e.id === enlaceId);
+        if (!enlace) {
+            showToast('Enlace no encontrado', 'error');
+            return;
+        }
+        if (tituloText) tituloText.textContent = 'Editar Enlace de Interés';
+        document.getElementById('enlaceTitulo').value = enlace.titulo || '';
+        document.getElementById('enlaceUrl').value = enlace.url || '';
+        document.getElementById('enlaceDescripcion').value = enlace.descripcion || '';
+        populateEnlaceCursoSelect(enlace.cursoEscolarId);
+    } else {
+        // Modo creación
+        if (tituloText) tituloText.textContent = 'Nuevo Enlace de Interés';
+        if (form) form.reset();
+        document.getElementById('enlaceId').value = '';
+        populateEnlaceCursoSelect();
+    }
+    
+    const modal = document.getElementById('enlaceModal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+/**
+ * Cierra el modal de enlace
+ */
+function cerrarModalEnlace() {
+    const modal = document.getElementById('enlaceModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    editingEnlaceId = null;
+}
+
+/**
+ * Guarda un enlace de normativa (crear o actualizar)
+ * @param {Event} event - Evento submit del formulario
+ */
+function guardarEnlace(event) {
+    event.preventDefault();
+    
+    // Solo administradores (o DACE) pueden gestionar enlaces
+    if (!currentUser || (currentUser.rol !== 'admin' && currentUser.rol !== 'dace')) {
+        showToast('No tienes permisos para gestionar los enlaces de normativa', 'error');
+        return;
+    }
+    
+    const titulo = document.getElementById('enlaceTitulo').value.trim();
+    const urlRaw = document.getElementById('enlaceUrl').value.trim();
+    const descripcion = document.getElementById('enlaceDescripcion').value.trim();
+    const cursoValue = document.getElementById('enlaceCurso').value;
+    const cursoEscolarId = (cursoValue && cursoValue !== 'sin_curso') ? cursoValue : null;
+    
+    // Validaciones
+    if (!titulo) {
+        showToast('El título del enlace es obligatorio', 'error');
+        return;
+    }
+    
+    const url = normalizarUrl(urlRaw);
+    if (!url) {
+        showToast('La URL no es válida. Ejemplo: https://www.ejemplo.com', 'error');
+        return;
+    }
+    
+    const enlaces = getEnlacesNormativa();
+    
+    if (editingEnlaceId) {
+        // Actualizar enlace existente
+        const index = enlaces.findIndex(e => e.id === editingEnlaceId);
+        if (index === -1) {
+            showToast('Enlace no encontrado', 'error');
+            return;
+        }
+        enlaces[index] = {
+            ...enlaces[index],
+            titulo,
+            url,
+            descripcion,
+            cursoEscolarId,
+            updatedAt: new Date().toISOString()
+        };
+        showToast('Enlace actualizado correctamente', 'success');
+    } else {
+        // Crear nuevo enlace
+        enlaces.push({
+            id: 'enlace_' + Date.now(),
+            titulo,
+            url,
+            descripcion,
+            cursoEscolarId,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        });
+        showToast('Enlace añadido correctamente', 'success');
+    }
+    
+    guardarEnlacesNormativa();
+    cerrarModalEnlace();
+}
+
+/**
+ * Elimina un enlace de normativa
+ * @param {string} enlaceId - ID del enlace a eliminar
+ */
+function eliminarEnlace(enlaceId) {
+    // Solo administradores (o DACE) pueden gestionar enlaces
+    if (!currentUser || (currentUser.rol !== 'admin' && currentUser.rol !== 'dace')) {
+        showToast('No tienes permisos para gestionar los enlaces de normativa', 'error');
+        return;
+    }
+    
+    const enlace = getEnlacesNormativa().find(e => e.id === enlaceId);
+    if (!enlace) return;
+    
+    if (!confirm(`¿Eliminar el enlace "${enlace.titulo}"?`)) return;
+    
+    appData.enlacesNormativa = getEnlacesNormativa().filter(e => e.id !== enlaceId);
+    guardarEnlacesNormativa();
+    showToast('Enlace eliminado correctamente', 'success');
+}
+
+/**
+ * Genera el HTML de una tarjeta de enlace
+ * @param {Object} enlace - Enlace a renderizar
+ * @param {boolean} conAcciones - Incluir botones de edición/eliminación
+ * @returns {string} HTML del item
+ */
+function renderEnlaceItem(enlace, conAcciones) {
+    const safeTitulo = escapeHTML(enlace.titulo);
+    const safeUrl = escapeHTML(enlace.url);
+    const safeUrlAttr = escapeAttr(enlace.url);
+    const safeDesc = enlace.descripcion ? escapeHTML(enlace.descripcion) : '';
+    const nombreCurso = escapeHTML(getNombreCursoEscolar(enlace.cursoEscolarId));
+    const fecha = enlace.createdAt ? formatDate(enlace.createdAt.split('T')[0]) : '';
+    
+    return `
+        <div class="enlace-item">
+            <div class="enlace-icon" title="Abrir enlace">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <a href="${safeUrlAttr}" target="_blank" rel="noopener noreferrer" class="enlace-titulo">${safeTitulo}</a>
+                <div class="enlace-url">${safeUrl}</div>
+                ${safeDesc ? `<p class="text-sm mt-1" style="color: var(--fg);">${safeDesc}</p>` : ''}
+                <div class="flex items-center gap-2 mt-2 flex-wrap">
+                    <span class="enlace-badge">🎓 ${nombreCurso}</span>
+                    ${fecha ? `<span class="text-xs" style="color: var(--muted);">Añadido el ${fecha}</span>` : ''}
+                </div>
+            </div>
+            ${conAcciones ? `
+            <div class="enlace-acciones">
+                <button onclick="abrirModalEnlace('${escapeAttr(enlace.id)}')" class="btn btn-sm btn-secondary py-1 px-2" title="Editar enlace">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                </button>
+                <button onclick="eliminarEnlace('${escapeAttr(enlace.id)}')" class="btn btn-sm btn-danger py-1 px-2" title="Eliminar enlace">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                </button>
+            </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+/**
+ * Renderiza la lista de enlaces en la sección de administración (Configuración)
+ */
+function renderEnlacesNormativa() {
+    const list = document.getElementById('enlacesNormativaList');
+    const countBadge = document.getElementById('enlacesNormativaCount');
+    if (!list) return;
+    
+    const enlaces = getEnlacesNormativa();
+    
+    // Actualizar contador
+    if (countBadge) {
+        countBadge.textContent = enlaces.length + (enlaces.length === 1 ? ' enlace' : ' enlaces');
+    }
+    
+    if (enlaces.length === 0) {
+        list.innerHTML = '<p class="text-sm text-center py-4" style="color: var(--muted);">No hay enlaces de interés añadidos todavía.<br>Usa el botón «Añadir Enlace» para crear el primero.</p>';
+        return;
+    }
+    
+    // Ordenar: curso activo primero, luego por fecha de creación (más reciente primero)
+    const cursoActivo = appData?.config?.cursoEscolarActivo;
+    const enlacesOrdenados = [...enlaces].sort((a, b) => {
+        const aActivo = a.cursoEscolarId === cursoActivo ? 0 : 1;
+        const bActivo = b.cursoEscolarId === cursoActivo ? 0 : 1;
+        if (aActivo !== bActivo) return aActivo - bActivo;
+        return (b.createdAt || '').localeCompare(a.createdAt || '');
+    });
+    
+    list.innerHTML = enlacesOrdenados.map(enlace => renderEnlaceItem(enlace, true)).join('');
+}
+
+/**
+ * Rellena el selector de filtro de curso de la pantalla de normativa (vista usuario)
+ */
+function populateNormativaCursoFilter() {
+    const select = document.getElementById('normativaCursoFilter');
+    if (!select) return;
+    
+    const row = document.getElementById('normativaFiltroCursoRow');
+    const info = document.getElementById('normativaCursoInfo');
+    const cursos = appData?.config?.cursosEscolares || [];
+    const cursoActivo = appData?.config?.cursoEscolarActivo || null;
+    
+    // El perfil usuario no puede cambiar el año: todo lo que consulta
+    // se refiere al curso escolar vigente. El filtro queda oculto y fijado.
+    const esUsuarioNormal = currentUser && currentUser.rol !== 'admin' && currentUser.rol !== 'dace';
+    if (row) row.classList.toggle('hidden', esUsuarioNormal);
+    if (info) {
+        info.classList.toggle('hidden', !esUsuarioNormal);
+        if (esUsuarioNormal) {
+            info.textContent = cursoActivo
+                ? `Curso escolar vigente: ${getNombreCursoEscolar(cursoActivo)}`
+                : 'No hay ningún curso escolar activo configurado';
+        }
+    }
+    
+    const valorActual = select.value;
+    select.innerHTML = '<option value="">Todos los cursos</option>';
+    cursos.forEach(curso => {
+        const option = document.createElement('option');
+        option.value = curso.id;
+        option.textContent = curso.nombre;
+        select.appendChild(option);
+    });
+    
+    if (esUsuarioNormal) {
+        // Fijar siempre el selector al curso vigente para el perfil usuario
+        select.value = cursoActivo || '';
+    } else if (valorActual && cursos.some(c => c.id === valorActual)) {
+        // Restaurar selección previa, o por defecto el curso activo
+        select.value = valorActual;
+    } else if (cursoActivo && cursos.some(c => c.id === cursoActivo)) {
+        select.value = cursoActivo;
+    }
+}
+
+/**
+ * Renderiza la lista de enlaces en la pantalla de normativa de la vista usuario
+ * (cuadrante «Normativa y enlaces», mostrado con los botones exclusivos)
+ */
+function renderNormativaUsuario() {
+    const list = document.getElementById('normativaListUsuario');
+    if (!list) return;
+    
+    // Rellenar filtro de cursos
+    populateNormativaCursoFilter();
+    
+    // Mostrar/ocultar botones de gestión según rol (admin/dace)
+    const gestionBtns = document.getElementById('normativaGestionBtns');
+    if (gestionBtns) {
+        const puedeGestionar = currentUser && (currentUser.rol === 'admin' || currentUser.rol === 'dace');
+        gestionBtns.classList.toggle('hidden', !puedeGestionar);
+    }
+    
+    // El perfil usuario no puede cambiar el año: siempre el curso vigente
+    const esUsuarioNormal = currentUser && currentUser.rol !== 'admin' && currentUser.rol !== 'dace';
+    const filtroCurso = esUsuarioNormal
+        ? (appData?.config?.cursoEscolarActivo || '')
+        : (document.getElementById('normativaCursoFilter')?.value || '');
+    let enlaces = getEnlacesNormativa();
+    
+    // Filtrar por curso seleccionado
+    if (filtroCurso) {
+        enlaces = enlaces.filter(e => e.cursoEscolarId === filtroCurso);
+    }
+    
+    if (enlaces.length === 0) {
+        list.innerHTML = '<p class="text-sm text-center py-6" style="color: var(--muted);">No hay enlaces de normativa disponibles para este curso.</p>';
+        return;
+    }
+    
+    // Ordenar por fecha de creación (más reciente primero)
+    const enlacesOrdenados = [...enlaces].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+    
+    const conAcciones = currentUser && (currentUser.rol === 'admin' || currentUser.rol === 'dace');
+    list.innerHTML = enlacesOrdenados.map(enlace => renderEnlaceItem(enlace, conAcciones)).join('');
+}
 // ==================== IMPORTAR ACTIVIDADES CC ====================
 
 let actividadesCCParaImportar = [];
@@ -10967,6 +11852,19 @@ function obtenerLunesDeSemana(fecha) {
 }
 
 /**
+ * Actividades CC visibles para el usuario actual.
+ * El perfil usuario no puede cambiar el año: todo lo que ve y hace
+ * se refiere al curso escolar vigente. (Admin/DACE ven todas.)
+ * Las actividades antiguas sin curso asociado se conservan por compatibilidad.
+ */
+function getActividadesCCVisibles() {
+    const esUsuarioNormal = currentUser && currentUser.rol !== 'admin' && currentUser.rol !== 'dace';
+    const cursoActivoId = appData?.config?.cursoEscolarActivo;
+    if (!esUsuarioNormal || !cursoActivoId) return actividadesCC;
+    return actividadesCC.filter(act => !act.cursoEscolarId || act.cursoEscolarId === cursoActivoId);
+}
+
+/**
  * Renderiza el calendario semanal de Actividades CC
  */
 function renderizarCalendarioCC() {
@@ -10988,6 +11886,9 @@ function renderizarCalendarioCC() {
     const inicioCalendario = new Date(lunesReferencia);
     const finCalendario = new Date(lunesReferencia);
     finCalendario.setDate(finCalendario.getDate() + 27); // 28 días = 4 semanas
+    
+    // Actividades CC visibles para el rol actual (perfil usuario: solo curso vigente)
+    const actividadesCCVisibles = getActividadesCCVisibles();
     
     // Actualizar título
     if (titulo) {
@@ -11021,7 +11922,7 @@ function renderizarCalendarioCC() {
         const esPasado = diaFecha < hoy;
         
         // Buscar actividades para este día
-        const actividadesDelDia = actividadesCC.filter(act => act.fecha === fechaISO);
+        const actividadesDelDia = actividadesCCVisibles.filter(act => act.fecha === fechaISO);
         
         // Determinar estilo del día
         let claseDia = 'p-2 min-h-[100px] border-r border-b transition-colors';
@@ -11391,18 +12292,20 @@ function actualizarEstadisticasCC(inicio, fin) {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     
+    const actividadesCCVisibles = getActividadesCCVisibles();
+    
     // Contar actividades de la semana visible (3 semanas)
     const inicioISO = formatDateUniversal(inicio);
     const finISO = formatDateUniversal(fin);
     
-    const actividadesSemanaVisible = actividadesCC.filter(act => 
+    const actividadesSemanaVisible = actividadesCCVisibles.filter(act => 
         act.fecha >= inicioISO && act.fecha <= finISO
     );
     
     // Contar actividades del mes actual
     const mesActual = hoy.getMonth();
     const añoActual = hoy.getFullYear();
-    const actividadesMes = actividadesCC.filter(act => {
+    const actividadesMes = actividadesCCVisibles.filter(act => {
         const fechaAct = new Date(act.fecha + 'T00:00:00');
         return fechaAct.getMonth() === mesActual && fechaAct.getFullYear() === añoActual;
     });
@@ -11414,7 +12317,7 @@ function actualizarEstadisticasCC(inicio, fin) {
     
     if (totalSemanaEl) totalSemanaEl.textContent = actividadesSemanaVisible.length;
     if (totalMesEl) totalMesEl.textContent = actividadesMes.length;
-    if (totalTotalEl) totalTotalEl.textContent = actividadesCC.length;
+    if (totalTotalEl) totalTotalEl.textContent = actividadesCCVisibles.length;
 }
 
 /**
@@ -11428,7 +12331,8 @@ function actualizarListaSemanaCC(inicio, fin) {
     const finISO = formatDateUniversal(fin);
     
     // Filtrar actividades del rango y ordenar por fecha
-    const actividadesSemana = actividadesCC
+    // (perfil usuario: solo las del curso escolar vigente)
+    const actividadesSemana = getActividadesCCVisibles()
         .filter(act => act.fecha >= inicioISO && act.fecha <= finISO)
         .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
     
