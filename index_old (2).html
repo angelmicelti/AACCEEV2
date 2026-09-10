@@ -161,16 +161,6 @@
         }
 
         /* Navigation */
-        /* El menú vive en la segunda fila del encabezado y se desplaza en
-           horizontal cuando no cabe: nunca ensancha la página */
-        .nav-tabs {
-            overflow-x: auto;
-            scrollbar-width: thin;
-            min-width: 0;
-        }
-        .nav-tabs::-webkit-scrollbar { height: 4px; }
-        .nav-tabs::-webkit-scrollbar-track { background: transparent; }
-        .nav-tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 9999px; }
         .nav-tab {
             position: relative;
             padding: 0.75rem 1.25rem;
@@ -178,8 +168,6 @@
             font-weight: 500;
             transition: all 0.2s;
             border-radius: 0.5rem;
-            white-space: nowrap;
-            flex-shrink: 0;
         }
 
         .nav-tab:hover {
@@ -344,16 +332,19 @@
             background: rgba(13, 115, 119, 0.16);
         }
 
-        /* Selector de «Curso de gestión» (pestañas Actividades EE / CC):
-           da acceso a las actividades guardadas de cualquier curso */
-        .curso-gestion-select {
-            max-width: 260px;
+        /* Selector de curso consultado (aislamiento por curso escolar) */
+        .curso-vista-select {
+            padding: 0.45rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            background: var(--card);
+            color: var(--fg);
+            border: 1px solid var(--border);
+            max-width: 132px;
+            cursor: pointer;
         }
-
-        /* En pantallas pequeñas el encabezado queda compacto: sin badge de
-           curso (la información ya está en las vistas) */
         @media (max-width: 639px) {
-            #headerCursoActivo { display: none !important; }
+            .curso-vista-select { display: none !important; }
         }
 
         /* Cronograma */
@@ -926,115 +917,6 @@
             flex-shrink: 0;
         }
 
-        /* ===== BUSCADOR DE ACTIVIDADES (selección para editar) ===== */
-        .actividad-buscador {
-            position: relative;
-        }
-
-        .actividad-buscador .buscador-icono {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--muted);
-            pointer-events: none;
-        }
-
-        .actividad-buscador .form-input {
-            padding-left: 2.4rem;
-            padding-right: 2.4rem;
-        }
-
-        .buscador-clear {
-            position: absolute;
-            right: 0.55rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1.4rem;
-            height: 1.4rem;
-            border-radius: 9999px;
-            border: none;
-            background: var(--border);
-            color: var(--fg);
-            font-size: 0.85rem;
-            line-height: 1;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .buscador-clear:hover {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .buscador-resultados {
-            max-height: 280px;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            background: var(--bg);
-        }
-
-        .buscador-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-            padding: 0.6rem 0.8rem;
-            cursor: pointer;
-            border-bottom: 1px solid var(--border);
-            transition: background 0.15s;
-        }
-
-        .buscador-item:last-child {
-            border-bottom: none;
-        }
-
-        .buscador-item:hover {
-            background: rgba(13, 115, 119, 0.07);
-        }
-
-        .buscador-item.selected {
-            background: rgba(13, 115, 119, 0.12);
-            border-left: 3px solid var(--accent);
-            padding-left: calc(0.8rem - 3px);
-        }
-
-        .buscador-item .item-nombre {
-            font-weight: 500;
-            color: var(--fg);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .buscador-item .item-meta {
-            font-size: 0.72rem;
-            color: var(--muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .buscador-item .item-lapiz {
-            color: var(--muted);
-            flex-shrink: 0;
-        }
-
-        .buscador-item:hover .item-lapiz,
-        .buscador-item.selected .item-lapiz {
-            color: var(--accent);
-        }
-
-        .buscador-vacio {
-            padding: 0.9rem 1rem;
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--muted);
-        }
-
         .user-actions {
             display: flex;
             gap: 0.5rem;
@@ -1055,10 +937,6 @@
         .session-user {
             font-weight: 600;
             color: var(--accent);
-            max-width: 140px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .session-role {
@@ -1067,7 +945,6 @@
             border-radius: 9999px;
             background: rgba(13, 115, 119, 0.1);
             color: var(--accent);
-            white-space: nowrap;
         }
 
         .logout-btn {
@@ -1296,23 +1173,16 @@
             
             /* Session info compacta */
             .session-info {
-                padding: 0.35rem 0.5rem;
+                padding: 0.35rem 0.6rem;
                 font-size: 0.75rem;
-                gap: 0.3rem;
+                gap: 0.4rem;
             }
             
             .session-user {
-                max-width: 60px;
+                max-width: 80px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-            }
-            
-            /* El perfil del badge se trunca con puntos suspensivos si no cabe */
-            .session-role {
-                max-width: 104px;
-                overflow: hidden;
-                text-overflow: ellipsis;
             }
             
             .logout-btn span {
@@ -1867,10 +1737,10 @@
         <!-- Header -->
         <header class="sticky top-0 z-50 backdrop-blur-md bg-opacity-90" style="background: var(--bg); border-bottom: 1px solid var(--border);">
             <div class="max-w-7xl mx-auto px-4">
-                <!-- Fila 1: Marca + controles de sesión (compactos) -->
-                <div class="flex items-center justify-between py-2 gap-3">
-                    <!-- Izquierda: Logo + Título (se encoge antes que desbordar) -->
-                    <div class="flex items-center gap-3 min-w-0">
+                <!-- Fila Principal -->
+                <div class="flex items-center justify-between py-3 gap-4">
+                    <!-- Izquierda: Logo + Título -->
+                    <div class="flex items-center gap-3 flex-shrink-0">
                         <button class="mobile-menu-btn md:hidden" onclick="openMobileNav()" aria-label="Abrir menú">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="3" y1="6" x2="21" y2="6"/>
@@ -1884,15 +1754,29 @@
                                 <path d="M12 14v7"/>
                             </svg>
                         </div>
-                        <div class="min-w-0">
-                            <h1 class="font-display text-lg md:text-xl font-bold truncate" style="color: var(--accent);">AACCEE Manager</h1>
-                            <p class="text-xs hidden sm:block truncate" style="color: var(--muted);">IES Virgen de Villadiego</p>
+                        <div>
+                            <h1 class="font-display text-lg md:text-xl font-bold" style="color: var(--accent);">AACCEE Manager</h1>
+                            <p class="text-xs hidden sm:block" style="color: var(--muted);">IES Virgen de Villadiego</p>
                         </div>
                     </div>
                     
+                    <!-- Centro: Menú de Navegación (Desktop) -->
+                    <nav class="nav-tabs hidden md:flex gap-1 lg:gap-2">
+                        <button class="nav-tab active" data-tab="config">Configuración</button>
+                        <button class="nav-tab" data-tab="actividades">Actividades EE</button>
+                        <button class="nav-tab" data-tab="actividades-cc">Actividades CC</button>
+                        <button class="nav-tab" data-tab="cronograma">Cronogramas</button>
+                        <button class="nav-tab" data-tab="informes">Informes</button>
+                    </nav>
+
                     <!-- Derecha: Controles -->
                     <div class="flex items-center gap-2 lg:gap-3 flex-shrink-0">
                         <span id="headerCursoActivo" class="text-xs px-3 py-1 rounded-full hidden" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);"></span>
+
+                        <!-- Selector de curso consultado (solo admin/dace): aísla
+                             las vistas por curso escolar (usuario: siempre el vigente) -->
+                        <select id="cursoVistaSelect" class="curso-vista-select hidden" onchange="cambiarCursoVista(this.value)" title="Curso consultado en las vistas" aria-label="Curso consultado en las vistas">
+                        </select>
 
                         <!-- Manual de uso del perfil: descarga el PDF según el rol conectado -->
                         <a id="manualBtn" class="manual-btn hidden" href="#" download target="_blank" rel="noopener" title="Descargar el manual de uso de tu perfil">
@@ -1926,16 +1810,6 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- Fila 2: Menú de Navegación (Desktop). Se desplaza en
-                     horizontal cuando no cabe: nunca ensancha la página -->
-                <nav class="nav-tabs hidden md:flex gap-1 lg:gap-2 pb-2">
-                    <button class="nav-tab active" data-tab="config">Configuración</button>
-                    <button class="nav-tab" data-tab="actividades">Actividades EE</button>
-                    <button class="nav-tab" data-tab="actividades-cc">Actividades CC</button>
-                    <button class="nav-tab" data-tab="cronograma">Cronogramas</button>
-                    <button class="nav-tab" data-tab="informes">Informes</button>
-                </nav>
             </div>
         </header>
 
@@ -2386,26 +2260,11 @@
                         </div>
                         <div class="accordion-content">
                             <div class="p-6 space-y-4">
-                                <div class="flex flex-col sm:flex-row sm:items-start gap-3">
-                                    <div class="flex-1 min-w-0">
-                                        <label class="block text-sm font-medium mb-1" for="editSearchInput">Busca la actividad a editar</label>
-                                        <div class="actividad-buscador">
-                                            <svg class="buscador-icono" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                            </svg>
-                                            <input type="text" id="editSearchInput" class="form-input" placeholder="Escribe para filtrar: nombre, curso, trimestre o fecha..." oninput="renderEditSearchResults()" autocomplete="off" aria-label="Buscar actividad EE a editar">
-                                            <button type="button" id="editSearchClear" class="buscador-clear hidden" onclick="limpiarBusquedaEditEE()" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">&times;</button>
-                                        </div>
-                                        <div id="editSearchResults" class="buscador-resultados mt-2" role="listbox" aria-label="Actividades EE encontradas"></div>
-                                        <p id="editSearchCount" class="text-xs mt-1 hidden" style="color: var(--muted);"></p>
-                                    </div>
-                                    <!-- Curso de gestión: acceso a las actividades
-                                         guardadas en la base de datos de cualquier curso -->
-                                    <div id="eeGestionCursoBox" class="hidden sm:w-auto flex-shrink-0">
-                                        <label class="block text-sm font-medium mb-1">Curso de gestión</label>
-                                        <select id="eeGestionCursoSelect" class="form-input form-select curso-gestion-select" onchange="cambiarCursoGestion(this.value)" title="Curso cuyas actividades se listan y editan aquí">
-                                        </select>
-                                    </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Selecciona actividad a editar</label>
+                                    <select id="editSelect" class="form-input form-select" onchange="loadActividadForEdit()">
+                                        <option value="">Selecciona una actividad</option>
+                                    </select>
                                 </div>
                                 <div id="editForm" class="hidden space-y-4">
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2477,10 +2336,9 @@
                                         <label class="block text-sm font-medium mb-1">Observaciones</label>
                                         <textarea id="editObservaciones" class="form-input" rows="2" placeholder="Notas o comentarios adicionales sobre la actividad"></textarea>
                                     </div>
-                                    <div class="flex gap-3 flex-wrap">
-                                        <button onclick="cancelarEdicionActividad()" class="btn btn-secondary flex-1" title="Cerrar el formulario sin guardar cambios">Cancelar</button>
+                                    <div class="flex gap-3">
                                         <button onclick="updateActividad()" class="btn btn-primary flex-1">Actualizar</button>
-                                        <button onclick="deleteActividad()" class="btn btn-danger flex-shrink-0">Eliminar</button>
+                                        <button onclick="deleteActividad()" class="btn btn-danger">Eliminar</button>
                                     </div>
                                 </div>
                             </div>
@@ -2902,27 +2760,12 @@
                         </div>
                         <div class="accordion-content">
                             <div class="p-6 space-y-4">
-                                <!-- Buscador de actividad y curso de gestión -->
-                                <div class="flex flex-col sm:flex-row sm:items-start gap-3">
-                                    <div class="flex-1 min-w-0">
-                                        <label class="block text-sm font-medium mb-1" for="ccSearchInput">Busca la actividad CC a editar</label>
-                                        <div class="actividad-buscador">
-                                            <svg class="buscador-icono" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                                            </svg>
-                                            <input type="text" id="ccSearchInput" class="form-input" placeholder="Escribe para filtrar: nombre, unidad o fecha..." oninput="renderCCSearchResults()" autocomplete="off" aria-label="Buscar actividad CC a editar">
-                                            <button type="button" id="ccSearchClear" class="buscador-clear hidden" onclick="limpiarBusquedaEditCC()" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">&times;</button>
-                                        </div>
-                                        <div id="ccSearchResults" class="buscador-resultados mt-2" role="listbox" aria-label="Actividades CC encontradas"></div>
-                                        <p id="ccSearchCount" class="text-xs mt-1 hidden" style="color: var(--muted);"></p>
-                                    </div>
-                                    <!-- Curso de gestión: acceso a las actividades
-                                         guardadas en la base de datos de cualquier curso -->
-                                    <div id="ccGestionCursoBox" class="hidden sm:w-auto flex-shrink-0">
-                                        <label class="block text-sm font-medium mb-1">Curso de gestión</label>
-                                        <select id="ccGestionCursoSelect" class="form-input form-select curso-gestion-select" onchange="cambiarCursoGestion(this.value)" title="Curso cuyas actividades se listan y editan aquí">
-                                        </select>
-                                    </div>
+                                <!-- Selector de actividad -->
+                                <div>
+                                    <label class="block text-sm font-medium mb-1">Selecciona actividad a editar</label>
+                                    <select id="ccEditSelect" class="form-input form-select" onchange="cargarActividadCCEditar()">
+                                        <option value="">Selecciona una actividad CC</option>
+                                    </select>
                                 </div>
 
                                 <!-- Formulario de edición (oculto hasta seleccionar) -->
@@ -2990,10 +2833,7 @@
                                         <p class="text-xs mt-1" style="color: var(--muted);">Puedes seleccionar varias horas</p>
                                     </div>
 
-                                    <div class="flex gap-3 flex-wrap">
-                                        <button onclick="cancelarEdicionCC()" class="btn btn-secondary flex-1" title="Cerrar el formulario sin guardar cambios">
-                                            Cancelar
-                                        </button>
+                                    <div class="flex gap-3">
                                         <button onclick="actualizarActividadCC()" class="btn btn-primary flex-1">
                                             Actualizar
                                         </button>
@@ -4855,11 +4695,10 @@
             updateSessionUI();
             applyRoleRestrictions();
             
-            // Manual de uso del perfil y curso de gestión (acceso a las
-            // actividades guardadas de cualquier curso para admin/dace)
+            // Manual de uso del perfil y selector de curso consultado
+            // (aislamiento por curso escolar)
             if (typeof actualizarEnlaceManual === 'function') actualizarEnlaceManual();
-            cursoGestionId = null; // cada sesión comienza con el curso vigente
-            if (typeof populateCursoGestionSelects === 'function') populateCursoGestionSelects();
+            if (typeof populateCursoVistaSelect === 'function') populateCursoVistaSelect();
             
             setTimeout(() => {
                 splash.classList.remove('visible');
@@ -5406,12 +5245,8 @@
             }
             
             sessionInfo.classList.remove('hidden');
-            // Texto principal: usuario activo (login). Dentro del badge: perfil completo.
-            const nombreCompleto = currentUser.nombre || '';
-            sessionUserName.textContent = currentUser.username || nombreCompleto.split(' ')[0] || 'Usuario';
-            sessionUserRole.textContent = currentUser.rol === 'admin' ? 'Administrador' : (currentUser.rol === 'dace' ? 'DACE' : 'Usuario');
-            // El nombre completo queda accesible al pasar el ratón por la zona de sesión
-            sessionInfo.title = nombreCompleto ? `${nombreCompleto} · ${currentUser.username || ''}` : (currentUser.username || '');
+            sessionUserName.textContent = currentUser.nombre.split(' ')[0]; // Primer nombre
+            sessionUserRole.textContent = currentUser.rol === 'admin' ? 'Admin' : (currentUser.rol === 'dace' ? 'DACE' : 'Usuario');
             sessionUserRole.className = `session-role ${currentUser.rol === 'admin' ? 'role-admin' : (currentUser.rol === 'dace' ? 'role-dace': 'role-user')}`;
             
             // Mostrar panel de gestión de usuarios si es admin
@@ -6041,12 +5876,11 @@
         }
         
         /**
-         * Obtiene la fecha mínima permitida (1 de septiembre) de un curso escolar
-         * @param {string} [cursoIdOverride] - Curso concreto; por defecto, el activo
-         * @returns {string|null} Fecha en formato YYYY-MM-DD o null si no hay curso
+         * Obtiene la fecha mínima permitida (1 de septiembre) del curso escolar activo
+         * @returns {string|null} Fecha en formato YYYY-MM-DD o null si no hay curso activo
          */
-        function getFechaMinimaCursoActivo(cursoIdOverride) {
-            const cursoId = cursoIdOverride || appData?.config?.cursoEscolarActivo;
+        function getFechaMinimaCursoActivo() {
+            const cursoId = appData?.config?.cursoEscolarActivo;
             if (!cursoId) return null;
             
             const curso = appData?.config?.cursosEscolares?.find(c => c.id === cursoId);
@@ -6067,27 +5901,22 @@
         }
         
         /**
-         * Valida que una fecha sea igual o posterior al 1 de septiembre del
-         * curso indicado (por defecto, el activo). Al editar una actividad se
-         * pasa su propio curso: así las registradas en cursos anteriores
-         * siguen siendo editables; el alta sigue perteneciendo al vigente.
+         * Valida que una fecha sea igual o posterior al 1 de septiembre del curso activo
          * @param {string} fechaStr - Fecha en formato YYYY-MM-DD
          * @param {string} contexto - Contexto para el mensaje de error (EE/CC)
-         * @param {string} [cursoIdOverride] - Curso escolar contra el que validar
          * @returns {boolean} true si la fecha es válida
          */
-        function validarFechaCursoActivo(fechaStr, contexto, cursoIdOverride) {
+        function validarFechaCursoActivo(fechaStr, contexto) {
             if (!fechaStr) return true; // Si no hay fecha, no validar (puede ser obligatorio en otro sitio)
             
-            const cursoId = cursoIdOverride || appData?.config?.cursoEscolarActivo;
-            const fechaMinima = getFechaMinimaCursoActivo(cursoId);
+            const fechaMinima = getFechaMinimaCursoActivo();
             if (!fechaMinima) {
-                console.warn('[VALIDACIÓN] No hay curso para validar la fecha');
-                return true; // Permitir si no hay curso configurado
+                console.warn('[VALIDACIÓN] No hay curso activo para validar fecha');
+                return true; // Permitir si no hay curso activo
             }
             
             if (fechaStr < fechaMinima) {
-                const curso = appData?.config?.cursosEscolares?.find(c => c.id === cursoId);
+                const curso = appData?.config?.cursosEscolares?.find(c => c.id === appData.config.cursoEscolarActivo);
                 const nombreCurso = curso ? curso.nombre : 'este curso';
                 showToast(`⚠️ La fecha no puede ser anterior al 1 de septiembre del inicio de ${nombreCurso}. Debes cambiar de curso manualmente para añadir actividades de fechas anteriores.`, 'error');
                 return false;
@@ -6231,29 +6060,21 @@
                    null;
         }
 
-        // Curso de gestión (solo admin/dace): curso cuyas actividades se
-        // listan y editan en las pestañas Actividades EE / Actividades CC.
-        // null = seguir el curso vigente. Da acceso a las actividades
-        // guardadas en la base de datos de cualquier curso escolar.
-        let cursoGestionId = null;
-
         /**
-         * Curso aplicado en las vistas y en la gestión de actividades:
+         * Curso que se está consultando en las vistas:
          * - usuario: siempre el curso escolar vigente (activo)
-         * - admin/dace: el «Curso de gestión» elegido (por defecto, el vigente)
-         * El aislamiento por curso escolar (regla 1-sep → 31-ago) se mantiene.
+         * - admin/dace: el elegido en el selector de cabecera (por defecto, el activo)
          */
         function getCursoVistaId() {
             const activo = appData?.config?.cursoEscolarActivo || null;
-            const esGestor = currentUser && (currentUser.rol === 'admin' || currentUser.rol === 'dace');
-            if (esGestor && cursoGestionId) {
-                const existe = (appData?.config?.cursosEscolares || []).some(c => c.id === cursoGestionId);
-                if (existe) return cursoGestionId;
-            }
+            const esUsuarioNormal = currentUser && currentUser.rol !== 'admin' && currentUser.rol !== 'dace';
+            if (esUsuarioNormal) return activo;
+            const sel = document.getElementById('cursoVistaSelect');
+            if (sel && sel.value) return sel.value;
             return activo;
         }
 
-        /** Nombre del curso vigente mostrado en las vistas (o null) */
+        /** Nombre del curso consultado en las vistas (o null) */
         function getNombreCursoVista() {
             const id = getCursoVistaId();
             if (!id) return null;
@@ -6262,7 +6083,7 @@
         }
 
         /**
-         * Actividades del curso vigente: base del aislamiento por curso
+         * Actividades del curso consultado: base del aislamiento por curso
          * escolar (las antiguas sin curso se atribuyen por fecha).
          */
         function getActividadesCursoActivo() {
@@ -6328,15 +6149,9 @@
             // Renderizar enlaces de normativa (sección admin y pantalla de usuario)
             renderEnlacesNormativa();
             renderNormativaUsuario();
-            // Manual de uso del perfil y curso de gestión
+            // Selector de curso consultado y manual de uso (aislamiento por curso)
+            if (typeof populateCursoVistaSelect === 'function') populateCursoVistaSelect();
             if (typeof actualizarEnlaceManual === 'function') actualizarEnlaceManual();
-            if (typeof populateCursoGestionSelects === 'function') populateCursoGestionSelects();
-            // Actividades CC: la carga asíncrona desde Firebase puede completarse
-            // después de cargarActividadesCC() y dejar la lista y el selector de
-            // edición desactualizados respecto al curso activo; se refrescan aquí
-            // para que el orden de llegada de las respuestas no afecte a la vista
-            if (typeof renderizarListaCC === 'function') renderizarListaCC();
-            if (typeof actualizarSelectorCCEdit === 'function') actualizarSelectorCCEdit();
         }
 
         function renderTrimestres() {
@@ -7072,8 +6887,14 @@
         }
 
         function renderEditSelect() {
-            // Contador del acordeón «Editar Actividad EE existente»
+            const select = document.getElementById('editSelect');
             const actividades = getActividadesCursoActivo();
+            select.innerHTML = '<option value="">Selecciona una actividad</option>' +
+                actividades.map(act => 
+                    `<option value="${act.id}">${act.curso} - ${act.trimestre} - ${act.nombre}</option>`
+                ).join('');
+            
+            // Actualizar contador en el acordeón
             const contador = document.getElementById('contadorEditEE');
             if (contador) {
                 const numActividades = actividades.length;
@@ -7085,121 +6906,6 @@
                     contador.className = 'ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-green-100 text-green-700';
                 }
             }
-            // Refrescar los resultados del buscador con los datos vigentes
-            renderEditSearchResults();
-        }
-
-        /**
-         * Normaliza texto para búsquedas: minúsculas y sin tildes
-         * (para que "italica" encuentre "ITÁLICA")
-         */
-        function normalizarTextoBusqueda(txt) {
-            return (txt === null || txt === undefined ? '' : String(txt))
-                .toLowerCase()
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '');
-        }
-
-        /**
-         * Filtra las actividades EE editables (curso de gestión aplicado)
-         * por texto libre: nombre, curso, trimestre o fecha
-         */
-        function filtrarActividadesEE(texto) {
-            const q = normalizarTextoBusqueda(texto);
-            const actividades = getActividadesCursoActivo();
-            if (!q) return actividades;
-            return actividades.filter(a => {
-                const campos = [
-                    a.nombre,
-                    a.curso,
-                    a.trimestre,
-                    a.fecha || '',
-                    a.fecha ? formatDate(a.fecha) : ''
-                ].join(' ');
-                return normalizarTextoBusqueda(campos).includes(q);
-            });
-        }
-
-        /**
-         * Renderiza la lista de resultados del buscador de actividades EE.
-         * Con listas largas, escribir unas letras reduce la selección a
-         * unas pocas actividades clicables (orden alfabético).
-         */
-        function renderEditSearchResults() {
-            const input = document.getElementById('editSearchInput');
-            const cont = document.getElementById('editSearchResults');
-            const count = document.getElementById('editSearchCount');
-            const clearBtn = document.getElementById('editSearchClear');
-            if (!input || !cont) return;
-
-            const todas = getActividadesCursoActivo();
-            const resultados = filtrarActividadesEE(input.value)
-                .sort((a, b) => (a.nombre || '').localeCompare(b.nombre || '', 'es'));
-
-            if (clearBtn) clearBtn.classList.toggle('hidden', !input.value);
-
-            if (todas.length === 0) {
-                cont.innerHTML = '<div class="buscador-vacio">No hay actividades EE en este curso.</div>';
-                if (count) count.classList.add('hidden');
-                return;
-            }
-
-            if (resultados.length === 0) {
-                cont.innerHTML = `<div class="buscador-vacio">Ninguna actividad coincide con «${escapeHTML(input.value)}»</div>`;
-            } else {
-                cont.innerHTML = resultados.map(act => {
-                    const meta = [
-                        act.curso,
-                        act.trimestre,
-                        act.fecha ? formatDate(act.fecha) : 'sin fecha'
-                    ].join(' · ');
-                    const seleccionada = act.id === editingActividadId ? ' selected' : '';
-                    const idAttr = escapeAttr(act.id);
-                    return `
-                    <div class="buscador-item${seleccionada}" role="option" tabindex="0"
-                         onclick="seleccionarActividadEditEE('${idAttr}')"
-                         onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); seleccionarActividadEditEE('${idAttr}'); }">
-                        <div class="min-w-0">
-                            <div class="item-nombre">${escapeHTML(act.nombre)}</div>
-                            <div class="item-meta">${escapeHTML(meta)}</div>
-                        </div>
-                        <svg class="item-lapiz" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                        </svg>
-                    </div>`;
-                }).join('');
-            }
-
-            if (count) {
-                count.textContent = `${resultados.length} de ${todas.length} actividades`;
-                count.classList.remove('hidden');
-            }
-        }
-
-        /**
-         * Selecciona una actividad EE del buscador y abre su formulario de edición
-         */
-        function seleccionarActividadEditEE(id) {
-            const act = appData.actividades.find(a => a.id === id);
-            if (!act) return;
-            // El buscador refleja la actividad cargada (útil tras filtrar)
-            const input = document.getElementById('editSearchInput');
-            if (input) input.value = act.nombre;
-            loadActividadForEdit(id);
-            renderEditSearchResults(); // resaltar la actividad en edición
-            const form = document.getElementById('editForm');
-            if (form) form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        /**
-         * Limpia la búsqueda de actividades EE y devuelve el foco al buscador
-         */
-        function limpiarBusquedaEditEE() {
-            const input = document.getElementById('editSearchInput');
-            if (!input) return;
-            input.value = '';
-            renderEditSearchResults();
-            input.focus();
         }
 
         function renderInformeSelects() {
@@ -8387,7 +8093,8 @@
             }
         }
         // ==================== EDIT ACTIVIDAD ====================
-        function loadActividadForEdit(id) {
+        function loadActividadForEdit() {
+            const id = document.getElementById('editSelect').value;
             if (!id) {
                 document.getElementById('editForm').classList.add('hidden');
                 return;
@@ -8575,11 +8282,9 @@
             const nuevaFecha = document.getElementById('editFecha').value;
             const noRealizada = document.getElementById('editNoRealizada').checked;
             
-            // Validar fecha solo si hay fecha y no está marcada como "no realizada".
-            // Se valida contra el curso de la PROPIA actividad: las registradas
-            // en cursos anteriores siguen siendo editables
+            // Validar fecha solo si hay fecha y no está marcada como "no realizada"
             if (nuevaFecha && !noRealizada) {
-                if (!validarFechaCursoActivo(nuevaFecha, 'EE', getCursoEfectivoActividad(act))) {
+                if (!validarFechaCursoActivo(nuevaFecha, 'EE')) {
                     return; // No continuar si la fecha no es válida
                 }
             }
@@ -8616,30 +8321,10 @@
             // Guardar observaciones
             act.observaciones = document.getElementById('editObservaciones').value.trim();
             
-            // El buscador refleja el nombre actualizado de la actividad
-            const inputBusq = document.getElementById('editSearchInput');
-            if (inputBusq && editingActividadId) {
-                const actActualizada = appData.actividades.find(a => a.id === editingActividadId);
-                if (actActualizada) inputBusq.value = actActualizada.nombre;
-            }
-            
             saveToLocalStorage();
             renderEditSelect();
             renderCronograma(); // Actualizar vista del cronograma
             showToast('Actividad actualizada', 'success');
-        }
-
-        /**
-         * Cancela la edición de la actividad EE en curso: cierra el
-         * formulario de edición y limpia la selección sin guardar cambios
-         */
-        function cancelarEdicionActividad() {
-            const input = document.getElementById('editSearchInput');
-            if (input) input.value = '';
-            document.getElementById('editForm').classList.add('hidden');
-            editingActividadId = null;
-            renderEditSearchResults();
-            showToast('Edición cancelada', 'info');
         }
 
         function deleteActividad() {
@@ -8677,8 +8362,7 @@
             appData.actividades = appData.actividades.filter(a => a.id !== editingActividadId);
             saveToLocalStorage();
             
-            const inputBusq = document.getElementById('editSearchInput');
-            if (inputBusq) inputBusq.value = '';
+            document.getElementById('editSelect').value = '';
             document.getElementById('editForm').classList.add('hidden');
             editingActividadId = null;
             
@@ -10811,7 +10495,6 @@
 
 // Array para almacenar actividades CC
 let actividadesCC = [];
-let editingCCId = null; // actividad CC cargada actualmente en el formulario de edición
 
 /**
  * Carga actividades CC desde localStorage/Firebase
@@ -10961,7 +10644,8 @@ function guardarActividadCC() {
  * Actualiza una actividad CC existente
  */
 function actualizarActividadCC() {
-    const id = editingCCId;
+    const select = document.getElementById('ccEditSelect');
+    const id = select.value;
     
     if (!id) {
         showToast('Selecciona una actividad para editar', 'error');
@@ -10984,9 +10668,8 @@ function actualizarActividadCC() {
         return;
     }
     
-    // Validar la fecha contra el curso de la PROPIA actividad: las
-    // registradas en cursos anteriores siguen siendo editables
-    if (fecha && !validarFechaCursoActivo(fecha, 'CC', getCursoEfectivoActividad(actividadesCC[index]))) {
+    // Validar que la fecha sea igual o posterior al 1 de septiembre del curso activo
+    if (fecha && !validarFechaCursoActivo(fecha, 'CC')) {
         return; // No continuar si la fecha no es válida
     }
 
@@ -11010,10 +10693,7 @@ function actualizarActividadCC() {
     
     // Ocultar formulario
     document.getElementById('ccEditForm').classList.add('hidden');
-    editingCCId = null;
-    const inputBusq = document.getElementById('ccSearchInput');
-    if (inputBusq) inputBusq.value = '';
-    renderCCSearchResults();
+    select.value = '';
 
     showToast('Actividad CC actualizada', 'success');
 }
@@ -11022,7 +10702,8 @@ function actualizarActividadCC() {
  * Elimina una actividad CC
  */
 function eliminarActividadCC() {
-    const id = editingCCId;
+    const select = document.getElementById('ccEditSelect');
+    const id = select.value;
     
     if (!id) {
         showToast('Selecciona una actividad para eliminar', 'error');
@@ -11039,31 +10720,23 @@ function eliminarActividadCC() {
     // Guardar
     guardarActividadesCC();
 
-    // Actualizar UI (actualizarSelectorCCEdit detecta que la actividad
-    // en edición ya no existe: cierra el formulario y limpia el buscador)
+    // Actualizar UI
     renderizarListaCC();
     actualizarSelectorCCEdit();
+    
+    // Ocultar formulario
+    document.getElementById('ccEditForm').classList.add('hidden');
+    select.value = '';
 
     showToast('Actividad CC eliminada', 'success');
 }
 
 /**
- * Cancela la edición de la actividad CC en curso: cierra el
- * formulario de edición y limpia la selección sin guardar cambios
- */
-function cancelarEdicionCC() {
-    document.getElementById('ccEditForm').classList.add('hidden');
-    editingCCId = null;
-    const input = document.getElementById('ccSearchInput');
-    if (input) input.value = '';
-    renderCCSearchResults();
-    showToast('Edición cancelada', 'info');
-}
-
-/**
  * Carga los datos de una actividad CC en el formulario de edición
  */
-function cargarActividadCCEditar(id) {
+function cargarActividadCCEditar() {
+    const select = document.getElementById('ccEditSelect');
+    const id = select.value;
     const form = document.getElementById('ccEditForm');
     const sinActividades = document.getElementById('ccSinActividades');
 
@@ -11080,9 +10753,6 @@ function cargarActividadCCEditar(id) {
         return;
     }
 
-    // Registrar la actividad en edición
-    editingCCId = id;
-
     // Rellenar formulario
     document.getElementById('ccEditNombre').value = actividad.nombre;
     document.getElementById('ccEditUnidad').value = actividad.unidad;
@@ -11091,10 +10761,6 @@ function cargarActividadCCEditar(id) {
     
     // Marcar horas seleccionadas
     marcarHorasSeleccionadas('ccEditHora', actividad.horas || []);
-
-    // El buscador refleja la actividad cargada (útil tras filtrar)
-    const input = document.getElementById('ccSearchInput');
-    if (input) input.value = actividad.nombre;
 
     // Mostrar formulario
     form.classList.remove('hidden');
@@ -11119,10 +10785,10 @@ function renderizarListaCC() {
         return;
     }
 
-    // Aislamiento por curso escolar: listar solo las del curso vigente
+    // Aislamiento por curso escolar: listar solo las del curso consultado
     const actividadesCCVisibles = getActividadesCCVisibles();
 
-    // Información del curso vigente junto al contador
+    // Información del curso consultado junto al contador
     const cursoInfo = document.getElementById('ccListaCursoInfo');
     if (cursoInfo) {
         const nombreCurso = (typeof getNombreCursoVista === 'function') ? getNombreCursoVista() : null;
@@ -11214,27 +10880,42 @@ function renderizarListaCC() {
  * Actualiza el selector de actividades para editar
  */
 function actualizarSelectorCCEdit() {
+    const select = document.getElementById('ccEditSelect');
     const sinActividades = document.getElementById('ccSinActividades');
-    const inputBusqueda = document.getElementById('ccSearchInput');
-    if (!sinActividades && !inputBusqueda) return;
+    
+    if (!select) return;
 
-    // Aislamiento por curso escolar: editar las actividades del curso aplicado
-    // (usuario: el vigente; admin/dace: el «Curso de gestión»)
+    // Guardar selección actual
+    const seleccionActual = select.value;
+
+    // Aislamiento por curso escolar: editar las actividades del curso consultado
     const actividadesCCVisibles = getActividadesCCVisibles();
 
-    // Si la actividad en edición ya no existe (eliminada, importación,
-    // cambio de datos...), cerrar el formulario y limpiar el buscador
-    if (editingCCId && !actividadesCC.find(a => a.id === editingCCId)) {
-        editingCCId = null;
+    // Generar opciones
+    let options = '<option value="">Selecciona una actividad CC</option>';
+    
+    if (actividadesCCVisibles.length === 0) {
+        options += '<option value="" disabled>No hay actividades disponibles</option>';
+    } else {
+        actividadesCCVisibles.forEach(act => {
+            const fechaFormateada = formatDate(act.fecha);
+            options += `<option value="${act.id}">${escapeHTML(act.nombre)} - ${act.unidad} (${fechaFormateada})</option>`;
+        });
+    }
+
+    select.innerHTML = options;
+
+    // Restaurar selección si aún existe
+    if (seleccionActual && actividadesCC.find(a => a.id === seleccionActual)) {
+        select.value = seleccionActual;
+    } else {
+        // Ocultar formulario de edición
         document.getElementById('ccEditForm').classList.add('hidden');
-        if (inputBusqueda) inputBusqueda.value = '';
+        if (sinActividades) {
+            sinActividades.classList.toggle('hidden', actividadesCCVisibles.length > 0);
+        }
     }
-
-    // Mensaje de «no hay actividades» solo cuando no quede ninguna por editar
-    if (sinActividades) {
-        sinActividades.classList.toggle('hidden', actividadesCCVisibles.length > 0);
-    }
-
+    
     // Actualizar contador en el acordeón
     const contador = document.getElementById('contadorEditCC');
     if (contador) {
@@ -11247,108 +10928,6 @@ function actualizarSelectorCCEdit() {
             contador.className = 'ml-2 text-sm font-normal px-2 py-0.5 rounded-full bg-blue-100 text-blue-700';
         }
     }
-
-    // Refrescar los resultados del buscador con los datos vigentes
-    renderCCSearchResults();
-}
-
-/**
- * Filtra las actividades CC editables (curso de gestión aplicado)
- * por texto libre: nombre, unidad, fecha u horas
- */
-function filtrarActividadesCC(texto) {
-    const q = normalizarTextoBusqueda(texto);
-    const actividades = getActividadesCCVisibles();
-    if (!q) return actividades;
-    return actividades.filter(act => {
-        const campos = [
-            act.nombre,
-            act.unidad,
-            act.fecha || '',
-            act.fecha ? formatDate(act.fecha) : '',
-            (act.horas || []).join(' ')
-        ].join(' ');
-        return normalizarTextoBusqueda(campos).includes(q);
-    });
-}
-
-/**
- * Renderiza la lista de resultados del buscador de actividades CC.
- * Con listas largas, escribir unas letras reduce la selección a
- * unas pocas actividades clicables (orden alfabético).
- */
-function renderCCSearchResults() {
-    const input = document.getElementById('ccSearchInput');
-    const cont = document.getElementById('ccSearchResults');
-    const count = document.getElementById('ccSearchCount');
-    const clearBtn = document.getElementById('ccSearchClear');
-    if (!input || !cont) return;
-
-    const todas = getActividadesCCVisibles();
-    const resultados = filtrarActividadesCC(input.value)
-        .sort((a, b) => (a.nombre || '').localeCompare(b.nombre || '', 'es'));
-
-    if (clearBtn) clearBtn.classList.toggle('hidden', !input.value);
-
-    if (todas.length === 0) {
-        cont.innerHTML = '<div class="buscador-vacio">No hay actividades CC en este curso.</div>';
-        if (count) count.classList.add('hidden');
-        return;
-    }
-
-    if (resultados.length === 0) {
-        cont.innerHTML = `<div class="buscador-vacio">Ninguna actividad coincide con «${escapeHTML(input.value)}»</div>`;
-    } else {
-        cont.innerHTML = resultados.map(act => {
-            const meta = [
-                act.unidad,
-                act.fecha ? formatDate(act.fecha) : 'sin fecha',
-                (act.horas && act.horas.length) ? act.horas.join(', ') : ''
-            ].filter(Boolean).join(' · ');
-            const seleccionada = act.id === editingCCId ? ' selected' : '';
-            const idAttr = escapeAttr(act.id);
-            return `
-            <div class="buscador-item${seleccionada}" role="option" tabindex="0"
-                 onclick="seleccionarActividadEditCC('${idAttr}')"
-                 onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); seleccionarActividadEditCC('${idAttr}'); }">
-                <div class="min-w-0">
-                    <div class="item-nombre">${escapeHTML(act.nombre)}</div>
-                    <div class="item-meta">${escapeHTML(meta)}</div>
-                </div>
-                <svg class="item-lapiz" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                </svg>
-            </div>`;
-        }).join('');
-    }
-
-    if (count) {
-        count.textContent = `${resultados.length} de ${todas.length} actividades`;
-        count.classList.remove('hidden');
-    }
-}
-
-/**
- * Selecciona una actividad CC del buscador y abre su formulario de edición
- */
-function seleccionarActividadEditCC(id) {
-    const actividad = actividadesCC.find(a => a.id === id);
-    if (!actividad) return;
-    cargarActividadCCEditar(id);
-    renderCCSearchResults(); // resaltar la actividad en edición
-    const form = document.getElementById('ccEditForm');
-    if (form) form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-/**
- * Limpia la búsqueda de actividades CC y devuelve el foco al buscador
- */
-function limpiarBusquedaEditCC() {
-    const input = document.getElementById('ccSearchInput');
-    if (!input) return;
-    input.value = '';
-    renderCCSearchResults();
-    input.focus();
 }
 
 // ==================== ELIMINACIÓN MASIVA DE ACTIVIDADES ====================
@@ -11821,60 +11400,61 @@ function toggleCuadrante(tipo) {
     }
 }
 
-// ==================== CURSO DE GESTIÓN (ACTIVIDADES EE / CC) ====================
+// ==================== SELECTOR DE CURSO CONSULTADO (AISLAMIENTO) ====================
 
 /**
- * Rellena los selectores de «Curso de gestión» de las pestañas Actividades
- * EE y Actividades CC (solo admin/dace). Permiten acceder a las actividades
- * guardadas en la base de datos de cualquier curso escolar; el perfil
- * usuario trabaja siempre con el vigente.
+ * Rellena el selector de curso consultado de la cabecera (solo admin/dace:
+ * el perfil usuario trabaja siempre con el curso vigente).
  */
-function populateCursoGestionSelects() {
-    const selects = [
-        document.getElementById('eeGestionCursoSelect'),
-        document.getElementById('ccGestionCursoSelect')
-    ].filter(Boolean);
-    if (selects.length === 0) return;
-
+function populateCursoVistaSelect() {
+    const sel = document.getElementById('cursoVistaSelect');
+    if (!sel) return;
+    
     const cursos = appData?.config?.cursosEscolares || [];
     const activo = appData?.config?.cursoEscolarActivo || null;
     const esUsuarioNormal = currentUser && currentUser.rol !== 'admin' && currentUser.rol !== 'dace';
-    const ocultar = esUsuarioNormal || cursos.length === 0;
-
-    selects.forEach(sel => {
-        const box = document.getElementById(sel.id.replace('Select', 'Box'));
-        if (box) box.classList.toggle('hidden', ocultar);
-        if (ocultar) return;
-
-        sel.innerHTML = cursos.map(c =>
-            `<option value="${escapeHTML(c.id)}">${escapeHTML(c.nombre)}${c.id === activo ? ' (vigente)' : ''}</option>`
-        ).join('');
-
-        // Selección efectiva actual (curso de gestión elegido o el vigente)
-        sel.value = getCursoVistaId() || '';
-    });
+    
+    // Sin cursos configurados o perfil usuario: selector oculto
+    sel.classList.toggle('hidden', esUsuarioNormal || cursos.length === 0);
+    if (cursos.length === 0) return;
+    
+    const valorPrevio = sel.value;
+    sel.innerHTML = cursos.map(c =>
+        `<option value="${escapeHTML(c.id)}">${escapeHTML(c.nombre)}${c.id === activo ? ' (vigente)' : ''}</option>`
+    ).join('');
+    
+    // Mantener la selección previa si sigue siendo válida; si no, el curso activo
+    if (valorPrevio && cursos.some(c => c.id === valorPrevio)) {
+        sel.value = valorPrevio;
+    } else if (activo) {
+        sel.value = activo;
+    }
 }
 
 /**
- * Cambia el curso de gestión y re-renderiza las vistas que dependen de él:
- * listas y desplegables de edición de EE/CC, cronogramas, calendario CC e
- * informes (solo afecta a admin/dace; el perfil usuario siempre ve el
- * curso vigente).
+ * Cambia el curso consultado y re-renderiza todas las vistas aisladas
+ * (cronogramas, calendario CC, listas, selects de edición e informes).
  */
-function cambiarCursoGestion(cursoId) {
-    cursoGestionId = cursoId || null;
-    populateCursoGestionSelects();
+function cambiarCursoVista(cursoId) {
+    // Sincronizar el filtro de normativa con el curso consultado
+    const filtroNormativa = document.getElementById('normativaCursoFilter');
+    if (filtroNormativa && cursoId) {
+        filtroNormativa.value = cursoId;
+    }
     renderVistasPorCurso();
 }
 
-/** Re-renderiza las vistas que dependen del curso de gestión */
+/** Re-renderiza todas las vistas que dependen del curso consultado */
 function renderVistasPorCurso() {
     if (typeof renderCronograma === 'function') renderCronograma();
     if (typeof renderizarCalendarioCC === 'function') renderizarCalendarioCC();
     if (typeof renderizarListaCC === 'function') renderizarListaCC();
     if (typeof renderEditSelect === 'function') renderEditSelect();
     if (typeof renderInformeSelects === 'function') renderInformeSelects();
+    if (typeof renderNormativaUsuario === 'function') renderNormativaUsuario();
     if (typeof actualizarSelectorCCEdit === 'function') actualizarSelectorCCEdit();
+    if (typeof inicializarEliminacionMasivaEE === 'function') inicializarEliminacionMasivaEE();
+    if (typeof inicializarEliminacionMasivaCC === 'function') inicializarEliminacionMasivaCC();
 }
 
 // ==================== MANUAL DE USO DEL PERFIL ====================
@@ -12141,6 +11721,7 @@ function renderEnlaceItem(enlace, conAcciones) {
     const safeUrlAttr = escapeAttr(enlace.url);
     const safeDesc = enlace.descripcion ? escapeHTML(enlace.descripcion) : '';
     const nombreCurso = escapeHTML(getNombreCursoEscolar(enlace.cursoEscolarId));
+    const fecha = enlace.createdAt ? formatDate(enlace.createdAt.split('T')[0]) : '';
     
     return `
         <div class="enlace-item">
@@ -12155,6 +11736,7 @@ function renderEnlaceItem(enlace, conAcciones) {
                 ${safeDesc ? `<p class="text-sm mt-1" style="color: var(--fg);">${safeDesc}</p>` : ''}
                 <div class="flex items-center gap-2 mt-2 flex-wrap">
                     <span class="enlace-badge">🎓 ${nombreCurso}</span>
+                    ${fecha ? `<span class="text-xs" style="color: var(--muted);">Añadido el ${fecha}</span>` : ''}
                 </div>
             </div>
             ${conAcciones ? `
@@ -12570,14 +12152,13 @@ function obtenerLunesDeSemana(fecha) {
 /**
  * Actividades CC visibles para el usuario actual.
  * El aislamiento por curso escolar se aplica a todos los perfiles: las
- * vistas muestran únicamente las actividades del curso aplicado (el vigente
- * para el perfil usuario; admin/dace pueden gestionar otro curso).
+ * vistas muestran únicamente las actividades del curso consultado.
  */
 function getActividadesCCVisibles() {
     // Aislamiento por curso escolar para TODOS los roles: se muestran solo
-    // las actividades del curso aplicado (usuario: el vigente; admin/dace:
-    // el «Curso de gestión»). Las antiguas sin cursoEscolarId se atribuyen
-    // por fecha (regla 1-sep → 31-ago).
+    // las actividades del curso consultado (admin/dace pueden cambiarlo con
+    // el selector de cabecera; el perfil usuario trabaja siempre con el
+    // vigente). Las antiguas sin cursoEscolarId se atribuyen por fecha.
     const cursoVista = (typeof getCursoVistaId === 'function')
         ? getCursoVistaId()
         : (appData?.config?.cursoEscolarActivo || null);
