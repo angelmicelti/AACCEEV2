@@ -313,40 +313,6 @@
             justify-content: space-between;
         }
 
-        /* Botón «Manual» de la cabecera (descarga el manual del perfil) */
-        .manual-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            background: rgba(13, 115, 119, 0.08);
-            color: var(--accent);
-            border: 1px solid rgba(13, 115, 119, 0.25);
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-        .manual-btn:hover {
-            background: rgba(13, 115, 119, 0.16);
-        }
-
-        /* Selector de curso consultado (aislamiento por curso escolar) */
-        .curso-vista-select {
-            padding: 0.45rem 0.5rem;
-            border-radius: 0.5rem;
-            font-size: 0.8rem;
-            background: var(--card);
-            color: var(--fg);
-            border: 1px solid var(--border);
-            max-width: 132px;
-            cursor: pointer;
-        }
-        @media (max-width: 639px) {
-            .curso-vista-select { display: none !important; }
-        }
-
         /* Cronograma */
         .crono-cell {
             min-height: 100px;
@@ -1772,19 +1738,6 @@
                     <!-- Derecha: Controles -->
                     <div class="flex items-center gap-2 lg:gap-3 flex-shrink-0">
                         <span id="headerCursoActivo" class="text-xs px-3 py-1 rounded-full hidden" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);"></span>
-
-                        <!-- Selector de curso consultado (solo admin/dace): aísla
-                             las vistas por curso escolar (usuario: siempre el vigente) -->
-                        <select id="cursoVistaSelect" class="curso-vista-select hidden" onchange="cambiarCursoVista(this.value)" title="Curso consultado en las vistas" aria-label="Curso consultado en las vistas">
-                        </select>
-
-                        <!-- Manual de uso del perfil: descarga el PDF según el rol conectado -->
-                        <a id="manualBtn" class="manual-btn hidden" href="#" download target="_blank" rel="noopener" title="Descargar el manual de uso de tu perfil">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                            </svg>
-                            <span class="hidden lg:inline">Manual</span>
-                        </a>
                         
                         <!-- Session Info (shown after login) -->
                         <div id="sessionInfo" class="session-info hidden">
@@ -2937,7 +2890,6 @@
                                 </svg>
                                 Actividades CC Registradas
                                 <span id="ccContadorActividades" class="text-sm font-normal ml-2 px-2 py-1 rounded-full" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);">0</span>
-                                <span id="ccListaCursoInfo" class="text-xs font-normal ml-2" style="color: var(--muted);"></span>
                             </h2>
                             <svg class="accordion-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="6 9 12 15 18 9"/>
@@ -3099,7 +3051,6 @@
                                     <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
                                 </svg>
                                 Cronograma de Actividades EE
-                                <span id="cronoEECursoInfo" class="text-xs font-normal ml-1 px-2 py-0.5 rounded-full" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);"></span>
                             </h2>
                         </div>
                         <div class="p-6 space-y-4">
@@ -3128,7 +3079,6 @@
                                     <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
                                 </svg>
                                 Cronograma de Actividades CC
-                                <span id="cronoCCCursoInfo" class="text-xs font-normal ml-1 px-2 py-0.5 rounded-full" style="background: rgba(13, 115, 119, 0.1); color: var(--accent);"></span>
                             </h2>
                         </div>
                         <div class="p-6">
@@ -4695,11 +4645,6 @@
             updateSessionUI();
             applyRoleRestrictions();
             
-            // Manual de uso del perfil y selector de curso consultado
-            // (aislamiento por curso escolar)
-            if (typeof actualizarEnlaceManual === 'function') actualizarEnlaceManual();
-            if (typeof populateCursoVistaSelect === 'function') populateCursoVistaSelect();
-            
             setTimeout(() => {
                 splash.classList.remove('visible');
                 splash.classList.add('hidden');
@@ -4810,12 +4755,6 @@
             isSaving = true;
             
             try {
-                // Atribuir curso escolar por fecha (1-sep → 31-ago) a las
-                // actividades antiguas sin curso: mantiene los cursos aislados
-                if (typeof atribuirCursoPorFechaActividades === 'function') {
-                    atribuirCursoPorFechaActividades();
-                }
-                
                 localStorage.setItem('aceManagerData', JSON.stringify(appData));
                 
                 // Sincronizar con Firebase (sin await para no bloquear)
@@ -6013,125 +5952,12 @@
         }
 
         // ==================== RENDER FUNCTIONS ====================
-        // ==================== AISLAMIENTO POR CURSO ESCOLAR ====================
-        /**
-         * Año escolar de una fecha: un curso escolar se extiende desde el
-         * 1 de septiembre de un año hasta el 31 de agosto del año siguiente.
-         */
-        function getEtiquetaAnoEscolar(date) {
-            const y = date.getFullYear();
-            return date.getMonth() >= 8 ? `${y}-${y + 1}` : `${y - 1}-${y}`;
-        }
-
-        /**
-         * ID del curso escolar cuya ventana (1-sep → 31-ago) contiene la fecha.
-         * Devuelve null si la fecha no cae en ningún curso configurado.
-         */
-        function getCursoIdPorFecha(fecha) {
-            if (!fecha) return null;
-            const f = String(fecha).slice(0, 10);
-            if (!/^\d{4}-\d{2}-\d{2}$/.test(f)) return null;
-            const cursos = appData?.config?.cursosEscolares || [];
-            for (const c of cursos) {
-                const ini = c.fechaInicio || (c.anoInicio ? `${c.anoInicio}-09-01` : null);
-                const fin = c.fechaFin || (c.anoFin ? `${c.anoFin}-08-31` : null);
-                if (ini && f >= ini && (!fin || f <= fin)) return c.id;
-            }
-            // Fallback: comparar la etiqueta de año escolar con el nombre del curso
-            const d = new Date(f + 'T00:00:00');
-            if (!isNaN(d.getTime())) {
-                const etiqueta = getEtiquetaAnoEscolar(d);
-                const curso = cursos.find(c => String(c.nombre || '').replace(/\s+/g, '') === etiqueta);
-                if (curso) return curso.id;
-            }
-            return null;
-        }
-
-        /**
-         * Curso escolar efectivo de una actividad: su cursoEscolarId o, si es
-         * una actividad antigua sin curso asignado, el que le corresponde por
-         * su fecha (regla 1-sep → 31-ago).
-         */
-        function getCursoEfectivoActividad(act) {
-            if (!act) return null;
-            if (act.cursoEscolarId) return act.cursoEscolarId;
-            return getCursoIdPorFecha(act.fecha) ||
-                   getCursoIdPorFecha(act.createdAt || act.creadoEn) ||
-                   null;
-        }
-
-        /**
-         * Curso que se está consultando en las vistas:
-         * - usuario: siempre el curso escolar vigente (activo)
-         * - admin/dace: el elegido en el selector de cabecera (por defecto, el activo)
-         */
-        function getCursoVistaId() {
-            const activo = appData?.config?.cursoEscolarActivo || null;
-            const esUsuarioNormal = currentUser && currentUser.rol !== 'admin' && currentUser.rol !== 'dace';
-            if (esUsuarioNormal) return activo;
-            const sel = document.getElementById('cursoVistaSelect');
-            if (sel && sel.value) return sel.value;
-            return activo;
-        }
-
-        /** Nombre del curso consultado en las vistas (o null) */
-        function getNombreCursoVista() {
-            const id = getCursoVistaId();
-            if (!id) return null;
-            const curso = (appData?.config?.cursosEscolares || []).find(c => c.id === id);
-            return curso ? curso.nombre : null;
-        }
-
-        /**
-         * Actividades del curso consultado: base del aislamiento por curso
-         * escolar (las antiguas sin curso se atribuyen por fecha).
-         */
+        // Helper: Obtener actividades del curso escolar activo
         function getActividadesCursoActivo() {
-            const cursoVista = getCursoVistaId();
-            if (!cursoVista) {
-                return appData.actividades; // Sin curso configurado: compatibilidad
+            if (!appData.config.cursoEscolarActivo) {
+                return appData.actividades; // Si no hay curso activo, mostrar todas (para compatibilidad)
             }
-            return appData.actividades.filter(a => getCursoEfectivoActividad(a) === cursoVista);
-        }
-
-        /** Actividades EE de un curso concreto (para lógica de formularios) */
-        function getActividadesDeCursoEscolar(cursoId) {
-            if (!cursoId) return appData.actividades;
-            return appData.actividades.filter(a => getCursoEfectivoActividad(a) === cursoId);
-        }
-
-        /**
-         * Atribuye curso escolar por fecha (1-sep → 31-ago) a las actividades
-         * antiguas que no tengan cursoEscolarId. Devuelve el número de cambios.
-         */
-        function atribuirCursoPorFechaActividades() {
-            if (typeof getCursoIdPorFecha !== 'function') return 0;
-            let cambios = 0;
-            (appData.actividades || []).forEach(a => {
-                if (a && !a.cursoEscolarId) {
-                    const cursoId = getCursoIdPorFecha(a.fecha) || getCursoIdPorFecha(a.createdAt || a.creadoEn);
-                    if (cursoId) { a.cursoEscolarId = cursoId; cambios++; }
-                }
-            });
-            if (typeof actividadesCC !== 'undefined' && Array.isArray(actividadesCC)) {
-                let cambiosCC = 0;
-                actividadesCC.forEach(a => {
-                    if (a && !a.cursoEscolarId) {
-                        const cursoId = getCursoIdPorFecha(a.fecha) || getCursoIdPorFecha(a.createdAt || a.creadoEn);
-                        if (cursoId) { a.cursoEscolarId = cursoId; cambiosCC++; }
-                    }
-                });
-                if (cambiosCC > 0) {
-                    try {
-                        localStorage.setItem('aaccee_actividades_cc', JSON.stringify(actividadesCC));
-                        if (typeof dbRef !== 'undefined' && dbRef) {
-                            dbRef.child('actividadesCC').set(actividadesCC).catch(() => {});
-                        }
-                    } catch (e) { /* sin consecuencias: la atribución en memoria ya funciona */ }
-                }
-                cambios += cambiosCC;
-            }
-            return cambios;
+            return appData.actividades.filter(a => a.cursoEscolarId === appData.config.cursoEscolarActivo);
         }
         
         function renderAll() {
@@ -6149,9 +5975,6 @@
             // Renderizar enlaces de normativa (sección admin y pantalla de usuario)
             renderEnlacesNormativa();
             renderNormativaUsuario();
-            // Selector de curso consultado y manual de uso (aislamiento por curso)
-            if (typeof populateCursoVistaSelect === 'function') populateCursoVistaSelect();
-            if (typeof actualizarEnlaceManual === 'function') actualizarEnlaceManual();
         }
 
         function renderTrimestres() {
@@ -6973,13 +6796,6 @@
         function renderCronograma() {
             const tbody = document.getElementById('cronogramaBody');
             tbody.innerHTML = '';
-            
-            // Curso consultado (aislamiento por curso escolar)
-            const cronoEECursoInfoEl = document.getElementById('cronoEECursoInfo');
-            if (cronoEECursoInfoEl) {
-                const nombreCurso = (typeof getNombreCursoVista === 'function') ? getNombreCursoVista() : null;
-                cronoEECursoInfoEl.textContent = nombreCurso ? `Curso ${nombreCurso}` : '';
-            }
             
             const actividadesCurso = getActividadesCursoActivo();
             
@@ -7874,9 +7690,7 @@
         function updateTrimestreOptions() {
             const curso = document.getElementById('newCurso').value;
             const trimestreSelect = document.getElementById('newTrimestre');
-            // El alta de actividades siempre pertenece al curso escolar ACTIVO
-            // (no al consultado), de ahí el filtro estricto
-            const actividadesCurso = getActividadesDeCursoEscolar(appData.config.cursoEscolarActivo);
+            const actividadesCurso = getActividadesCursoActivo();
             
             trimestreSelect.innerHTML = '<option value="">Selecciona trimestre</option>';
             
@@ -10052,9 +9866,7 @@
                 // Obtener datos
                 const actividadesEE = typeof getActividadesCursoActivo === 'function' 
                     ? getActividadesCursoActivo() : [];
-                const actividadesCCData = (typeof getActividadesCCVisibles === 'function')
-                    ? getActividadesCCVisibles()
-                    : (Array.isArray(actividadesCC) ? actividadesCC : []);
+                const actividadesCCData = Array.isArray(actividadesCC) ? actividadesCC : [];
                 
                 let yPos = 45;
                 
@@ -10785,30 +10597,20 @@ function renderizarListaCC() {
         return;
     }
 
-    // Aislamiento por curso escolar: listar solo las del curso consultado
-    const actividadesCCVisibles = getActividadesCCVisibles();
-
-    // Información del curso consultado junto al contador
-    const cursoInfo = document.getElementById('ccListaCursoInfo');
-    if (cursoInfo) {
-        const nombreCurso = (typeof getNombreCursoVista === 'function') ? getNombreCursoVista() : null;
-        cursoInfo.textContent = nombreCurso ? `· Curso ${nombreCurso}` : '';
-    }
-
     // Actualizar contador
     if (contador) {
-        contador.textContent = actividadesCCVisibles.length;
+        contador.textContent = actividadesCC.length;
     }
 
     // Si no hay actividades
-    if (actividadesCCVisibles.length === 0) {
+    if (actividadesCC.length === 0) {
         container.innerHTML = '<p class="text-center py-6" style="color: var(--muted);">No hay actividades CC registradas aún.</p>';
         console.log('[CC] Mostrando mensaje: No hay actividades');
         return;
     }
 
     // Ordenar por fecha (manejar fechas nulas/inválidas)
-    const ordenadas = [...actividadesCCVisibles].sort((a, b) => {
+    const ordenadas = [...actividadesCC].sort((a, b) => {
         const fechaA = a.fecha ? new Date(a.fecha).getTime() : 0;
         const fechaB = b.fecha ? new Date(b.fecha).getTime() : 0;
         return fechaA - fechaB;
@@ -10888,16 +10690,13 @@ function actualizarSelectorCCEdit() {
     // Guardar selección actual
     const seleccionActual = select.value;
 
-    // Aislamiento por curso escolar: editar las actividades del curso consultado
-    const actividadesCCVisibles = getActividadesCCVisibles();
-
     // Generar opciones
     let options = '<option value="">Selecciona una actividad CC</option>';
     
-    if (actividadesCCVisibles.length === 0) {
+    if (actividadesCC.length === 0) {
         options += '<option value="" disabled>No hay actividades disponibles</option>';
     } else {
-        actividadesCCVisibles.forEach(act => {
+        actividadesCC.forEach(act => {
             const fechaFormateada = formatDate(act.fecha);
             options += `<option value="${act.id}">${escapeHTML(act.nombre)} - ${act.unidad} (${fechaFormateada})</option>`;
         });
@@ -10912,14 +10711,14 @@ function actualizarSelectorCCEdit() {
         // Ocultar formulario de edición
         document.getElementById('ccEditForm').classList.add('hidden');
         if (sinActividades) {
-            sinActividades.classList.toggle('hidden', actividadesCCVisibles.length > 0);
+            sinActividades.classList.toggle('hidden', actividadesCC.length > 0);
         }
     }
     
     // Actualizar contador en el acordeón
     const contador = document.getElementById('contadorEditCC');
     if (contador) {
-        const numActividades = actividadesCCVisibles.length;
+        const numActividades = actividadesCC.length;
         contador.textContent = `${numActividades} actividad${numActividades !== 1 ? 'es' : ''}`;
         // Cambiar color según si hay actividades
         if (numActividades === 0) {
@@ -10952,9 +10751,8 @@ function inicializarEliminacionMasivaEE() {
         cursoActivoEl.textContent = 'No hay curso activo';
     }
     
-    // Contar actividades del curso actual (curso ACTIVO, no el consultado:
-    // la eliminación masiva actúa siempre sobre el curso activo)
-    const actividadesCurso = getActividadesDeCursoEscolar(cursoId);
+    // Contar actividades del curso actual
+    const actividadesCurso = getActividadesCursoActivo();
     numActividadesEl.textContent = actividadesCurso.length;
 }
 
@@ -11020,12 +10818,8 @@ function eliminarTodasActividadesEE() {
         return;
     }
     
-    // Confirmación adicional (se eliminan las del curso ACTIVO, no las del
-    // consultado: contar con el mismo criterio que la eliminación)
-    const cursoIdEliminarEE = appData?.config?.cursoEscolarActivo || null;
-    const numActividades = cursoIdEliminarEE
-        ? appData.actividades.filter(a => getCursoEfectivoActividad(a) === cursoIdEliminarEE).length
-        : appData.actividades.length;
+    // Confirmación adicional
+    const numActividades = getActividadesCursoActivo().length;
     const mensaje = `⚠️ CONFIRMACIÓN FINAL ⚠️\n\n` +
                     `Estás a punto de ELIMINAR ${numActividades} Actividades EE.\n\n` +
                     `Esta acción:\n` +
@@ -11052,14 +10846,13 @@ function eliminarTodasActividadesEE() {
             return;
         }
         
-        // Contar antes de eliminar (solo las del curso activo; las antiguas
-        // sin curso se atribuyen por fecha y se eliminan con su curso)
-        const actividadesAntes = appData.actividades.filter(a => getCursoEfectivoActividad(a) === cursoId);
+        // Contar antes de eliminar (solo las del curso activo)
+        const actividadesAntes = appData.actividades.filter(a => a.cursoEscolarId === cursoId);
         const cantidadAntesCurso = actividadesAntes.length;
         console.log(`[ELIMINACIÓN MASIVA EE] Actividades del curso a eliminar: ${cantidadAntesCurso}`);
         
         // Filtrar: mantener solo las que NO son del curso actual
-        appData.actividades = appData.actividades.filter(a => getCursoEfectivoActividad(a) !== cursoId);
+        appData.actividades = appData.actividades.filter(a => a.cursoEscolarId !== cursoId);
         
         const cantidadEliminadas = cantidadAntesCurso;
         
@@ -11127,8 +10920,8 @@ function inicializarEliminacionMasivaCC() {
     let numActividades = 0;
     
     if (cursoId) {
-        // Contar con atribución por fecha (mismo criterio que la eliminación)
-        numActividades = actividadesCC.filter(a => getCursoEfectivoActividad(a) === cursoId).length;
+        // Contar solo las del curso activo
+        numActividades = actividadesCC.filter(a => a.cursoEscolarId === cursoId).length;
     } else {
         // Si no hay curso, contar todas (para compatibilidad con datos antiguos)
         numActividades = actividadesCC.length;
@@ -11199,11 +10992,8 @@ function eliminarTodasActividadesCC() {
         return;
     }
     
-    // Confirmación adicional (mismo criterio que la eliminación: curso activo)
-    const cursoIdEliminarCC = appData && appData.config ? appData.config.cursoEscolarActivo : null;
-    const numActividades = cursoIdEliminarCC
-        ? actividadesCC.filter(a => getCursoEfectivoActividad(a) === cursoIdEliminarCC).length
-        : actividadesCC.length;
+    // Confirmación adicional
+    const numActividades = actividadesCC.length;
     const mensaje = `⚠️ CONFIRMACIÓN FINAL ⚠️\n\n` +
                     `Estás a punto de ELIMINAR ${numActividades} Actividades CC.\n\n` +
                     `Esta acción:\n` +
@@ -11223,10 +11013,9 @@ function eliminarTodasActividadesCC() {
         let cantidadEliminadas = 0;
         
         if (cursoId) {
-            // Solo eliminar las actividades CC del curso activo (las antiguas
-            // sin curso se atribuyen por fecha y se eliminan con su curso)
+            // Solo eliminar las actividades CC del curso activo
             const antes = actividadesCC.length;
-            actividadesCC = actividadesCC.filter(a => getCursoEfectivoActividad(a) !== cursoId);
+            actividadesCC = actividadesCC.filter(a => a.cursoEscolarId !== cursoId);
             cantidadEliminadas = antes - actividadesCC.length;
             console.log(`[ELIMINACIÓN MASIVA CC] Eliminadas ${cantidadEliminadas} actividades del curso ${cursoId}`);
         } else {
@@ -11398,93 +11187,6 @@ function toggleCuadrante(tipo) {
     } else if (tipo === 'CC') {
         renderizarCalendarioCC();
     }
-}
-
-// ==================== SELECTOR DE CURSO CONSULTADO (AISLAMIENTO) ====================
-
-/**
- * Rellena el selector de curso consultado de la cabecera (solo admin/dace:
- * el perfil usuario trabaja siempre con el curso vigente).
- */
-function populateCursoVistaSelect() {
-    const sel = document.getElementById('cursoVistaSelect');
-    if (!sel) return;
-    
-    const cursos = appData?.config?.cursosEscolares || [];
-    const activo = appData?.config?.cursoEscolarActivo || null;
-    const esUsuarioNormal = currentUser && currentUser.rol !== 'admin' && currentUser.rol !== 'dace';
-    
-    // Sin cursos configurados o perfil usuario: selector oculto
-    sel.classList.toggle('hidden', esUsuarioNormal || cursos.length === 0);
-    if (cursos.length === 0) return;
-    
-    const valorPrevio = sel.value;
-    sel.innerHTML = cursos.map(c =>
-        `<option value="${escapeHTML(c.id)}">${escapeHTML(c.nombre)}${c.id === activo ? ' (vigente)' : ''}</option>`
-    ).join('');
-    
-    // Mantener la selección previa si sigue siendo válida; si no, el curso activo
-    if (valorPrevio && cursos.some(c => c.id === valorPrevio)) {
-        sel.value = valorPrevio;
-    } else if (activo) {
-        sel.value = activo;
-    }
-}
-
-/**
- * Cambia el curso consultado y re-renderiza todas las vistas aisladas
- * (cronogramas, calendario CC, listas, selects de edición e informes).
- */
-function cambiarCursoVista(cursoId) {
-    // Sincronizar el filtro de normativa con el curso consultado
-    const filtroNormativa = document.getElementById('normativaCursoFilter');
-    if (filtroNormativa && cursoId) {
-        filtroNormativa.value = cursoId;
-    }
-    renderVistasPorCurso();
-}
-
-/** Re-renderiza todas las vistas que dependen del curso consultado */
-function renderVistasPorCurso() {
-    if (typeof renderCronograma === 'function') renderCronograma();
-    if (typeof renderizarCalendarioCC === 'function') renderizarCalendarioCC();
-    if (typeof renderizarListaCC === 'function') renderizarListaCC();
-    if (typeof renderEditSelect === 'function') renderEditSelect();
-    if (typeof renderInformeSelects === 'function') renderInformeSelects();
-    if (typeof renderNormativaUsuario === 'function') renderNormativaUsuario();
-    if (typeof actualizarSelectorCCEdit === 'function') actualizarSelectorCCEdit();
-    if (typeof inicializarEliminacionMasivaEE === 'function') inicializarEliminacionMasivaEE();
-    if (typeof inicializarEliminacionMasivaCC === 'function') inicializarEliminacionMasivaCC();
-}
-
-// ==================== MANUAL DE USO DEL PERFIL ====================
-
-/**
- * Enlaza el botón «Manual» de la cabecera con el PDF del manual del rol
- * conectado. Los manuales viven en la misma carpeta que index.html.
- */
-function actualizarEnlaceManual() {
-    const btn = document.getElementById('manualBtn');
-    if (!btn) return;
-    
-    const MANUALES_POR_ROL = {
-        admin: 'Manual_Administrador_AACCEE.pdf',
-        dace: 'Manual_DACE_AACCEE.pdf',
-        usuario: 'Manual_Usuario_AACCEE.pdf'
-    };
-    
-    if (!currentUser) {
-        btn.classList.add('hidden');
-        return;
-    }
-    
-    const archivo = MANUALES_POR_ROL[currentUser.rol] || MANUALES_POR_ROL.usuario;
-    btn.href = archivo;
-    btn.setAttribute('download', archivo);
-    const nombreRol = currentUser.rol === 'admin' ? 'Administrador'
-        : currentUser.rol === 'dace' ? 'DACE' : 'Usuario';
-    btn.title = `Descargar el manual de uso (perfil ${nombreRol})`;
-    btn.classList.remove('hidden');
 }
 
 // ==================== ENLACES DE INTERÉS / NORMATIVA ====================
@@ -12151,19 +11853,15 @@ function obtenerLunesDeSemana(fecha) {
 
 /**
  * Actividades CC visibles para el usuario actual.
- * El aislamiento por curso escolar se aplica a todos los perfiles: las
- * vistas muestran únicamente las actividades del curso consultado.
+ * El perfil usuario no puede cambiar el año: todo lo que ve y hace
+ * se refiere al curso escolar vigente. (Admin/DACE ven todas.)
+ * Las actividades antiguas sin curso asociado se conservan por compatibilidad.
  */
 function getActividadesCCVisibles() {
-    // Aislamiento por curso escolar para TODOS los roles: se muestran solo
-    // las actividades del curso consultado (admin/dace pueden cambiarlo con
-    // el selector de cabecera; el perfil usuario trabaja siempre con el
-    // vigente). Las antiguas sin cursoEscolarId se atribuyen por fecha.
-    const cursoVista = (typeof getCursoVistaId === 'function')
-        ? getCursoVistaId()
-        : (appData?.config?.cursoEscolarActivo || null);
-    if (!cursoVista) return actividadesCC;
-    return actividadesCC.filter(act => getCursoEfectivoActividad(act) === cursoVista);
+    const esUsuarioNormal = currentUser && currentUser.rol !== 'admin' && currentUser.rol !== 'dace';
+    const cursoActivoId = appData?.config?.cursoEscolarActivo;
+    if (!esUsuarioNormal || !cursoActivoId) return actividadesCC;
+    return actividadesCC.filter(act => !act.cursoEscolarId || act.cursoEscolarId === cursoActivoId);
 }
 
 /**
@@ -12175,13 +11873,6 @@ function renderizarCalendarioCC() {
     const subtitulo = document.getElementById('ccCalendarioSubtitulo');
     
     if (!container) return;
-
-    // Curso consultado (aislamiento por curso escolar)
-    const cronoCCCursoInfoEl = document.getElementById('cronoCCCursoInfo');
-    if (cronoCCCursoInfoEl) {
-        const nombreCurso = (typeof getNombreCursoVista === 'function') ? getNombreCursoVista() : null;
-        cronoCCCursoInfoEl.textContent = nombreCurso ? `Curso ${nombreCurso}` : '';
-    }
     
     // Obtener fecha de hoy
     const hoy = new Date();
@@ -12217,8 +11908,7 @@ function renderizarCalendarioCC() {
     
     // Actualizar subtítulo con rango de fechas
     if (subtitulo) {
-        const nombreCursoVistaCC = (typeof getNombreCursoVista === 'function') ? getNombreCursoVista() : null;
-        subtitulo.textContent = `${inicioCalendario.getDate()} ${MESES_CC[inicioCalendario.getMonth()]} - ${finCalendario.getDate()} ${MESES_CC[finCalendario.getMonth()]}${nombreCursoVistaCC ? ` · Curso ${nombreCursoVistaCC}` : ''}`;
+        subtitulo.textContent = `${inicioCalendario.getDate()} ${MESES_CC[inicioCalendario.getMonth()]} - ${finCalendario.getDate()} ${MESES_CC[finCalendario.getMonth()]}`;
     }
     
     // Generar los 28 días (4 semanas x 7 días)
